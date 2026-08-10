@@ -24,11 +24,12 @@
   </header>
 
   <main id="main" class="container week-layout">
-    <article class="lesson" id="lessonContent" aria-live="polite"></article>
+    <article class="lesson notion-content" id="lessonContent" aria-live="polite">
+      <p class="loading">강의교안을 불러오는 중입니다.</p>
+    </article>
     <aside class="week-side" aria-label="강의교안 바로가기">
       <h2>이 주차 바로가기</h2>
       <div id="sectionNav"></div>
-      <a class="source-link" id="sourceLink" href="#" target="_blank" rel="noopener noreferrer">Notion 원문 보기</a>
     </aside>
   </main>
 
@@ -41,6 +42,7 @@
 
   <button class="top-button" id="topButton" type="button" aria-label="페이지 맨 위로 이동">TOP</button>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>

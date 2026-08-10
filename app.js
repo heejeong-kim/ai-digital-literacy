@@ -3,6 +3,7 @@
   const page = document.body.dataset.page;
   const agendaNav = document.getElementById('agendaNav');
   const topButton = document.getElementById('topButton');
+  const weekHero = document.querySelector('.week-hero');
 
   const esc = (value='') => String(value)
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
@@ -28,7 +29,7 @@
         <span class="lecture-card__week">${item.week}주차</span>
         <h3>${esc(item.title)}</h3>
         <p>${item.agenda.map(esc).join(' · ')}</p>
-        <span class="lecture-card__arrow">강의교안 보기 →</span>
+        <span class="lecture-card__cta">강의교안 보기 <span aria-hidden="true">→</span></span>
       </a>`).join('');
   }
 
@@ -49,7 +50,6 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const markdown = await response.text();
 
-      // 외부 CDN 로드 여부와 관계없이 항상 자체 렌더러로 변환한다.
       lesson.innerHTML = renderNotionMarkdown(markdown);
       normalizeNotionBlocks(lesson);
       structureLecture(lesson);
@@ -256,10 +256,15 @@
     nav.innerHTML = headings.map(h => `<a href="#${h.id}">${esc(h.textContent.trim())}</a>`).join('');
   }
 
+  const syncScrollUI = () => {
+    if (topButton) topButton.classList.toggle('is-visible', window.scrollY > 500);
+    if (weekHero) weekHero.classList.toggle('is-compact', window.scrollY > 120);
+  };
+
+  window.addEventListener('scroll', syncScrollUI, { passive: true });
+  syncScrollUI();
+
   if (topButton) {
-    const syncTopButton = () => topButton.classList.toggle('is-visible', window.scrollY > 500);
-    window.addEventListener('scroll', syncTopButton, {passive:true});
-    syncTopButton();
-    topButton.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+    topButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   }
 })();

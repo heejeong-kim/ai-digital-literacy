@@ -6,6 +6,34 @@
   <meta name="description" content="2026년 2학기 AI와 디지털 리터러시 주차별 강의교안" />
   <title>AI와 디지털 리터러시 | 2026-2</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .lecture-card__cta {
+      width: fit-content;
+      align-self: flex-start;
+      justify-content: flex-start;
+      gap: 10px;
+      margin-top: 36px;
+      padding: 11px 15px;
+      border: 1.5px solid var(--accent);
+      background: #fff;
+      color: var(--accent-strong);
+      box-shadow: none;
+    }
+    .lecture-card:hover .lecture-card__cta,
+    .lecture-card:focus-visible .lecture-card__cta {
+      background: #fff;
+      color: var(--accent-strong);
+      border-color: var(--accent-strong);
+      box-shadow: 0 6px 18px rgba(11,159,131,.10);
+    }
+    @media (max-width: 640px) {
+      .lecture-card__cta {
+        width: fit-content;
+        margin-top: 34px;
+        padding: 11px 14px;
+      }
+    }
+  </style>
 </head>
 <body data-page="home">
   <a class="skip-link" href="#main">본문 바로가기</a>

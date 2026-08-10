@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="AI와 디지털 리터러시 주차별 강의교안" />
+  <title>주차별 강의교안 | AI와 디지털 리터러시</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="week">
+  <a class="skip-link" href="#main">본문 바로가기</a>
+
+  <nav class="agenda" aria-label="주차별 아젠다">
+    <div class="container agenda__inner" id="agendaNav"></div>
+  </nav>
+
+  <header class="week-hero">
+    <div class="container">
+      <a class="week-hero__back" href="index.html">← 전체 강의목록</a>
+      <div class="week-hero__meta" id="weekMeta">주차별 강의교안</div>
+      <h1 id="weekTitle">강의교안</h1>
+      <p id="weekAgenda"></p>
+    </div>
+  </header>
+
+  <main id="main" class="container week-layout">
+    <article class="lesson" id="lessonContent" aria-live="polite"></article>
+    <aside class="week-side" aria-label="강의교안 바로가기">
+      <h2>이 주차 바로가기</h2>
+      <div id="sectionNav"></div>
+      <a class="source-link" id="sourceLink" href="#" target="_blank" rel="noopener noreferrer">Notion 원문 보기</a>
+    </aside>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <strong>AI와 디지털 리터러시</strong>
+      <span>2026년 2학기 · 주차별 강의교안</span>
+    </div>
+  </footer>
+
+  <button class="top-button" id="topButton" type="button" aria-label="페이지 맨 위로 이동">TOP</button>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

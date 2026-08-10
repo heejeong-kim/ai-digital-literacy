@@ -7,12 +7,19 @@
   <title>AI와 디지털 리터러시 | 2026-2</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
+    .lecture-grid { grid-auto-rows: 1fr; }
+    .lecture-card {
+      height: 100%;
+      background: linear-gradient(180deg, #effcf8 0%, #ffffff 24%, #ffffff 76%, #f1faf7 100%);
+    }
+    .lecture-card h3 { min-height: 68px; }
+    .lecture-card p { flex: 1; min-height: 94px; }
     .lecture-card__cta {
       width: fit-content;
       align-self: flex-start;
       justify-content: flex-start;
       gap: 10px;
-      margin-top: 36px;
+      margin-top: 34px;
       padding: 11px 15px;
       border: 1.5px solid var(--accent);
       background: #fff;
@@ -27,9 +34,11 @@
       box-shadow: 0 6px 18px rgba(11,159,131,.10);
     }
     @media (max-width: 640px) {
+      .lecture-card h3,
+      .lecture-card p { min-height: 0; }
       .lecture-card__cta {
         width: fit-content;
-        margin-top: 34px;
+        margin-top: 30px;
         padding: 11px 14px;
       }
     }

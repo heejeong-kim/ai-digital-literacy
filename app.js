@@ -3,18 +3,20 @@
   const page = document.body.dataset.page;
   const agendaNav = document.getElementById('agendaNav');
   const topButton = document.getElementById('topButton');
-  const weekHero = document.querySelector('.week-hero');
 
   const esc = (value='') => String(value)
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
     .replaceAll('"','&quot;').replaceAll("'",'&#039;');
 
-  const currentWeek = Number(new URLSearchParams(location.search).get('week')) || null;
+  const staticWeek = Number(document.body.dataset.week) || null;
+  const queryWeek = Number(new URLSearchParams(location.search).get('week')) || null;
+  const currentWeek = staticWeek || queryWeek;
+  const weekUrl = week => `week-${String(week).padStart(2, '0')}.html`;
 
   if (agendaNav) {
     agendaNav.innerHTML = data.map(item => {
       const active = currentWeek === item.week ? ' is-active' : '';
-      return `<a class="agenda__link${active}" href="week.html?week=${item.week}" data-title="${esc(item.title)}" aria-label="${item.week}주차 ${esc(item.title)}">${item.week}주차</a>`;
+      return `<a class="agenda__link${active}" href="${weekUrl(item.week)}" data-title="${esc(item.title)}" aria-label="${item.week}주차 ${esc(item.title)}">${item.week}주차</a>`;
     }).join('');
   }
 
@@ -25,7 +27,7 @@
     const list = document.getElementById('lectureList');
     if (!list) return;
     list.innerHTML = data.map(item => `
-      <a class="lecture-card" href="week.html?week=${item.week}">
+      <a class="lecture-card" href="${weekUrl(item.week)}">
         <span class="lecture-card__week">${item.week}주차</span>
         <h3>${esc(item.title)}</h3>
         <p>${item.agenda.map(esc).join(' · ')}</p>
@@ -52,12 +54,19 @@
 
       lesson.innerHTML = renderNotionMarkdown(markdown);
       normalizeNotionBlocks(lesson);
-      enhancePromptBlocks(lesson);
+      enhanceStandaloneCode(lesson);
       structureLecture(lesson);
       buildSectionNav(lesson);
     } catch (error) {
       lesson.innerHTML = `<div class="load-error"><h2>강의교안을 불러오지 못했습니다.</h2><p>${esc(error.message)}</p></div>`;
     }
+  }
+
+  function copyableCodeBlock(text, extraClass='') {
+    return `<div class="copy-code-block ${extraClass}">
+      <button class="code-copy" type="button" aria-label="코드 복사">복사</button>
+      <pre><code>${esc(text)}</code></pre>
+    </div>`;
   }
 
   function renderNotionMarkdown(source) {
@@ -72,6 +81,8 @@
     const out = [];
     let listType = null;
     let paragraph = [];
+    let inFence = false;
+    let fenceLines = [];
 
     const closeList = () => {
       if (listType) out.push(`</${listType}>`);
@@ -87,6 +98,23 @@
     for (let i = 0; i < lines.length; i++) {
       const raw = lines[i];
       const line = raw.trim();
+
+      if (/^```/.test(line)) {
+        if (!inFence) {
+          flush();
+          inFence = true;
+          fenceLines = [];
+        } else {
+          out.push(copyableCodeBlock(fenceLines.join('\n'), 'is-fenced-code'));
+          inFence = false;
+          fenceLines = [];
+        }
+        continue;
+      }
+      if (inFence) {
+        fenceLines.push(raw);
+        continue;
+      }
 
       if (!line) {
         flushParagraph();
@@ -170,6 +198,7 @@
       paragraph.push(line);
     }
 
+    if (inFence && fenceLines.length) out.push(copyableCodeBlock(fenceLines.join('\n'), 'is-fenced-code'));
     flush();
     return out.join('\n');
   }
@@ -202,26 +231,17 @@
     });
   }
 
-  function enhancePromptBlocks(root) {
+  function enhanceStandaloneCode(root) {
     [...root.querySelectorAll('p')].forEach(paragraph => {
       const codes = [...paragraph.querySelectorAll('code')];
       if (codes.length !== 1) return;
-
       const code = codes[0];
-      const prompt = code.textContent.trim();
-      const paragraphText = paragraph.textContent.trim();
+      const value = code.textContent.trim();
+      if (!value || paragraph.textContent.trim() !== value) return;
 
-      // 문단 전체가 하나의 코드 예시일 때만 블록형 프롬프트로 승격한다.
-      if (!prompt || prompt.length < 18 || paragraphText !== prompt) return;
-
-      const block = document.createElement('div');
-      block.className = 'prompt-block';
-      block.innerHTML = `
-        <button class="prompt-copy" type="button" aria-label="프롬프트 복사">복사</button>
-        <pre><code></code></pre>
-      `;
-      block.querySelector('pre code').textContent = prompt;
-      paragraph.replaceWith(block);
+      const wrap = document.createElement('div');
+      wrap.innerHTML = copyableCodeBlock(value, 'is-prompt-code');
+      paragraph.replaceWith(wrap.firstElementChild);
     });
   }
 
@@ -248,10 +268,6 @@
     });
 
     root.replaceChildren(fragment);
-
-    root.querySelectorAll('.lesson-period').forEach((block, index) => {
-      block.dataset.period = String(index + 1);
-    });
   }
 
   function createSection(className) {
@@ -297,21 +313,20 @@
   }
 
   document.addEventListener('click', async event => {
-    const button = event.target.closest('.prompt-copy');
+    const button = event.target.closest('.code-copy');
     if (!button) return;
-
-    const prompt = button.closest('.prompt-block')?.querySelector('pre code')?.textContent?.trim();
-    if (!prompt) return;
+    const block = button.closest('.copy-code-block');
+    const value = block?.querySelector('pre code')?.textContent || '';
+    if (!value.trim()) return;
 
     const original = button.textContent;
     try {
-      await copyText(prompt);
+      await copyText(value);
       button.textContent = '복사됨';
       button.classList.add('is-copied');
     } catch (error) {
       button.textContent = '복사 실패';
     }
-
     window.setTimeout(() => {
       button.textContent = original;
       button.classList.remove('is-copied');
@@ -320,7 +335,6 @@
 
   const syncScrollUI = () => {
     if (topButton) topButton.classList.toggle('is-visible', window.scrollY > 500);
-    if (weekHero) weekHero.classList.toggle('is-compact', window.scrollY > 120);
   };
 
   window.addEventListener('scroll', syncScrollUI, { passive: true });

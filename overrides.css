@@ -149,6 +149,76 @@
   max-height: calc(100vh - var(--agenda-height) - 145px);
 }
 
+/* Copyable prompt blocks */
+.prompt-block {
+  margin: 18px 0 28px;
+  overflow: hidden;
+  border: 1px solid rgba(38, 218, 175, .28);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #0b211c 0%, #10342b 100%);
+  box-shadow: 0 12px 30px rgba(4, 48, 39, .12);
+}
+
+.prompt-block__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 14px;
+  border-bottom: 1px solid rgba(190, 255, 237, .12);
+  background: rgba(255,255,255,.025);
+}
+
+.prompt-block__label {
+  color: #79e9cf;
+  font-size: 14px;
+  font-weight: 850;
+  letter-spacing: .12em;
+}
+
+.prompt-copy {
+  appearance: none;
+  padding: 7px 11px;
+  border: 1px solid rgba(121,233,207,.55);
+  border-radius: 9px;
+  background: transparent;
+  color: #dffff6;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.prompt-copy:hover,
+.prompt-copy:focus-visible,
+.prompt-copy.is-copied {
+  border-color: #79e9cf;
+  background: rgba(121,233,207,.12);
+  color: #ffffff;
+  outline: none;
+}
+
+.prompt-block pre {
+  margin: 0;
+  padding: 20px;
+  overflow-x: auto;
+  background: transparent;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.prompt-block pre code {
+  padding: 0;
+  background: transparent;
+  color: #effffb;
+  font-family: 'Pretendard Variable', Pretendard, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 18px;
+  font-weight: 520;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
 @media (max-width: 960px) {
   .week-context__inner {
     grid-template-columns: 1fr;
@@ -188,5 +258,14 @@
 
   .week-context p {
     font-size: 14px;
+  }
+
+  .prompt-block pre {
+    padding: 17px 16px 19px;
+  }
+
+  .prompt-block pre code {
+    font-size: 18px;
+    line-height: 1.7;
   }
 }

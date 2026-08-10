@@ -52,6 +52,7 @@
 
       lesson.innerHTML = renderNotionMarkdown(markdown);
       normalizeNotionBlocks(lesson);
+      enhancePromptBlocks(lesson);
       structureLecture(lesson);
       buildSectionNav(lesson);
     } catch (error) {
@@ -201,6 +202,33 @@
     });
   }
 
+  function enhancePromptBlocks(root) {
+    [...root.querySelectorAll('p')].forEach(paragraph => {
+      const meaningfulNodes = [...paragraph.childNodes].filter(node => {
+        return !(node.nodeType === Node.TEXT_NODE && !node.textContent.trim());
+      });
+      if (meaningfulNodes.length !== 1) return;
+
+      const code = meaningfulNodes[0];
+      if (!(code instanceof HTMLElement) || code.tagName !== 'CODE') return;
+
+      const prompt = code.textContent.trim();
+      if (prompt.length < 18) return;
+
+      const block = document.createElement('div');
+      block.className = 'prompt-block';
+      block.innerHTML = `
+        <div class="prompt-block__head">
+          <span class="prompt-block__label">PROMPT</span>
+          <button class="prompt-copy" type="button" aria-label="프롬프트 복사">복사</button>
+        </div>
+        <pre><code></code></pre>
+      `;
+      block.querySelector('code').textContent = prompt;
+      paragraph.replaceWith(block);
+    });
+  }
+
   function structureLecture(root) {
     const children = [...root.children];
     if (!children.length) return;
@@ -255,6 +283,44 @@
     });
     nav.innerHTML = headings.map(h => `<a href="#${h.id}">${esc(h.textContent.trim())}</a>`).join('');
   }
+
+  async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    textarea.remove();
+  }
+
+  document.addEventListener('click', async event => {
+    const button = event.target.closest('.prompt-copy');
+    if (!button) return;
+
+    const prompt = button.closest('.prompt-block')?.querySelector('pre code')?.textContent?.trim();
+    if (!prompt) return;
+
+    const original = button.textContent;
+    try {
+      await copyText(prompt);
+      button.textContent = '복사됨';
+      button.classList.add('is-copied');
+    } catch (error) {
+      button.textContent = '복사 실패';
+    }
+
+    window.setTimeout(() => {
+      button.textContent = original;
+      button.classList.remove('is-copied');
+    }, 1600);
+  });
 
   const syncScrollUI = () => {
     if (topButton) topButton.classList.toggle('is-visible', window.scrollY > 500);

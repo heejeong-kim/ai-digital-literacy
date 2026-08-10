@@ -35,6 +35,7 @@
   async function renderWeek() {
     const item = data.find(v => v.week === currentWeek) || data[0];
     if (!item) return;
+
     document.title = `${item.week}주차 · ${item.title} | AI와 디지털 리터러시`;
     document.getElementById('weekMeta').textContent = `${item.week}주차 강의교안`;
     document.getElementById('weekTitle').textContent = item.title;
@@ -46,52 +47,200 @@
     try {
       const response = await fetch(file, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      let markdown = await response.text();
+      const markdown = await response.text();
 
-      // Notion enhanced Markdown의 이스케이프된 파이프·물결표를 웹 표시용으로 복원한다.
-      markdown = markdown.replaceAll('\\|', '|').replaceAll('\\~', '~');
-
-      if (window.marked) {
-        marked.setOptions({ gfm: true, breaks: false });
-        lesson.innerHTML = marked.parse(markdown);
-      } else {
-        lesson.textContent = markdown;
-      }
-
+      // 외부 CDN 로드 여부와 관계없이 항상 자체 렌더러로 변환한다.
+      lesson.innerHTML = renderNotionMarkdown(markdown);
       normalizeNotionBlocks(lesson);
+      structureLecture(lesson);
       buildSectionNav(lesson);
     } catch (error) {
       lesson.innerHTML = `<div class="load-error"><h2>강의교안을 불러오지 못했습니다.</h2><p>${esc(error.message)}</p></div>`;
     }
   }
 
-  function normalizeNotionBlocks(root) {
-    root.querySelectorAll('callout').forEach(el => el.classList.add('notion-callout'));
-    root.querySelectorAll('details').forEach(el => el.classList.add('notion-details'));
+  function renderNotionMarkdown(source) {
+    const markdown = source
+      .replace(/\r\n?/g, '\n')
+      .replaceAll('\\|', '|')
+      .replaceAll('\\~', '~')
+      .replaceAll('\\[', '[')
+      .replaceAll('\\]', ']');
 
-    // Notion에서 문자로 이스케이프되어 저장된 표 태그가 있는 경우 실제 표로 복원한다.
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const candidates = [];
-    while (walker.nextNode()) {
-      if (walker.currentNode.nodeValue.includes('<table') || walker.currentNode.nodeValue.includes('\\<table')) {
-        candidates.push(walker.currentNode.parentElement);
+    const lines = markdown.split('\n');
+    const out = [];
+    let listType = null;
+    let paragraph = [];
+
+    const closeList = () => {
+      if (listType) out.push(`</${listType}>`);
+      listType = null;
+    };
+    const flushParagraph = () => {
+      if (!paragraph.length) return;
+      out.push(`<p>${inline(paragraph.join(' ').trim())}</p>`);
+      paragraph = [];
+    };
+    const flush = () => { flushParagraph(); closeList(); };
+
+    for (let i = 0; i < lines.length; i++) {
+      const raw = lines[i];
+      const line = raw.trim();
+
+      if (!line) {
+        flushParagraph();
+        closeList();
+        continue;
       }
+
+      if (/^<callout\b/i.test(line)) {
+        flush();
+        const icon = (line.match(/icon="([^"]+)"/) || [,'💡'])[1];
+        out.push(`<aside class="notion-callout"><span class="callout-icon" aria-hidden="true">${esc(icon)}</span><div class="callout-body">`);
+        continue;
+      }
+      if (/^<\/callout>/i.test(line)) {
+        flush();
+        out.push('</div></aside>');
+        continue;
+      }
+      if (/^<details>/i.test(line)) {
+        flush();
+        out.push('<details class="notion-details">');
+        continue;
+      }
+      if (/^<\/details>/i.test(line)) {
+        flush();
+        out.push('</details>');
+        continue;
+      }
+      if (/^<summary>/i.test(line)) {
+        flush();
+        const text = line.replace(/^<summary>/i,'').replace(/<\/summary>$/i,'');
+        out.push(`<summary>${inline(text)}</summary>`);
+        continue;
+      }
+
+      if (line.includes('<table') || line.includes('\\<table')) {
+        flush();
+        const table = line
+          .replaceAll('\\<','<').replaceAll('\\>','>')
+          .replace(/ fit-page-width="[^"]*"/g,'')
+          .replace(/ header-row="[^"]*"/g,'');
+        out.push(`<div class="table-wrap">${table}</div>`);
+        continue;
+      }
+      if (/^\\?<\/table>$/i.test(line)) continue;
+
+      const heading = line.match(/^(#{1,6})\s+(.+)$/);
+      if (heading) {
+        flush();
+        const level = Math.min(heading[1].length, 4);
+        out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
+        continue;
+      }
+
+      if (/^---+$/.test(line)) {
+        flush();
+        out.push('<hr>');
+        continue;
+      }
+
+      const unordered = line.match(/^[-*]\s+(.+)$/);
+      const ordered = line.match(/^\d+[.)]\s+(.+)$/);
+      if (unordered || ordered) {
+        flushParagraph();
+        const nextType = ordered ? 'ol' : 'ul';
+        if (listType !== nextType) {
+          closeList();
+          listType = nextType;
+          out.push(`<${listType}>`);
+        }
+        out.push(`<li>${inline((unordered || ordered)[1])}</li>`);
+        continue;
+      }
+
+      if (/^>\s?/.test(line)) {
+        flush();
+        out.push(`<blockquote>${inline(line.replace(/^>\s?/,''))}</blockquote>`);
+        continue;
+      }
+
+      paragraph.push(line);
     }
-    candidates.forEach(node => {
-      const raw = node.textContent.replaceAll('\\<','<').replaceAll('\\>','>');
-      if (raw.includes('<table')) {
+
+    flush();
+    return out.join('\n');
+  }
+
+  function inline(value='') {
+    let text = esc(value);
+    const code = [];
+    text = text.replace(/`([^`]+)`/g, (_,v) => {
+      const key = `%%CODE${code.length}%%`;
+      code.push(`<code>${v}</code>`);
+      return key;
+    });
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+    text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    code.forEach((html, index) => { text = text.replace(`%%CODE${index}%%`, html); });
+    return text;
+  }
+
+  function normalizeNotionBlocks(root) {
+    root.querySelectorAll('details').forEach(el => el.classList.add('notion-details'));
+    root.querySelectorAll('table').forEach(table => {
+      if (!table.closest('.table-wrap')) {
         const wrap = document.createElement('div');
         wrap.className = 'table-wrap';
-        wrap.innerHTML = raw;
-        node.replaceWith(wrap);
+        table.before(wrap);
+        wrap.appendChild(table);
       }
     });
+  }
+
+  function structureLecture(root) {
+    const children = [...root.children];
+    if (!children.length) return;
+
+    const fragment = document.createDocumentFragment();
+    let section = createSection('lesson-overview');
+    fragment.appendChild(section);
+
+    children.forEach(node => {
+      if (node.tagName === 'H1') {
+        section = createSection('lesson-period');
+        fragment.appendChild(section);
+      } else if (node.tagName === 'H2' && /📌\s*학습 요약/.test(node.textContent)) {
+        section = createSection('lesson-summary');
+        fragment.appendChild(section);
+      } else if (node.tagName === 'H2' && /🔎\s*(핵심 정리|추가 심화 학습)/.test(node.textContent)) {
+        section = createSection('lesson-deepdive');
+        fragment.appendChild(section);
+      }
+      section.appendChild(node);
+    });
+
+    root.replaceChildren(fragment);
+
+    root.querySelectorAll('.lesson-period').forEach((block, index) => {
+      block.dataset.period = String(index + 1);
+    });
+  }
+
+  function createSection(className) {
+    const section = document.createElement('section');
+    section.className = `lesson-block ${className}`;
+    return section;
   }
 
   function buildSectionNav(root) {
     const nav = document.getElementById('sectionNav');
     if (!nav) return;
-    const headings = [...root.querySelectorAll('h1, h2')];
+    const headings = [...root.querySelectorAll('h1, h2')]
+      .filter(h => h.tagName === 'H1' || /학습 목표|핵심 정리|추가 심화 학습|학습 요약|평가 범위|주차별 퀴즈/.test(h.textContent));
     const used = new Set();
     headings.forEach((heading, index) => {
       let slug = `lesson-${index + 1}`;

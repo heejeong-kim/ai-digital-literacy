@@ -73,25 +73,84 @@ a { color: inherit; }
 .week-hero p { max-width: 850px; margin: 0; color: #dfe7ff; }
 .week-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 38px; align-items: start; padding: 56px 0 100px; }
 .lesson { min-width: 0; }
-.lesson section { margin: 0 0 42px; padding: 34px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
-.lesson h2 { margin: 0 0 20px; font-size: 32px; line-height: 1.3; letter-spacing: -.025em; }
-.lesson h3 { margin: 30px 0 12px; font-size: 24px; line-height: 1.4; }
-.lesson p { margin: 0 0 16px; }
-.lesson ul, .lesson ol { padding-left: 1.4em; }
-.lesson li { margin: 7px 0; }
-.lesson .summary { border-color: #aabcf3; background: #f5f7ff; }
-.lesson .notice { padding: 22px 24px; border-left: 4px solid var(--accent); border-radius: 12px; background: var(--surface-soft); }
-.lesson code { padding: .15em .35em; border-radius: 6px; background: #f0f2f7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
-.week-side { position: sticky; top: 82px; padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+.week-side { position: sticky; top: 82px; padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: #fff; max-height: calc(100vh - 110px); overflow: auto; }
 .week-side h2 { margin: 0 0 16px; font-size: 18px; }
-.week-side a { display: block; padding: 9px 0; color: var(--muted); text-decoration: none; font-size: 16px; }
+.week-side a { display: block; padding: 9px 0; color: var(--muted); text-decoration: none; font-size: 16px; line-height: 1.45; }
 .week-side a:hover, .week-side a:focus-visible { color: var(--accent); }
-.source-link { display: inline-flex; margin-top: 12px; padding: 10px 14px; border-radius: 10px; background: var(--accent); color: #fff !important; font-weight: 800; }
+
+/* Full Notion lecture rendering */
+.notion-content {
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 8px 30px rgba(30,42,70,.045);
+  font-size: 18px;
+  line-height: 1.82;
+  overflow-wrap: anywhere;
+}
+.notion-content > :first-child { margin-top: 0; }
+.notion-content > :last-child { margin-bottom: 0; }
+.notion-content h1 {
+  margin: 64px 0 26px;
+  padding: 22px 0 16px;
+  border-top: 2px solid #cfd8ee;
+  border-bottom: 1px solid var(--line);
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.28;
+  letter-spacing: -.035em;
+}
+.notion-content h2 { margin: 52px 0 18px; font-size: clamp(25px, 3vw, 32px); line-height: 1.35; letter-spacing: -.025em; }
+.notion-content h3 { margin: 34px 0 12px; font-size: 22px; line-height: 1.45; letter-spacing: -.015em; }
+.notion-content p { margin: 0 0 18px; }
+.notion-content ul, .notion-content ol { margin: 12px 0 24px; padding-left: 1.55em; }
+.notion-content li { margin: 8px 0; }
+.notion-content strong { font-weight: 800; }
+.notion-content hr { margin: 48px 0; border: 0; border-top: 1px solid var(--line); }
+.notion-content a { color: var(--accent); text-underline-offset: 3px; }
+.notion-content blockquote { margin: 24px 0; padding: 18px 22px; border-left: 4px solid var(--accent); background: var(--surface-soft); color: #333b4d; }
+.notion-content code { padding: .16em .38em; border-radius: 6px; background: #eef1f6; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; word-break: break-word; }
+.notion-content pre { overflow-x: auto; margin: 24px 0; padding: 20px; border-radius: 14px; background: #151821; color: #eef3ff; }
+.notion-content pre code { padding: 0; background: transparent; color: inherit; }
+.notion-content callout, .notion-content .notion-callout {
+  display: block;
+  margin: 24px 0;
+  padding: 20px 22px;
+  border: 1px solid #ccd8f5;
+  border-radius: 14px;
+  background: #f3f6ff;
+}
+.notion-content details, .notion-content .notion-details {
+  display: block;
+  margin: 22px 0;
+  padding: 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fbfcfe;
+}
+.notion-content summary {
+  margin: 0 -20px;
+  padding: 18px 20px;
+  cursor: pointer;
+  font-weight: 800;
+  background: #f2f5fa;
+  border-radius: 14px;
+}
+.notion-content details[open] > summary { margin-bottom: 18px; border-radius: 14px 14px 0 0; border-bottom: 1px solid var(--line); }
+.notion-content details details { background: #fff; }
+.notion-content table { width: 100%; border-collapse: collapse; min-width: 620px; font-size: 18px; line-height: 1.6; }
+.notion-content th, .notion-content td { padding: 14px 16px; border: 1px solid var(--line); vertical-align: top; text-align: left; }
+.notion-content tr:first-child td, .notion-content th { background: #f0f3f8; font-weight: 800; }
+.table-wrap { width: 100%; margin: 24px 0; overflow-x: auto; border-radius: 12px; }
+.loading, .load-error { padding: 30px; border-radius: 14px; background: #fff; color: var(--muted); }
+.load-error h2 { color: var(--text); }
 
 @media (max-width: 960px) {
   .lecture-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .week-layout { grid-template-columns: 1fr; }
-  .week-side { position: static; order: -1; }
+  .week-side { position: static; order: -1; max-height: none; }
+  .week-side #sectionNav { display: flex; gap: 8px; overflow-x: auto; }
+  .week-side a { flex: 0 0 auto; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; }
 }
 @media (max-width: 640px) {
   body { font-size: 18px; }
@@ -105,9 +164,11 @@ a { color: inherit; }
   .site-footer .container { flex-direction: column; }
   .week-hero { padding: 42px 0 34px; }
   .week-layout { padding: 36px 0 76px; }
-  .lesson section { padding: 24px 20px; }
-  .lesson h2 { font-size: 28px; }
-  .lesson h3 { font-size: 22px; }
+  .notion-content { padding: 22px 18px; font-size: 18px; }
+  .notion-content h1 { margin-top: 48px; font-size: 30px; }
+  .notion-content h2 { margin-top: 40px; font-size: 26px; }
+  .notion-content h3 { font-size: 21px; }
+  .notion-content table { min-width: 560px; font-size: 18px; }
   .top-button { width: 54px; height: 54px; right: 16px; bottom: 16px; }
   .agenda__link::after { display: none; }
 }

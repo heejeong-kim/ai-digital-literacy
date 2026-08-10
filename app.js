@@ -204,27 +204,23 @@
 
   function enhancePromptBlocks(root) {
     [...root.querySelectorAll('p')].forEach(paragraph => {
-      const meaningfulNodes = [...paragraph.childNodes].filter(node => {
-        return !(node.nodeType === Node.TEXT_NODE && !node.textContent.trim());
-      });
-      if (meaningfulNodes.length !== 1) return;
+      const codes = [...paragraph.querySelectorAll('code')];
+      if (codes.length !== 1) return;
 
-      const code = meaningfulNodes[0];
-      if (!(code instanceof HTMLElement) || code.tagName !== 'CODE') return;
-
+      const code = codes[0];
       const prompt = code.textContent.trim();
-      if (prompt.length < 18) return;
+      const paragraphText = paragraph.textContent.trim();
+
+      // 문단 전체가 하나의 코드 예시일 때만 블록형 프롬프트로 승격한다.
+      if (!prompt || prompt.length < 18 || paragraphText !== prompt) return;
 
       const block = document.createElement('div');
       block.className = 'prompt-block';
       block.innerHTML = `
-        <div class="prompt-block__head">
-          <span class="prompt-block__label">PROMPT</span>
-          <button class="prompt-copy" type="button" aria-label="프롬프트 복사">복사</button>
-        </div>
+        <button class="prompt-copy" type="button" aria-label="프롬프트 복사">복사</button>
         <pre><code></code></pre>
       `;
-      block.querySelector('code').textContent = prompt;
+      block.querySelector('pre code').textContent = prompt;
       paragraph.replaceWith(block);
     });
   }

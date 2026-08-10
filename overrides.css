@@ -149,59 +149,21 @@
   max-height: calc(100vh - var(--agenda-height) - 145px);
 }
 
-/* Copyable prompt blocks */
+/* Copyable prompt/code panels - reference style: single dark rounded panel + copy pill */
 .prompt-block {
-  margin: 18px 0 28px;
+  position: relative;
+  margin: 20px 0 34px;
+  min-height: 106px;
   overflow: hidden;
-  border: 1px solid rgba(38, 218, 175, .28);
-  border-radius: 16px;
-  background: linear-gradient(145deg, #0b211c 0%, #10342b 100%);
-  box-shadow: 0 12px 30px rgba(4, 48, 39, .12);
-}
-
-.prompt-block__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 11px 14px;
-  border-bottom: 1px solid rgba(190, 255, 237, .12);
-  background: rgba(255,255,255,.025);
-}
-
-.prompt-block__label {
-  color: #79e9cf;
-  font-size: 14px;
-  font-weight: 850;
-  letter-spacing: .12em;
-}
-
-.prompt-copy {
-  appearance: none;
-  padding: 7px 11px;
-  border: 1px solid rgba(121,233,207,.55);
-  border-radius: 9px;
-  background: transparent;
-  color: #dffff6;
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1.2;
-  cursor: pointer;
-  transition: .18s ease;
-}
-
-.prompt-copy:hover,
-.prompt-copy:focus-visible,
-.prompt-copy.is-copied {
-  border-color: #79e9cf;
-  background: rgba(121,233,207,.12);
-  color: #ffffff;
-  outline: none;
+  border: 0;
+  border-radius: 24px;
+  background: #111416;
+  box-shadow: none;
 }
 
 .prompt-block pre {
   margin: 0;
-  padding: 20px;
+  padding: 29px 116px 29px 30px;
   overflow-x: auto;
   background: transparent;
   white-space: pre-wrap;
@@ -210,13 +172,59 @@
 
 .prompt-block pre code {
   padding: 0;
-  background: transparent;
-  color: #effffb;
+  background: transparent !important;
+  color: #f7f8f8;
   font-family: 'Pretendard Variable', Pretendard, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 18px;
-  font-weight: 520;
-  line-height: 1.75;
+  font-weight: 650;
+  line-height: 1.65;
   white-space: pre-wrap;
+  box-decoration-break: initial;
+  -webkit-box-decoration-break: initial;
+}
+
+.prompt-copy {
+  appearance: none;
+  position: absolute;
+  top: 17px;
+  right: 17px;
+  z-index: 2;
+  min-width: 52px;
+  height: 38px;
+  padding: 0 13px;
+  border: 1px solid #777d80;
+  border-radius: 999px;
+  background: #111416;
+  color: #f7f8f8;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease;
+}
+
+.prompt-copy:hover,
+.prompt-copy:focus-visible {
+  border-color: #c7cdcf;
+  background: #1a1e20;
+  color: #ffffff;
+  outline: none;
+}
+
+.prompt-copy:active {
+  transform: scale(.97);
+}
+
+.prompt-copy.is-copied {
+  border-color: #8ce3cd;
+  background: #16362e;
+  color: #cffff1;
+}
+
+/* 일반 인라인 코드는 기존 가독성 유지. 단독 예시는 JS가 .prompt-block으로 승격 */
+.notion-content p > code:only-child {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 @media (max-width: 960px) {
@@ -260,12 +268,26 @@
     font-size: 14px;
   }
 
+  .prompt-block {
+    min-height: 96px;
+    border-radius: 19px;
+  }
+
   .prompt-block pre {
-    padding: 17px 16px 19px;
+    padding: 24px 82px 24px 22px;
   }
 
   .prompt-block pre code {
     font-size: 18px;
-    line-height: 1.7;
+    line-height: 1.65;
+  }
+
+  .prompt-copy {
+    top: 14px;
+    right: 14px;
+    min-width: 48px;
+    height: 35px;
+    padding: 0 11px;
+    font-size: 13px;
   }
 }

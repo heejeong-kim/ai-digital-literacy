@@ -78,51 +78,61 @@ a { color: inherit; }
 .week-side a { display: block; padding: 9px 0; color: var(--muted); text-decoration: none; font-size: 16px; line-height: 1.45; }
 .week-side a:hover, .week-side a:focus-visible { color: var(--accent); }
 
-/* Full Notion lecture rendering */
+/* Full lecture rendering */
 .notion-content {
-  padding: clamp(24px, 4vw, 48px);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: 0 8px 30px rgba(30,42,70,.045);
   font-size: 18px;
   line-height: 1.82;
   overflow-wrap: anywhere;
 }
-.notion-content > :first-child { margin-top: 0; }
-.notion-content > :last-child { margin-bottom: 0; }
+.lesson-block {
+  margin: 0 0 26px;
+  padding: clamp(26px, 4vw, 46px);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(30,42,70,.045);
+}
+.lesson-overview { border-top: 5px solid #3b63d4; }
+.lesson-period { border-top: 5px solid #18233e; }
+.lesson-deepdive { background: #fbfcff; border-color: #ccd6ef; }
+.lesson-summary { background: #eef3ff; border-color: #b8c8ef; }
+.lesson-block > :first-child { margin-top: 0 !important; }
+.lesson-block > :last-child { margin-bottom: 0 !important; }
 .notion-content h1 {
-  margin: 64px 0 26px;
-  padding: 22px 0 16px;
-  border-top: 2px solid #cfd8ee;
+  margin: 0 0 30px;
+  padding: 0 0 20px;
   border-bottom: 1px solid var(--line);
   font-size: clamp(30px, 4vw, 42px);
   line-height: 1.28;
   letter-spacing: -.035em;
 }
-.notion-content h2 { margin: 52px 0 18px; font-size: clamp(25px, 3vw, 32px); line-height: 1.35; letter-spacing: -.025em; }
-.notion-content h3 { margin: 34px 0 12px; font-size: 22px; line-height: 1.45; letter-spacing: -.015em; }
-.notion-content p { margin: 0 0 18px; }
+.notion-content h2 { margin: 46px 0 16px; font-size: clamp(25px, 3vw, 31px); line-height: 1.35; letter-spacing: -.025em; }
+.notion-content h3 { margin: 30px 0 10px; font-size: 21px; line-height: 1.45; letter-spacing: -.015em; color: #24345d; }
+.notion-content h4 { margin: 24px 0 8px; font-size: 19px; line-height: 1.45; color: #46516a; }
+.notion-content p { margin: 0 0 17px; max-width: 78ch; }
 .notion-content ul, .notion-content ol { margin: 12px 0 24px; padding-left: 1.55em; }
 .notion-content li { margin: 8px 0; }
-.notion-content strong { font-weight: 800; }
-.notion-content hr { margin: 48px 0; border: 0; border-top: 1px solid var(--line); }
+.notion-content strong { font-weight: 800; color: #0e1930; }
+.notion-content hr { margin: 40px 0; border: 0; border-top: 1px solid var(--line); }
 .notion-content a { color: var(--accent); text-underline-offset: 3px; }
 .notion-content blockquote { margin: 24px 0; padding: 18px 22px; border-left: 4px solid var(--accent); background: var(--surface-soft); color: #333b4d; }
 .notion-content code { padding: .16em .38em; border-radius: 6px; background: #eef1f6; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; word-break: break-word; }
-.notion-content pre { overflow-x: auto; margin: 24px 0; padding: 20px; border-radius: 14px; background: #151821; color: #eef3ff; }
-.notion-content pre code { padding: 0; background: transparent; color: inherit; }
-.notion-content callout, .notion-content .notion-callout {
-  display: block;
-  margin: 24px 0;
-  padding: 20px 22px;
+.notion-callout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  margin: 22px 0;
+  padding: 18px 20px;
   border: 1px solid #ccd8f5;
   border-radius: 14px;
   background: #f3f6ff;
 }
-.notion-content details, .notion-content .notion-details {
+.callout-icon { font-size: 22px; line-height: 1.4; }
+.callout-body > :first-child { margin-top: 0; }
+.callout-body > :last-child { margin-bottom: 0; }
+.notion-details {
   display: block;
-  margin: 22px 0;
+  margin: 20px 0;
   padding: 0 20px;
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -130,7 +140,7 @@ a { color: inherit; }
 }
 .notion-content summary {
   margin: 0 -20px;
-  padding: 18px 20px;
+  padding: 17px 20px;
   cursor: pointer;
   font-weight: 800;
   background: #f2f5fa;
@@ -163,11 +173,12 @@ a { color: inherit; }
   .lecture-card { min-height: 220px; }
   .site-footer .container { flex-direction: column; }
   .week-hero { padding: 42px 0 34px; }
-  .week-layout { padding: 36px 0 76px; }
-  .notion-content { padding: 22px 18px; font-size: 18px; }
-  .notion-content h1 { margin-top: 48px; font-size: 30px; }
-  .notion-content h2 { margin-top: 40px; font-size: 26px; }
-  .notion-content h3 { font-size: 21px; }
+  .week-layout { padding: 30px 0 72px; }
+  .lesson-block { padding: 24px 19px; border-radius: 18px; }
+  .notion-content { font-size: 18px; }
+  .notion-content h1 { font-size: 29px; }
+  .notion-content h2 { margin-top: 38px; font-size: 25px; }
+  .notion-content h3 { font-size: 20px; }
   .notion-content table { min-width: 560px; font-size: 18px; }
   .top-button { width: 54px; height: 54px; right: 16px; bottom: 16px; }
   .agenda__link::after { display: none; }

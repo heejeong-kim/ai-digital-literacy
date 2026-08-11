@@ -9,46 +9,11 @@
   <link rel="stylesheet" href="overrides.css" />
   <link rel="stylesheet" href="theme-blue.css" />
   <style>
-    .lecture-grid { grid-auto-rows: 1fr; }
-    .lecture-card {
-      height: 100%;
-      background: linear-gradient(180deg, #effcf8 0%, #ffffff 24%, #ffffff 76%, #f1faf7 100%);
-    }
-    .lecture-card h3 { min-height: 68px; }
-    .lecture-card p { flex: 1; min-height: 94px; }
-    .lecture-card__cta {
-      width: fit-content;
-      align-self: flex-start;
-      justify-content: flex-start;
-      gap: 10px;
-      margin-top: 34px;
-      padding: 11px 15px;
-      border: 1.5px solid var(--accent);
-      background: #fff;
-      color: var(--accent-strong);
-      box-shadow: none;
-    }
-    .lecture-card:hover .lecture-card__cta,
-    .lecture-card:focus-visible .lecture-card__cta {
-      background: #fff;
-      color: var(--accent-strong);
-      border-color: var(--accent-strong);
-      box-shadow: 0 6px 18px rgba(37,99,235,.10);
-    }
-    @media (max-width: 640px) {
-      .lecture-card h3,
-      .lecture-card p { min-height: 0; }
-      .lecture-card__cta {
-        width: fit-content;
-        margin-top: 30px;
-        padding: 11px 14px;
-      }
-    }
+    .lecture-grid{grid-auto-rows:1fr}.lecture-card{height:100%}.lecture-card h3{min-height:68px}.lecture-card p{flex:1;min-height:94px}.lecture-card__cta{width:fit-content;align-self:flex-start;justify-content:flex-start;gap:10px;margin-top:34px;padding:11px 15px;border:1.5px solid var(--accent);background:#fff;color:var(--accent-strong);box-shadow:none}.lecture-card.is-available{border-color:#8db0ff!important;background:linear-gradient(180deg,#eaf2ff 0%,#fff 30%,#fff 100%)!important;box-shadow:0 12px 34px rgba(37,99,235,.12)}.lecture-card.is-available .lecture-card__week{background:#2563eb;color:#fff}.lecture-card.is-available .lecture-card__cta{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}.lecture-card.is-preparing{background:linear-gradient(180deg,#f6f8fc 0%,#fff 100%)!important;border-color:#e0e6f0!important;color:#59657a;box-shadow:none;cursor:pointer}.lecture-card.is-preparing .lecture-card__week{background:#eef1f6;color:#7a8498}.lecture-card.is-preparing .lecture-card__cta{border-color:#cfd6e2!important;color:#7a8498!important;background:#f8fafc!important}.agenda__link.is-available{border-color:#7aa7ff;background:#eef4ff;color:#1d4ed8;box-shadow:0 0 0 2px rgba(37,99,235,.08) inset}.agenda__link.is-preparing{color:#8a94a8;background:#f7f9fc;border-color:#e2e7f0}.agenda__link.is-available::before{content:'';width:7px;height:7px;margin-right:6px;border-radius:50%;background:#2563eb}@media(max-width:640px){.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px}}
   </style>
 </head>
-<body data-page="home">
+<body>
   <a class="skip-link" href="#main">본문 바로가기</a>
-
   <header class="hero">
     <div class="container hero__inner">
       <p class="eyebrow">2026 · 2학기</p>
@@ -58,7 +23,23 @@
   </header>
 
   <nav class="agenda" aria-label="주차별 아젠다">
-    <div class="container agenda__inner" id="agendaNav"></div>
+    <div class="container agenda__inner">
+      <a class="agenda__link is-available" href="week-01.html">1주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">2주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">3주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">4주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">5주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">6주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">7주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">8주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">9주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">10주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">11주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">12주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">13주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">14주차</a>
+      <a class="agenda__link is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;">15주차</a>
+    </div>
   </nav>
 
   <main id="main">
@@ -67,24 +48,30 @@
         <div class="section-heading">
           <p class="eyebrow">COURSE OVERVIEW</p>
           <h2>주차별 강의목록</h2>
-          <p>1주차 교안이 공개되어 있으며 이후 주차는 순차적으로 연결됩니다.</p>
+          <p>교안이 연결된 주차는 파란색으로 표시되며, 준비 중인 주차는 클릭 시 안내 메시지가 표시됩니다.</p>
         </div>
-        <div class="lecture-grid" id="lectureList" aria-live="polite"></div>
+        <div class="lecture-grid">
+          <a class="lecture-card is-available" href="week-01.html"><span class="lecture-card__week">1주차</span><h3>AI와 디지털 리터러시의 개요</h3><p>AI의 정의와 기본 개념 · 디지털 리터러시의 의미와 중요성 · AI와 디지털 리터러시의 현대적 역할</p><span class="lecture-card__cta">강의교안 보기 →</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">2주차</span><h3>AI의 작동 원리</h3><p>AI의 역사 · 머신러닝·딥러닝 개요 · 알고리즘과 데이터의 역할 · 모델 훈련과 평가</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">3주차</span><h3>디지털 리터러시의 핵심</h3><p>디지털 정보 탐색과 평가 · 가짜 정보와 팩트체크 · 책임 있는 정보 공유</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">4주차</span><h3>AI 활용 사례</h3><p>산업별 AI 활용 · 컴퓨터 비전·자연어 처리·추천 · 업무 자동화와 인간 개입</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">5주차</span><h3>AI 활용 실습</h3><p>생성형 AI와 프롬프트 설계 · 구조화 출력과 문서 기반 생성 · 프롬프트 인젝션과 안전한 활용</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">6주차</span><h3>데이터와 리터러시</h3><p>데이터 구조와 품질 · 통계 해석 · 데이터 시각화와 왜곡 판단</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">7주차</span><h3>사이버 보안과 프라이버시</h3><p>계정·시스템 보호 · 피싱·사회공학·랜섬웨어 · 개인정보·저작권·디지털 권리</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">8주차</span><h3>중간고사</h3><p>1~7주차 종합평가 · 객관식 30문항 · 교안형·확장형 5:5</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">9주차</span><h3>디지털 윤리와 AI</h3><p>AI 윤리와 편향 · 공정성과 사회적 오류 비용 · 투명성·설명가능성·책임성</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">10주차</span><h3>생성형 AI 분석</h3><p>대규모 언어 모델의 작동 구조 · 환각과 검증 · RAG·미세조정·멀티모달</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">11주차</span><h3>생성형 AI 분석</h3><p>콘텐츠 목적·대상·핵심 메시지 · 페르소나·사용자 여정·스토리보드 · AI 기반 콘텐츠 기획 워크플로</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">12주차</span><h3>분야별 생성형AI 활용 1 (Text)</h3><p>텍스트·문서 AI 활용 · 코드 생성과 검증 · PPT·AI 자동화·업무 워크플로</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">13주차</span><h3>분야별 생성형AI 활용 2 (이미지)</h3><p>이미지 프롬프트 설계 · 캐릭터·스타일 일관성 · 편집·사실성·권리·접근성 검수</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">14주차</span><h3>분야별 생성형AI 활용 3 (영상)</h3><p>음성·음악 생성 · 영상 생성과 시간적 일관성 · 편집·자막·접근성·권리 검수</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">15주차</span><h3>기말고사</h3><p>9~14주차 종합 실습평가 · 기획·AI 활용·검증·윤리 평가 · 주차별 기본·고난도·확장 탐구 퀴즈</p><span class="lecture-card__cta">교안 준비중</span></a>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <strong>AI와 디지털 리터러시</strong>
-      <span>2026년 2학기 · 주차별 강의교안</span>
-    </div>
-  </footer>
-
-  <button class="top-button" id="topButton" type="button" aria-label="페이지 맨 위로 이동">TOP</button>
-
-  <script src="data.js"></script>
-  <script src="app.js"></script>
-  <script src="availability.js"></script>
+  <footer class="site-footer"><div class="container"><strong>AI와 디지털 리터러시</strong><span>2026년 2학기 · 주차별 강의교안</span></div></footer>
+  <button class="top-button is-visible" type="button" aria-label="페이지 맨 위로 이동" onclick="window.scrollTo({top:0,behavior:'smooth'})">TOP</button>
 </body>
 </html>

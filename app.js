@@ -279,8 +279,15 @@
   function buildSectionNav(root) {
     const nav = document.getElementById('sectionNav');
     if (!nav) return;
+
     const headings = [...root.querySelectorAll('h1, h2')]
-      .filter(h => h.tagName === 'H1' || /학습 목표|핵심 정리|추가 심화 학습|학습 요약|평가 범위|주차별 퀴즈/.test(h.textContent));
+      .filter(h => {
+        const text = h.textContent.trim();
+        if (h.tagName === 'H1') return true;
+        if (/^\d+\.\s+/.test(text)) return true;
+        return /학습 목표|핵심 정리|추가 심화 학습|학습 요약|평가 범위|주차별 퀴즈/.test(text);
+      });
+
     const used = new Set();
     headings.forEach((heading, index) => {
       let slug = `lesson-${index + 1}`;
@@ -293,7 +300,13 @@
       used.add(unique);
       heading.id = unique;
     });
-    nav.innerHTML = headings.map(h => `<a href="#${h.id}">${esc(h.textContent.trim())}</a>`).join('');
+
+    nav.innerHTML = headings.map(h => {
+      const isPeriod = h.tagName === 'H1';
+      const isTopLevel = h.tagName === 'H2' && /^\d+\.\s+/.test(h.textContent.trim());
+      const className = isPeriod ? 'section-nav__period' : isTopLevel ? 'section-nav__item' : 'section-nav__special';
+      return `<a class="${className}" href="#${h.id}">${esc(h.textContent.trim())}</a>`;
+    }).join('');
   }
 
   async function copyText(text) {

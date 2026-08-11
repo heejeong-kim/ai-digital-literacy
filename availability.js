@@ -11,42 +11,35 @@
     return textMatch ? Number(textMatch[1]) : null;
   };
 
-  const applyWeekStates = () => {
-    document.querySelectorAll('.agenda__link, .lecture-card').forEach(element => {
-      const week = getWeekNumber(element);
-      if (!week) return;
+  document.querySelectorAll('.agenda__link, .lecture-card').forEach(element => {
+    const week = getWeekNumber(element);
+    if (!week) return;
 
-      element.dataset.week = String(week);
+    element.dataset.week = String(week);
 
-      if (week === 1) {
-        element.href = 'week-01.html';
-        element.dataset.preparing = 'false';
-        element.classList.add('is-available');
-        element.classList.remove('is-preparing');
-
-        if (element.classList.contains('lecture-card')) {
-          const cta = element.querySelector('.lecture-card__cta');
-          if (cta) cta.innerHTML = '강의교안 보기 <span aria-hidden="true">→</span>';
-        }
-        return;
-      }
-
-      element.href = '#';
-      element.dataset.preparing = 'true';
-      element.classList.add('is-preparing');
-      element.classList.remove('is-available');
+    if (week === 1) {
+      element.setAttribute('href', 'week-01.html');
+      element.dataset.preparing = 'false';
+      element.classList.add('is-available');
+      element.classList.remove('is-preparing');
 
       if (element.classList.contains('lecture-card')) {
         const cta = element.querySelector('.lecture-card__cta');
-        if (cta) cta.textContent = '교안 준비중';
+        if (cta) cta.innerHTML = '강의교안 보기 <span aria-hidden="true">→</span>';
       }
-    });
-  };
+      return;
+    }
 
-  applyWeekStates();
+    element.setAttribute('href', '#');
+    element.dataset.preparing = 'true';
+    element.classList.add('is-preparing');
+    element.classList.remove('is-available');
 
-  const observer = new MutationObserver(applyWeekStates);
-  observer.observe(document.body, { childList: true, subtree: true });
+    if (element.classList.contains('lecture-card')) {
+      const cta = element.querySelector('.lecture-card__cta');
+      if (cta) cta.textContent = '교안 준비중';
+    }
+  });
 
   document.addEventListener('click', event => {
     const preparing = event.target.closest('.agenda__link[data-preparing="true"], .lecture-card[data-preparing="true"]');

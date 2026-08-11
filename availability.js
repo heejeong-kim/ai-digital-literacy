@@ -1,24 +1,46 @@
 (() => {
-  const lockedWeekPattern = /week-(\d{2})\.html(?:[?#].*)?$/;
+  const weekPattern = /week-(\d{2})\.html(?:[?#].*)?$/;
 
-  const lockPreparingLinks = () => {
-    document.querySelectorAll('a[href]').forEach(link => {
-      const href = link.getAttribute('href') || '';
-      const match = href.match(lockedWeekPattern);
-      if (!match || Number(match[1]) === 1) return;
+  const applyWeekStates = () => {
+    document.querySelectorAll('a[href], a[data-preparing="true"]').forEach(link => {
+      const originalHref = link.dataset.originalWeekHref || link.getAttribute('href') || '';
+      const match = originalHref.match(weekPattern);
+      if (!match) return;
 
+      const week = Number(match[1]);
+      const card = link.classList.contains('lecture-card') ? link : null;
+
+      if (week === 1) {
+        link.classList.add('is-available');
+        link.classList.remove('is-preparing');
+        if (card) {
+          const cta = card.querySelector('.lecture-card__cta');
+          if (cta) cta.innerHTML = '강의교안 보기 <span aria-hidden="true">→</span>';
+        }
+        return;
+      }
+
+      link.dataset.originalWeekHref = originalHref;
       link.dataset.preparing = 'true';
+      link.classList.add('is-preparing');
+      link.classList.remove('is-available');
       link.setAttribute('href', '#');
+
       const label = link.getAttribute('aria-label') || link.textContent.trim();
       if (label && !label.includes('교안 준비중')) {
         link.setAttribute('aria-label', `${label} · 교안 준비중`);
       }
+
+      if (card) {
+        const cta = card.querySelector('.lecture-card__cta');
+        if (cta) cta.textContent = '교안 준비중';
+      }
     });
   };
 
-  lockPreparingLinks();
+  applyWeekStates();
 
-  const observer = new MutationObserver(lockPreparingLinks);
+  const observer = new MutationObserver(applyWeekStates);
   observer.observe(document.body, { childList: true, subtree: true });
 
   document.addEventListener('click', event => {

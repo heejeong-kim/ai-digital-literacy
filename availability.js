@@ -1,38 +1,43 @@
 (() => {
-  const weekPattern = /week-(\d{2})\.html(?:[?#].*)?$/;
+  const getWeekNumber = element => {
+    const explicit = Number(element.dataset.week);
+    if (explicit) return explicit;
+
+    const href = element.getAttribute('href') || '';
+    const hrefMatch = href.match(/week-(\d{2})\.html/);
+    if (hrefMatch) return Number(hrefMatch[1]);
+
+    const textMatch = element.textContent.match(/(\d{1,2})주차/);
+    return textMatch ? Number(textMatch[1]) : null;
+  };
 
   const applyWeekStates = () => {
-    document.querySelectorAll('a[href], a[data-preparing="true"]').forEach(link => {
-      const originalHref = link.dataset.originalWeekHref || link.getAttribute('href') || '';
-      const match = originalHref.match(weekPattern);
-      if (!match) return;
+    document.querySelectorAll('.agenda__link, .lecture-card').forEach(element => {
+      const week = getWeekNumber(element);
+      if (!week) return;
 
-      const week = Number(match[1]);
-      const card = link.classList.contains('lecture-card') ? link : null;
+      element.dataset.week = String(week);
 
       if (week === 1) {
-        link.classList.add('is-available');
-        link.classList.remove('is-preparing');
-        if (card) {
-          const cta = card.querySelector('.lecture-card__cta');
+        element.href = 'week-01.html';
+        element.dataset.preparing = 'false';
+        element.classList.add('is-available');
+        element.classList.remove('is-preparing');
+
+        if (element.classList.contains('lecture-card')) {
+          const cta = element.querySelector('.lecture-card__cta');
           if (cta) cta.innerHTML = '강의교안 보기 <span aria-hidden="true">→</span>';
         }
         return;
       }
 
-      link.dataset.originalWeekHref = originalHref;
-      link.dataset.preparing = 'true';
-      link.classList.add('is-preparing');
-      link.classList.remove('is-available');
-      link.setAttribute('href', '#');
+      element.href = '#';
+      element.dataset.preparing = 'true';
+      element.classList.add('is-preparing');
+      element.classList.remove('is-available');
 
-      const label = link.getAttribute('aria-label') || link.textContent.trim();
-      if (label && !label.includes('교안 준비중')) {
-        link.setAttribute('aria-label', `${label} · 교안 준비중`);
-      }
-
-      if (card) {
-        const cta = card.querySelector('.lecture-card__cta');
+      if (element.classList.contains('lecture-card')) {
+        const cta = element.querySelector('.lecture-card__cta');
         if (cta) cta.textContent = '교안 준비중';
       }
     });
@@ -44,10 +49,11 @@
   observer.observe(document.body, { childList: true, subtree: true });
 
   document.addEventListener('click', event => {
-    const link = event.target.closest('a[data-preparing="true"]');
-    if (!link) return;
+    const preparing = event.target.closest('.agenda__link[data-preparing="true"], .lecture-card[data-preparing="true"]');
+    if (!preparing) return;
+
     event.preventDefault();
     event.stopPropagation();
     alert('교안 준비중입니다');
-  });
+  }, true);
 })();

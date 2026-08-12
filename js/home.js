@@ -10,6 +10,7 @@
   let activeFilter = 'all';
 
   const weekUrl = week => `content/week-${String(week).padStart(2, '0')}.html`;
+  const thumbnailUrl = week => `asset/${week}.png`;
   const category = week => (week === 8 || week === 15 ? 'assessment' : 'class');
   const esc = (value='') => String(value)
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
@@ -31,6 +32,9 @@
       const href = available ? weekUrl(item.week) : '#';
       const keywords = `${item.week}주차 ${item.title} ${item.agenda.join(' ')}`;
       return `<a class="lecture-card ${klass}" data-week="${item.week}" data-category="${category(item.week)}" data-keywords="${esc(keywords)}" href="${href}">
+        <figure class="lecture-card__thumb">
+          <img src="${thumbnailUrl(item.week)}" alt="${item.week}주차 ${esc(item.title)} 비주얼" loading="lazy" decoding="async">
+        </figure>
         <span class="lecture-card__week">${item.week}주차</span>
         <h3>${esc(item.title)}</h3>
         <p>${item.agenda.map(esc).join(' · ')}</p>

@@ -1,0 +1,70 @@
+.copy-code-block {
+  position: relative;
+  margin: 20px 0 34px;
+  min-height: 106px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #111416;
+}
+
+.copy-code-block pre {
+  margin: 0;
+  padding: 29px 116px 29px 30px;
+  overflow-x: auto;
+  background: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.copy-code-block pre code {
+  padding: 0;
+  background: transparent !important;
+  color: #f7f8f8 !important;
+  font-family: 'Pretendard Variable', Pretendard, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 18px;
+  font-weight: 620;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.code-copy {
+  appearance: none;
+  position: absolute;
+  top: 17px;
+  right: 17px;
+  z-index: 2;
+  min-width: 52px;
+  height: 38px;
+  padding: 0 13px;
+  border: 1px solid #777d80;
+  border-radius: 999px;
+  background: #111416;
+  color: #f7f8f8;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.code-copy:hover,
+.code-copy:focus-visible {
+  border-color: #c7cdcf;
+  background: #1a1e20;
+  color: #fff;
+  outline: none;
+}
+
+.code-copy:active { transform: scale(.97); }
+.code-copy.is-copied {
+  border-color: #8ce3cd;
+  background: #16362e;
+  color: #cffff1;
+}
+
+@media (max-width: 640px) {
+  .copy-code-block { min-height: 96px; border-radius: 19px; }
+  .copy-code-block pre { padding: 24px 82px 24px 22px; }
+  .copy-code-block pre code { font-size: 18px; line-height: 1.65; }
+  .code-copy { top: 14px; right: 14px; min-width: 48px; height: 35px; padding: 0 11px; font-size: 13px; }
+}

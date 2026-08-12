@@ -150,16 +150,21 @@
         continue;
       }
 
-      if (line.includes('<table') || line.includes('\\<table')) {
+      if (/^\\?<table\b/i.test(line)) {
         flush();
-        const table = line
+        const tableLines = [raw];
+        while (i + 1 < lines.length && !/^\\?<\/table>\s*$/i.test(lines[i + 1].trim())) {
+          tableLines.push(lines[++i]);
+        }
+        if (i + 1 < lines.length) tableLines.push(lines[++i]);
+        const table = tableLines.join('\n')
           .replaceAll('\\<','<').replaceAll('\\>','>')
-          .replace(/ fit-page-width="[^"]*"/g,'')
-          .replace(/ header-row="[^"]*"/g,'');
+          .replace(/ fit-page-width="[^"]*"/gi,'')
+          .replace(/ header-row="[^"]*"/gi,'')
+          .replace(/ header-column="[^"]*"/gi,'');
         out.push(`<div class="table-wrap">${table}</div>`);
         continue;
       }
-      if (/^\\?<\/table>$/i.test(line)) continue;
 
       const heading = line.match(/^(#{1,6})\s+(.+)$/);
       if (heading) {
@@ -195,6 +200,8 @@
         continue;
       }
 
+      flushParagraph();
+      closeList();
       paragraph.push(line);
     }
 
@@ -284,7 +291,7 @@
       .filter(h => {
         const text = h.textContent.trim();
         if (h.tagName === 'H1') return true;
-        if (/^\d+\.\s+/.test(text)) return true;
+        if (/^\d+\.\d+(?:\s|$)/.test(text)) return true;
         return /학습 목표|핵심 정리|추가 심화 학습|학습 요약|평가 범위|주차별 퀴즈/.test(text);
       });
 
@@ -303,8 +310,8 @@
 
     nav.innerHTML = headings.map(h => {
       const isPeriod = h.tagName === 'H1';
-      const isTopLevel = h.tagName === 'H2' && /^\d+\.\s+/.test(h.textContent.trim());
-      const className = isPeriod ? 'section-nav__period' : isTopLevel ? 'section-nav__item' : 'section-nav__special';
+      const isSubsection = h.tagName === 'H2' && /^\d+\.\d+(?:\s|$)/.test(h.textContent.trim());
+      const className = isPeriod ? 'section-nav__period' : isSubsection ? 'section-nav__item' : 'section-nav__special';
       return `<a class="${className}" href="#${h.id}">${esc(h.textContent.trim())}</a>`;
     }).join('');
   }

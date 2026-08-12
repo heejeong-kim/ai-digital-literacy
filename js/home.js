@@ -29,25 +29,25 @@
     lectureGrid.innerHTML = data.map(item => {
       const available = availableWeeks.has(item.week);
       const klass = available ? 'is-available' : 'is-preparing';
-      const href = available ? weekUrl(item.week) : '#';
       const keywords = `${item.week}주차 ${item.title} ${item.agenda.join(' ')}`;
-      return `<a class="lecture-card ${klass}" data-week="${item.week}" data-category="${category(item.week)}" data-keywords="${esc(keywords)}" href="${href}">
+      const tag = available ? 'a' : 'article';
+      const linkAttrs = available ? ` href="${weekUrl(item.week)}"` : ' aria-disabled="true"';
+      return `<${tag} class="lecture-card ${klass}" data-week="${item.week}" data-category="${category(item.week)}" data-keywords="${esc(keywords)}"${linkAttrs}>
         <figure class="lecture-card__thumb">
           <img src="${thumbnailUrl(item.week)}" alt="${item.week}주차 ${esc(item.title)} 비주얼" loading="lazy" decoding="async">
         </figure>
         <span class="lecture-card__week">${item.week}주차</span>
         <h3>${esc(item.title)}</h3>
         <p>${item.agenda.map(esc).join(' · ')}</p>
-        <span class="lecture-card__cta">${available ? '강의교안 보기 →' : '교안 준비중'}</span>
-      </a>`;
+        <span class="lecture-card__cta"${available ? '' : ' aria-disabled="true"'}>${available ? '강의교안 보기 →' : '교안 준비중'}</span>
+      </${tag}>`;
     }).join('');
   }
 
   document.addEventListener('click', event => {
-    const preparing = event.target.closest('.agenda__link.is-preparing, .lecture-card.is-preparing');
-    if (!preparing) return;
+    const preparingAgenda = event.target.closest('.agenda__link.is-preparing');
+    if (!preparingAgenda) return;
     event.preventDefault();
-    alert('교안 준비중입니다');
   });
 
   const normalize = (value='') => String(value).toLowerCase().normalize('NFKC').replace(/[^0-9a-z가-힣]+/g, '');

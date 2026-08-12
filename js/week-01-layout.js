@@ -38,15 +38,12 @@
 
     let weights = profiles.map(profile => Math.pow(profile.score, 0.72));
 
-    // The first column in lecture tables is often a short label/category column.
-    // When its content is clearly shorter than the explanatory columns, keep it compact.
     if (count >= 3) {
       const restAvg = profiles.slice(1).reduce((sum, profile) => sum + profile.score, 0) / (count - 1);
       if (profiles[0].score < restAvg * 0.62) weights[0] *= 0.58;
       else if (profiles[0].score < restAvg * 0.78) weights[0] *= 0.76;
     }
 
-    // Columns made almost entirely of short labels should not consume explanatory space.
     profiles.forEach((profile, index) => {
       if (profile.max <= 14 && count >= 3) weights[index] *= 0.72;
     });
@@ -65,6 +62,8 @@
   };
 
   const fitTableColumns = table => {
+    if (table.dataset.widthFitted === 'true') return;
+
     const rows = [...table.rows];
     if (!rows.length) return;
 
@@ -78,7 +77,6 @@
       });
     });
 
-    // Fall back to header values for empty columns.
     if (rows[0]) {
       [...rows[0].cells].forEach((cell, index) => {
         if (!columnValues[index].length) columnValues[index].push(visualLength(cell.textContent));
@@ -113,6 +111,8 @@
       cell.style.wordBreak = 'keep-all';
       cell.style.overflowWrap = 'break-word';
     });
+
+    table.dataset.widthFitted = 'true';
   };
 
   const applyLayout = () => {
@@ -123,14 +123,18 @@
     root.querySelectorAll('table').forEach(fitTableColumns);
   };
 
-  let frame = 0;
-  const scheduleLayout = () => {
-    cancelAnimationFrame(frame);
-    frame = requestAnimationFrame(applyLayout);
-  };
+  const contentReady = () => root.querySelector('.lesson-period, table, .load-error');
 
-  const observer = new MutationObserver(scheduleLayout);
+  if (contentReady()) {
+    applyLayout();
+    return;
+  }
+
+  const observer = new MutationObserver(() => {
+    if (!contentReady()) return;
+    observer.disconnect();
+    applyLayout();
+  });
+
   observer.observe(root, { childList: true, subtree: true });
-  window.addEventListener('resize', scheduleLayout, { passive: true });
-  applyLayout();
 })();

@@ -1,6 +1,9 @@
 /* Final layout refinements */
 .lecture-grid { grid-auto-rows: 1fr; align-items: stretch; }
 .lecture-card { height: 100%; background: linear-gradient(180deg,#eefcf8 0%,#fff 22%,#fff 78%,#f0faf7 100%); }
+.lecture-card__thumb { width:100%; margin:0 0 18px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#f7f9fc; aspect-ratio:16/10; }
+.lecture-card__thumb img { display:block; width:100%; height:100%; object-fit:cover; }
+.lecture-card.is-preparing .lecture-card__thumb { opacity:.72; filter:saturate(.72); }
 .lecture-card h3 { min-height: 68px; }
 .lecture-card p { flex: 1 1 auto; min-height: 94px; }
 .lecture-card__cta { flex:0 0 auto;width:fit-content;align-self:flex-start;justify-content:flex-start;gap:10px;margin-top:34px;padding:11px 15px;border:1.5px solid var(--accent);background:#fff;color:var(--accent-strong);box-shadow:none; }
@@ -28,4 +31,4 @@
 .prompt-copy.is-copied { border-color:#8ce3cd;background:#16362e;color:#cffff1; }
 .notion-content p > code:only-child { box-decoration-break:clone;-webkit-box-decoration-break:clone; }
 @media (max-width:960px){.week-context__inner{grid-template-columns:1fr;gap:5px;min-height:0;padding:11px 0 12px}.week-context__back{font-size:13px}.week-side{position:static;max-height:none}}
-@media (max-width:640px){.hero--detail{padding:58px 0 52px}.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px;padding:11px 14px}.week-context h1{font-size:20px}.week-context p{font-size:14px}.prompt-block{min-height:96px;border-radius:19px}.prompt-block pre{padding:24px 82px 24px 22px}.prompt-block pre code{font-size:18px;line-height:1.65}.prompt-copy{top:14px;right:14px;min-width:48px;height:35px;padding:0 11px;font-size:13px}}
+@media (max-width:640px){.hero--detail{padding:58px 0 52px}.lecture-card__thumb{margin-bottom:16px;border-radius:14px}.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px;padding:11px 14px}.week-context h1{font-size:20px}.week-context p{font-size:14px}.prompt-block{min-height:96px;border-radius:19px}.prompt-block pre{padding:24px 82px 24px 22px}.prompt-block pre code{font-size:18px;line-height:1.65}.prompt-copy{top:14px;right:14px;min-width:48px;height:35px;padding:0 11px;font-size:13px}}

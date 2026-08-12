@@ -11,6 +11,7 @@
   <style>
     .lecture-grid{grid-auto-rows:1fr}
     .lecture-card{height:100%}
+    .lecture-card[hidden]{display:none!important}
     .lecture-card h3{min-height:68px}
     .lecture-card p{flex:1;min-height:94px}
     .lecture-card__cta{width:fit-content;align-self:flex-start;justify-content:flex-start;gap:10px;margin-top:34px;padding:11px 15px;border:1.5px solid var(--accent);background:#fff;color:var(--accent-strong);box-shadow:none}
@@ -23,6 +24,14 @@
     .agenda__link.is-available{border-color:#7aa7ff;background:#eef4ff;color:#1d4ed8;box-shadow:0 0 0 2px rgba(37,99,235,.08) inset}
     .agenda__link.is-preparing{color:#8a94a8;background:#f7f9fc;border-color:#e2e7f0}
     .agenda__link.is-available::before{content:'';width:7px;height:7px;margin-right:6px;border-radius:50%;background:#2563eb}
+
+    .course-notice{margin:0 0 36px;padding:24px 26px;border:2px solid #ff4d4f;border-radius:20px;background:#fff5f3;color:#962b23;box-shadow:0 8px 24px rgba(180,45,35,.06)}
+    .course-notice__title{margin:0 0 18px;font-size:20px;line-height:1.4;font-weight:800;color:#9c281f}
+    .course-notice__body{display:grid;gap:7px;font-size:17px;line-height:1.65;font-weight:650}
+    .course-notice__row{display:flex;align-items:flex-start;gap:26px;flex-wrap:nowrap}
+    .course-notice__item{display:flex;align-items:flex-start;gap:8px;min-width:0}
+    .course-notice__bullet{flex:0 0 auto;font-weight:900;color:#b3241d}
+    .course-notice__text{min-width:0}
 
     .course-tools{display:grid;grid-template-columns:minmax(280px,460px) 1fr;gap:24px;align-items:end;margin:24px 0 34px}
     .course-search{position:relative}
@@ -43,6 +52,10 @@
     .course-search__empty{display:none;margin:0 0 30px;padding:20px;border:1px dashed #c8d3e7;border-radius:15px;background:#f8faff;color:#68758d;font-weight:650;text-align:center}
     .course-search__empty.is-visible{display:block}
 
+    @media(max-width:1000px){
+      .course-notice__row{flex-wrap:wrap;gap:7px}
+      .course-notice__row .course-notice__item{width:100%}
+    }
     @media(max-width:900px){
       .course-tools{grid-template-columns:1fr;align-items:stretch}
       .course-filter{justify-content:flex-start}
@@ -50,6 +63,8 @@
     @media(max-width:640px){
       .lecture-card h3,.lecture-card p{min-height:0}
       .lecture-card__cta{margin-top:30px}
+      .course-notice{padding:20px}
+      .course-notice__body{font-size:16px}
       .course-tools{gap:16px}
       .course-filter{gap:8px}
       .course-filter__legend{width:100%;margin:0 0 2px}
@@ -91,6 +106,18 @@
   <main id="main">
     <section class="section intro-section">
       <div class="container">
+        <aside class="course-notice" aria-label="수강 및 성적 안내">
+          <h2 class="course-notice__title">⚠️ 수강 및 성적 안내</h2>
+          <div class="course-notice__body">
+            <div class="course-notice__row">
+              <div class="course-notice__item"><span class="course-notice__bullet">•</span><span class="course-notice__text">본 과목은 교양 필수로 미이수 시 졸업학점에 영향을 받습니다.</span></div>
+              <div class="course-notice__item"><span class="course-notice__bullet">•</span><span class="course-notice__text">온라인 영상·퀴즈·시험 미응시자는 F학점이 나갈 수 있습니다.</span></div>
+            </div>
+            <div class="course-notice__item"><span class="course-notice__bullet">•</span><span class="course-notice__text">성적은 학습 및 응시 내역을 철저하게 검증·확인하여 반영할 예정이므로 학습에 각별히 신경 써주시기 바랍니다.</span></div>
+            <div class="course-notice__item"><span class="course-notice__bullet">•</span><span class="course-notice__text">퀴즈와 시험 문제는 수업 내용을 제대로 학습해야 정확히 해결할 수 있습니다.</span></div>
+          </div>
+        </aside>
+
         <div class="section-heading">
           <p class="eyebrow">COURSE OVERVIEW</p>
           <h2>주차별 강의목록</h2>
@@ -120,7 +147,7 @@
         <div class="lecture-grid" id="lectureGrid">
           <a class="lecture-card is-available" data-category="class" data-keywords="1주차 1 주차 ai 인공지능 디지털 리터러시 개요 정의 기본 개념 현대적 역할" href="week-01.html"><span class="lecture-card__week">1주차</span><h3>AI와 디지털 리터러시의 개요</h3><p>AI의 정의와 기본 개념 · 디지털 리터러시의 의미와 중요성 · AI와 디지털 리터러시의 현대적 역할</p><span class="lecture-card__cta">강의교안 보기 →</span></a>
 
-          <a class="lecture-card is-preparing" data-category="class" data-keywords="2주차 2 주차 ai 인공지능 작동 원리 역사 머신러닝 딥러닝 생성형 ai 알고리즘 데이터 모델 훈련 평가" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">2주차</span><h3>AI의 작동 원리</h3><p>AI의 역사 · 머신러닝·딥러닝 개요 · 알고리즘과 데이터의 역할 · 모델 훈련과 평가</p><span class="lecture-card__cta">교안 준비중</span></a>
+          <a class="lecture-card is-preparing" data-category="class" data-keywords="2주차 2 주차 ai 인공지능 작동 원리 역사 튜링 테스트 전문가 시스템 머신러닝 딥러닝 생성형 ai 알고리즘 데이터 모델 훈련 검증 성능 평가" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">2주차</span><h3>AI의 작동 원리</h3><p>AI의 역사 · 머신러닝·딥러닝 개요 · 알고리즘과 데이터의 역할 · 모델 훈련과 평가</p><span class="lecture-card__cta">교안 준비중</span></a>
 
           <a class="lecture-card is-preparing" data-category="class" data-keywords="3주차 3 주차 디지털 리터러시 정보 탐색 평가 가짜 정보 팩트체크 검증 책임 공유" href="#" onclick="alert('교안 준비중입니다');return false;"><span class="lecture-card__week">3주차</span><h3>디지털 리터러시의 핵심</h3><p>디지털 정보 탐색과 평가 · 가짜 정보와 팩트체크 · 책임 있는 정보 공유</p><span class="lecture-card__cta">교안 준비중</span></a>
 
@@ -170,32 +197,45 @@
       const topButton = document.getElementById('topButton');
       let activeFilter = 'all';
 
-      const normalize = (value = '') => String(value)
+      const normalizeToken = (value = '') => String(value)
         .toLowerCase()
         .normalize('NFKC')
         .replace(/[^0-9a-z가-힣]+/g, '');
 
+      const queryTokens = value => String(value || '')
+        .toLowerCase()
+        .normalize('NFKC')
+        .trim()
+        .split(/\s+/)
+        .map(normalizeToken)
+        .filter(Boolean);
+
       const cardIndex = new Map(cards.map(card => [
         card,
-        normalize(`${card.dataset.keywords || ''} ${card.textContent || ''}`)
+        normalizeToken(`${card.dataset.keywords || ''} ${card.textContent || ''}`)
       ]));
 
       function applyFilters() {
-        const query = normalize(input?.value || '');
+        const tokens = queryTokens(input?.value || '');
         let visibleCount = 0;
 
         cards.forEach(card => {
           const categoryMatch = activeFilter === 'all' || card.dataset.category === activeFilter;
-          const keywordMatch = !query || cardIndex.get(card).includes(query);
+          const index = cardIndex.get(card) || '';
+          const keywordMatch = tokens.length === 0 || tokens.every(token => index.includes(token));
           const visible = categoryMatch && keywordMatch;
           card.hidden = !visible;
+          card.setAttribute('aria-hidden', visible ? 'false' : 'true');
           if (visible) visibleCount += 1;
         });
 
         if (empty) empty.classList.toggle('is-visible', visibleCount === 0);
       }
 
-      if (input) input.addEventListener('input', applyFilters);
+      if (input) {
+        input.addEventListener('input', applyFilters);
+        input.addEventListener('search', applyFilters);
+      }
 
       buttons.forEach(button => {
         button.addEventListener('click', () => {

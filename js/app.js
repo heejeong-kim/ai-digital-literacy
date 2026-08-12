@@ -125,7 +125,8 @@
       if (/^<callout\b/i.test(line)) {
         flush();
         const icon = (line.match(/icon="([^"]+)"/) || [,'💡'])[1];
-        out.push(`<aside class="notion-callout"><span class="callout-icon" aria-hidden="true">${esc(icon)}</span><div class="callout-body">`);
+        const summaryClass = icon === '📌' ? ' notion-callout--summary' : '';
+        out.push(`<aside class="notion-callout${summaryClass}"><span class="callout-icon" aria-hidden="true">${esc(icon)}</span><div class="callout-body">`);
         continue;
       }
       if (/^<\/callout>/i.test(line)) {

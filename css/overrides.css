@@ -1,0 +1,31 @@
+/* Final layout refinements */
+.lecture-grid { grid-auto-rows: 1fr; align-items: stretch; }
+.lecture-card { height: 100%; background: linear-gradient(180deg,#eefcf8 0%,#fff 22%,#fff 78%,#f0faf7 100%); }
+.lecture-card h3 { min-height: 68px; }
+.lecture-card p { flex: 1 1 auto; min-height: 94px; }
+.lecture-card__cta { flex:0 0 auto;width:fit-content;align-self:flex-start;justify-content:flex-start;gap:10px;margin-top:34px;padding:11px 15px;border:1.5px solid var(--accent);background:#fff;color:var(--accent-strong);box-shadow:none; }
+.lecture-card:hover .lecture-card__cta,.lecture-card:focus-visible .lecture-card__cta { background:#fff;color:var(--accent-strong);border-color:var(--accent-strong);box-shadow:0 6px 18px rgba(11,159,131,.10); }
+.hero--detail { padding:88px 0 72px; }
+.week-context { position:sticky;top:var(--agenda-height);z-index:105;border-bottom:1px solid rgba(8,118,98,.18);background:rgba(247,255,252,.96);backdrop-filter:blur(18px);box-shadow:0 8px 24px rgba(8,83,70,.08); }
+.week-context__inner { display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center;min-height:96px;padding:14px 0; }
+.week-context__back { display:inline-flex;align-items:center;white-space:nowrap;color:var(--accent-strong);text-decoration:none;font-size:15px;font-weight:800; }
+.week-context__back:hover,.week-context__back:focus-visible { color:var(--accent-dark); }
+.week-context__copy { min-width:0; }
+.week-context__meta { margin-bottom:2px;color:var(--accent-strong);font-size:13px;font-weight:850; }
+.week-context h1 { margin:0;overflow:hidden;color:var(--text);font-size:clamp(22px,2.5vw,30px);line-height:1.25;letter-spacing:-.03em;text-overflow:ellipsis;white-space:nowrap; }
+.week-context p { margin:4px 0 0;overflow:hidden;color:var(--muted);font-size:15px;line-height:1.45;text-overflow:ellipsis;white-space:nowrap; }
+.lesson-block { background:linear-gradient(180deg,rgba(229,250,244,.72) 0%,#fff 10%,#fff 90%,rgba(240,250,247,.80) 100%); }
+.lesson-deepdive { background:linear-gradient(180deg,#eefaf7 0%,#fff 20%,#fff 82%,#f4fbf9 100%); }
+.lesson-summary { background:linear-gradient(180deg,#ddf6ef 0%,#effbf7 32%,#e9f8f4 100%); }
+.week-layout { padding-top:42px; }
+.week-side { top:calc(var(--agenda-height) + 116px);max-height:calc(100vh - var(--agenda-height) - 145px); }
+.prompt-block { position:relative;margin:20px 0 34px;min-height:106px;overflow:hidden;border:0;border-radius:24px;background:#111416;box-shadow:none; }
+.prompt-block pre { margin:0;padding:29px 116px 29px 30px;overflow-x:auto;background:transparent;white-space:pre-wrap;word-break:keep-all; }
+.prompt-block pre code { padding:0;background:transparent!important;color:#f7f8f8;font-family:'Pretendard Variable',Pretendard,ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:18px;font-weight:650;line-height:1.65;white-space:pre-wrap;box-decoration-break:initial;-webkit-box-decoration-break:initial; }
+.prompt-copy { appearance:none;position:absolute;top:17px;right:17px;z-index:2;min-width:52px;height:38px;padding:0 13px;border:1px solid #777d80;border-radius:999px;background:#111416;color:#f7f8f8;font-size:14px;font-weight:800;line-height:1;cursor:pointer;transition:border-color .18s ease,background .18s ease,color .18s ease,transform .18s ease; }
+.prompt-copy:hover,.prompt-copy:focus-visible { border-color:#c7cdcf;background:#1a1e20;color:#fff;outline:none; }
+.prompt-copy:active { transform:scale(.97); }
+.prompt-copy.is-copied { border-color:#8ce3cd;background:#16362e;color:#cffff1; }
+.notion-content p > code:only-child { box-decoration-break:clone;-webkit-box-decoration-break:clone; }
+@media (max-width:960px){.week-context__inner{grid-template-columns:1fr;gap:5px;min-height:0;padding:11px 0 12px}.week-context__back{font-size:13px}.week-side{position:static;max-height:none}}
+@media (max-width:640px){.hero--detail{padding:58px 0 52px}.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px;padding:11px 14px}.week-context h1{font-size:20px}.week-context p{font-size:14px}.prompt-block{min-height:96px;border-radius:19px}.prompt-block pre{padding:24px 82px 24px 22px}.prompt-block pre code{font-size:18px;line-height:1.65}.prompt-copy{top:14px;right:14px;min-width:48px;height:35px;padding:0 11px;font-size:13px}}

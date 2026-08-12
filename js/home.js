@@ -9,6 +9,9 @@
   const topButton = document.getElementById('topButton');
   let activeFilter = 'all';
 
+  // Home page desktop canvas: optimized for a 1560px content width.
+  document.documentElement.style.setProperty('--max-width', '1560px');
+
   const weekUrl = week => `content/week-${String(week).padStart(2, '0')}.html`;
   const thumbnailUrl = week => `asset/${week}.png`;
   const category = week => (week === 8 || week === 15 ? 'assessment' : 'class');
@@ -36,8 +39,10 @@
         <figure class="lecture-card__thumb">
           <img src="${thumbnailUrl(item.week)}" alt="${item.week}주차 ${esc(item.title)} 비주얼" loading="lazy" decoding="async">
         </figure>
-        <span class="lecture-card__week">${item.week}주차</span>
-        <h3>${esc(item.title)}</h3>
+        <div class="lecture-card__heading">
+          <span class="lecture-card__week">${item.week}주차</span>
+          <h3>${esc(item.title)}</h3>
+        </div>
         <p>${item.agenda.map(esc).join(' · ')}</p>
         <span class="lecture-card__cta"${available ? '' : ' aria-disabled="true"'}>${available ? '강의교안 보기 →' : '교안 준비중'}</span>
       </${tag}>`;

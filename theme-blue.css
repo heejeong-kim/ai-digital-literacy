@@ -59,4 +59,25 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans KR',-appl
 .notion-content code{background:#eaf1ff}
 .notion-callout{border-color:#c7d8f7!important;background:#f4f8ff!important}
 .site-footer{border-top-color:var(--line);background:#fff}
-@media(max-width:640px){.agenda__link.is-available::before{width:6px;height:6px;margin-right:4px}}
+
+/* Course requirement notice */
+.intro-section .container::before{
+  content:'⚠️  수강 및 성적 안내\A\A본 과목은 교양 필수로 미이수 시 졸업학점에 영향을 받습니다.\A온라인 영상·퀴즈·시험 미응시자는 F학점이 나갈 수 있습니다.\A성적은 학습 및 응시 내역을 철저하게 검증·확인하여 반영할 예정이므로 학습에 각별히 신경 써주시기 바랍니다.\A퀴즈와 시험 문제는 수업 내용을 제대로 학습해야 정확히 해결할 수 있습니다.';
+  display:block;
+  margin:0 0 38px;
+  padding:24px 26px;
+  border:2px solid #ef4444;
+  border-radius:18px;
+  background:linear-gradient(135deg,#fff1f2 0%,#fff7ed 100%);
+  color:#7f1d1d;
+  font-size:17px;
+  font-weight:600;
+  line-height:1.75;
+  white-space:pre-line;
+  box-shadow:0 14px 34px rgba(185,28,28,.12);
+}
+
+@media(max-width:640px){
+  .agenda__link.is-available::before{width:6px;height:6px;margin-right:4px}
+  .intro-section .container::before{margin-bottom:28px;padding:20px 18px;border-radius:15px;font-size:15px;line-height:1.7}
+}

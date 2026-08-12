@@ -33,13 +33,13 @@ body[data-page="week"] { --max-width:1560px; }
 .lesson-summary { background:linear-gradient(180deg,#ddf6ef 0%,#effbf7 32%,#e9f8f4 100%); }
 .week-layout { padding-top:42px; }
 
-/* Learning goals and learning summary are supporting blocks, so keep them visually lighter than the main lecture text. */
-body[data-page="week"] .lesson-overview > h2:first-child { font-size:22px;line-height:1.35;margin-bottom:12px; }
-body[data-page="week"] .lesson-overview > h2:first-child + ol { font-size:16px;line-height:1.65;margin-top:8px;margin-bottom:22px; }
+/* Learning goals and learning summary use compact supporting typography. */
+body[data-page="week"] .lesson-overview > h2:first-child { font-size:14px;line-height:1.55;margin-bottom:10px; }
+body[data-page="week"] .lesson-overview > h2:first-child + ol { font-size:14px;line-height:1.65;margin-top:8px;margin-bottom:22px; }
 body[data-page="week"] .lesson-overview > h2:first-child + ol li { margin:5px 0; }
-body[data-page="week"] .notion-callout--summary { font-size:15.5px;line-height:1.65; }
+body[data-page="week"] .notion-callout--summary { font-size:14px;line-height:1.65; }
 body[data-page="week"] .notion-callout--summary .callout-body > p:first-child,
-body[data-page="week"] .notion-callout--summary .callout-body > strong:first-child { font-size:16px; }
+body[data-page="week"] .notion-callout--summary .callout-body > strong:first-child { font-size:14px; }
 body[data-page="week"] .notion-callout--summary ul,
 body[data-page="week"] .notion-callout--summary ol { margin:8px 0 4px; }
 body[data-page="week"] .notion-callout--summary li { margin:5px 0; }
@@ -71,4 +71,4 @@ body[data-page="week"] .week-side__visual img { width:100%;height:150px;object-f
 @media (max-width:1100px){body[data-page="week"] .week-side{position:static;top:auto;max-height:none;overflow:visible}body[data-page="week"] .week-side__visual{max-height:none}body[data-page="week"] .week-side__visual img{height:auto;aspect-ratio:16/10}}
 @media (max-width:960px){#lectureGrid.lecture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.week-context__inner{grid-template-columns:1fr;gap:5px;min-height:0;padding:11px 0 12px}.week-context__back{font-size:13px}}
 @media (max-width:720px){body[data-page="week"] .notion-content table{min-width:620px}.table-wrap{overflow-x:auto}}
-@media (max-width:640px){#lectureGrid.lecture-grid{grid-template-columns:1fr}#lectureGrid .lecture-card__heading{gap:10px;margin:16px 0 8px}#lectureGrid .lecture-card__heading h3{font-size:21px}.hero--detail{padding:58px 0 52px}.lecture-card__thumb{margin-bottom:16px;border-radius:14px}.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px;padding:11px 14px}.week-context h1{font-size:20px}.week-context p{font-size:14px}.prompt-block{min-height:96px;border-radius:19px}.prompt-block pre{padding:24px 82px 24px 22px}.prompt-block pre code{font-size:18px;line-height:1.65}.prompt-copy{top:14px;right:14px;min-width:48px;height:35px;padding:0 11px;font-size:13px}body[data-page="week"] .lesson-overview > h2:first-child{font-size:20px}body[data-page="week"] .lesson-overview > h2:first-child + ol{font-size:15px}body[data-page="week"] .notion-callout--summary{font-size:14.5px}}
+@media (max-width:640px){#lectureGrid.lecture-grid{grid-template-columns:1fr}#lectureGrid .lecture-card__heading{gap:10px;margin:16px 0 8px}#lectureGrid .lecture-card__heading h3{font-size:21px}.hero--detail{padding:58px 0 52px}.lecture-card__thumb{margin-bottom:16px;border-radius:14px}.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px;padding:11px 14px}.week-context h1{font-size:20px}.week-context p{font-size:14px}.prompt-block{min-height:96px;border-radius:19px}.prompt-block pre{padding:24px 82px 24px 22px}.prompt-block pre code{font-size:18px;line-height:1.65}.prompt-copy{top:14px;right:14px;min-width:48px;height:35px;padding:0 11px;font-size:13px}body[data-page="week"] .lesson-overview > h2:first-child,body[data-page="week"] .lesson-overview > h2:first-child + ol,body[data-page="week"] .notion-callout--summary,body[data-page="week"] .notion-callout--summary .callout-body > p:first-child,body[data-page="week"] .notion-callout--summary .callout-body > strong:first-child{font-size:13.5px}}

@@ -33,6 +33,14 @@ body[data-page="week"] { --max-width:1560px; }
 .lesson-summary { background:linear-gradient(180deg,#ddf6ef 0%,#effbf7 32%,#e9f8f4 100%); }
 .week-layout { padding-top:42px; }
 
+/* Let lecture prose use the actual card width; wrapping is controlled by the viewport, not an artificial character cap. */
+body[data-page="week"] .notion-content p { max-width:none; }
+body[data-page="week"] .notion-content li { max-width:none; }
+body[data-page="week"] .notion-content table { width:100%;max-width:100%;min-width:0;table-layout:fixed; }
+body[data-page="week"] .table-wrap { width:100%;max-width:100%;overflow-x:auto; }
+body[data-page="week"] .notion-content th,
+body[data-page="week"] .notion-content td { word-break:keep-all;overflow-wrap:break-word; }
+
 /* Week quick navigation: full list, no nested scrollbar, sticky on desktop. */
 body[data-page="week"] .week-side { position:sticky;top:116px;max-height:none;overflow:visible;align-self:start; }
 body[data-page="week"] .week-side #sectionNav { overflow:visible; }
@@ -51,4 +59,5 @@ body[data-page="week"] .week-side__visual img { width:100%;height:150px;object-f
 @media (max-width:1399px){#lectureGrid.lecture-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:1100px){body[data-page="week"] .week-side{position:static;top:auto;max-height:none;overflow:visible}body[data-page="week"] .week-side__visual{max-height:none}body[data-page="week"] .week-side__visual img{height:auto;aspect-ratio:16/10}}
 @media (max-width:960px){#lectureGrid.lecture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.week-context__inner{grid-template-columns:1fr;gap:5px;min-height:0;padding:11px 0 12px}.week-context__back{font-size:13px}}
+@media (max-width:720px){body[data-page="week"] .notion-content table{min-width:620px}.table-wrap{overflow-x:auto}}
 @media (max-width:640px){#lectureGrid.lecture-grid{grid-template-columns:1fr}#lectureGrid .lecture-card__heading{gap:10px;margin:16px 0 8px}#lectureGrid .lecture-card__heading h3{font-size:21px}.hero--detail{padding:58px 0 52px}.lecture-card__thumb{margin-bottom:16px;border-radius:14px}.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px;padding:11px 14px}.week-context h1{font-size:20px}.week-context p{font-size:14px}.prompt-block{min-height:96px;border-radius:19px}.prompt-block pre{padding:24px 82px 24px 22px}.prompt-block pre code{font-size:18px;line-height:1.65}.prompt-copy{top:14px;right:14px;min-width:48px;height:35px;padding:0 11px;font-size:13px}}

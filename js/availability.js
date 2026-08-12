@@ -1,5 +1,5 @@
 (() => {
-  const availableWeeks = new Set([1, 2]);
+  const availableWeeks = new Set([1, 2, 3]);
 
   const getWeekNumber = element => {
     const explicit = Number(element.dataset.week);

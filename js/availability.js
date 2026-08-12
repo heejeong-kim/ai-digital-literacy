@@ -1,4 +1,6 @@
 (() => {
+  const availableWeeks = new Set([1, 2]);
+
   const getWeekNumber = element => {
     const explicit = Number(element.dataset.week);
     if (explicit) return explicit;
@@ -17,8 +19,8 @@
 
     element.dataset.week = String(week);
 
-    if (week === 1) {
-      element.setAttribute('href', 'week-01.html');
+    if (availableWeeks.has(week)) {
+      element.setAttribute('href', `week-${String(week).padStart(2, '0')}.html`);
       element.dataset.preparing = 'false';
       element.classList.add('is-available');
       element.classList.remove('is-preparing');

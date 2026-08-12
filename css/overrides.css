@@ -16,6 +16,9 @@
 #lectureGrid .lecture-card__heading h3 { flex:1;min-width:0;min-height:0;margin:0;font-size:21px;line-height:1.4; }
 #lectureGrid .lecture-card__thumb { opacity:1;filter:none; }
 
+/* Week detail pages use the same 1560px desktop canvas as the home page. */
+body[data-page="week"] { --max-width:1560px; }
+
 .hero--detail { padding:88px 0 72px; }
 .week-context { position:sticky;top:var(--agenda-height);z-index:105;border-bottom:1px solid rgba(8,118,98,.18);background:rgba(247,255,252,.96);backdrop-filter:blur(18px);box-shadow:0 8px 24px rgba(8,83,70,.08); }
 .week-context__inner { display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center;min-height:96px;padding:14px 0; }

@@ -5,7 +5,7 @@
   const week = String(document.body.dataset.week || '').trim();
   if (week !== '1' && week !== '2') return;
 
-  const imageCount = 3;
+  const imageCount = week === '2' ? 4 : 3;
 
   const ensureStyle = () => {
     if (document.getElementById('weekSectionImageStyle')) return;

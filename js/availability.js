@@ -1,26 +1,31 @@
 (() => {
-  const availableWeeks = new Set([1]);
+  const availableItems = new Set(['ot','1']);
 
-  const getWeekNumber = element => {
-    const explicit = Number(element.dataset.week);
-    if (explicit) return explicit;
+  const getItemKey = element => {
+    const explicit = String(element.dataset.week || '').trim().toLowerCase();
+    if (explicit === 'ot') return 'ot';
+    if (/^\d{1,2}$/.test(explicit) && Number(explicit) > 0) return String(Number(explicit));
 
     const href = element.getAttribute('href') || '';
+    if (/\bot\.html(?:$|[?#])/.test(href)) return 'ot';
     const hrefMatch = href.match(/week-(\d{2})\.html/);
-    if (hrefMatch) return Number(hrefMatch[1]);
+    if (hrefMatch) return String(Number(hrefMatch[1]));
 
-    const textMatch = element.textContent.match(/(\d{1,2})주차/);
-    return textMatch ? Number(textMatch[1]) : null;
+    if (/\bOT\b/i.test(element.textContent || '')) return 'ot';
+    const textMatch = (element.textContent || '').match(/(\d{1,2})주차/);
+    return textMatch ? String(Number(textMatch[1])) : null;
   };
 
+  const itemHref = key => key === 'ot' ? 'ot.html' : `week-${String(key).padStart(2, '0')}.html`;
+
   document.querySelectorAll('.agenda__link, .lecture-card').forEach(element => {
-    const week = getWeekNumber(element);
-    if (!week) return;
+    const key = getItemKey(element);
+    if (!key) return;
 
-    element.dataset.week = String(week);
+    element.dataset.week = key;
 
-    if (availableWeeks.has(week)) {
-      element.setAttribute('href', `week-${String(week).padStart(2, '0')}.html`);
+    if (availableItems.has(key)) {
+      element.setAttribute('href', itemHref(key));
       element.dataset.preparing = 'false';
       element.classList.add('is-available');
       element.classList.remove('is-preparing');

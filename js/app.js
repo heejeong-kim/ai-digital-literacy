@@ -8,15 +8,26 @@
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
     .replaceAll('"','&quot;').replaceAll("'",'&#039;');
 
-  const staticWeek = Number(document.body.dataset.week) || null;
-  const queryWeek = Number(new URLSearchParams(location.search).get('week')) || null;
-  const currentWeek = staticWeek || queryWeek;
-  const weekUrl = week => `week-${String(week).padStart(2, '0')}.html`;
+  const normalizeKey = value => {
+    const raw = String(value || '').trim().toLowerCase();
+    if (!raw) return null;
+    if (raw === 'ot') return 'ot';
+    const number = Number(raw);
+    return Number.isFinite(number) && number > 0 ? String(number) : null;
+  };
+  const keyOf = item => item.id || String(item.week);
+  const labelOf = item => item.label || `${item.week}주차`;
+  const staticKey = normalizeKey(document.body.dataset.week);
+  const queryKey = normalizeKey(new URLSearchParams(location.search).get('week'));
+  const currentKey = staticKey || queryKey;
+  const itemUrl = item => item.id === 'ot' ? 'ot.html' : `week-${String(item.week).padStart(2, '0')}.html`;
 
   if (agendaNav) {
     agendaNav.innerHTML = data.map(item => {
-      const active = currentWeek === item.week ? ' is-active' : '';
-      return `<a class="agenda__link${active}" href="${weekUrl(item.week)}" data-title="${esc(item.title)}" aria-label="${item.week}주차 ${esc(item.title)}">${item.week}주차</a>`;
+      const key = keyOf(item);
+      const active = currentKey === key ? ' is-active' : '';
+      const label = labelOf(item);
+      return `<a class="agenda__link${active}" href="${itemUrl(item)}" data-week="${esc(key)}" data-title="${esc(item.title)}" aria-label="${esc(label)} ${esc(item.title)}">${esc(label)}</a>`;
     }).join('');
   }
 
@@ -27,8 +38,8 @@
     const list = document.getElementById('lectureList');
     if (!list) return;
     list.innerHTML = data.map(item => `
-      <a class="lecture-card" href="${weekUrl(item.week)}">
-        <span class="lecture-card__week">${item.week}주차</span>
+      <a class="lecture-card" href="${itemUrl(item)}">
+        <span class="lecture-card__week">${esc(labelOf(item))}</span>
         <h3>${esc(item.title)}</h3>
         <p>${item.agenda.map(esc).join(' · ')}</p>
         <span class="lecture-card__cta">강의교안 보기 <span aria-hidden="true">→</span></span>
@@ -36,16 +47,17 @@
   }
 
   async function renderWeek() {
-    const item = data.find(v => v.week === currentWeek) || data[0];
+    const item = data.find(v => keyOf(v) === currentKey) || data.find(v => v.week === 1);
     if (!item) return;
 
-    document.title = `${item.week}주차 · ${item.title} | AI와 디지털 리터러시`;
-    document.getElementById('weekMeta').textContent = `${item.week}주차 강의교안`;
+    const label = labelOf(item);
+    document.title = `${label} · ${item.title} | AI와 디지털 리터러시`;
+    document.getElementById('weekMeta').textContent = item.id === 'ot' ? '오리엔테이션' : `${label} 강의교안`;
     document.getElementById('weekTitle').textContent = item.title;
     document.getElementById('weekAgenda').textContent = item.agenda.join(' · ');
 
     const lesson = document.getElementById('lessonContent');
-    const file = `week-${String(item.week).padStart(2, '0')}.md`;
+    const file = item.id === 'ot' ? 'ot.md' : `week-${String(item.week).padStart(2, '0')}.md`;
 
     try {
       const response = await fetch(file, { cache: 'no-cache' });

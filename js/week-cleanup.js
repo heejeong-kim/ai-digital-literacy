@@ -25,9 +25,9 @@
       .week-pager__link--next{text-align:right;align-items:flex-end}
       .week-pager__label{font-size:13px;font-weight:800;color:#66758f;letter-spacing:.02em}
       .week-pager__title{font-size:18px;font-weight:800;line-height:1.4;color:#1f3154}
-      .week-pager__link.is-preparing{background:#f7f9fc;border-color:#e1e7f0;box-shadow:none}
+      .week-pager__link.is-preparing{background:#f7f9fc;border-color:#e1e7f0;box-shadow:none;cursor:not-allowed}
       .week-pager__link.is-preparing .week-pager__label,.week-pager__link.is-preparing .week-pager__title{color:#7f8ba0}
-      .week-pager__link.is-preparing:hover,.week-pager__link.is-preparing:focus-visible{border-color:#b7c4d8;background:#f2f5fa;transform:translateY(-2px)}
+      .week-pager__link.is-preparing:hover,.week-pager__link.is-preparing:focus-visible{border-color:#b7c4d8;background:#f2f5fa;transform:none;box-shadow:none}
       .week-pager__empty{visibility:hidden}
       .notion-gray-text{color:#787774}
       @media(max-width:640px){.week-pager{grid-template-columns:1fr;gap:10px;margin-top:32px}.week-pager__link--next{text-align:left;align-items:flex-start}.week-pager__empty{display:none}}
@@ -61,8 +61,8 @@
       const preparingClass = available ? '' : ' is-preparing';
       const label = direction === 'prev' ? '← 이전주차' : '다음주차 →';
       const status = available ? '' : ' · 교안 준비중';
-      const href = item.id === 'ot' ? 'ot.html' : `week-${String(item.week).padStart(2, '0')}.html`;
-      return `<a class="week-pager__link${sideClass}${preparingClass}" href="${href}"><span class="week-pager__label">${label}</span><span class="week-pager__title">${labelOf(item)} · ${item.title}${status}</span></a>`;
+      const href = available ? (item.id === 'ot' ? 'ot.html' : `week-${String(item.week).padStart(2, '0')}.html`) : '#';
+      return `<a class="week-pager__link${sideClass}${preparingClass}" href="${href}" data-week="${key}" data-preparing="${available ? 'false' : 'true'}"><span class="week-pager__label">${label}</span><span class="week-pager__title">${labelOf(item)} · ${item.title}${status}</span></a>`;
     };
 
     const pager = document.createElement('nav');
@@ -81,7 +81,14 @@
     renderPager();
   };
 
-  const observer = new MutationObserver(() => cleanup());
+  let applying = false;
+  const safeCleanup = () => {
+    if (applying) return;
+    applying = true;
+    try { cleanup(); } finally { applying = false; }
+  };
+
+  const observer = new MutationObserver(() => safeCleanup());
   observer.observe(root, { childList: true, subtree: true });
-  cleanup();
+  safeCleanup();
 })();

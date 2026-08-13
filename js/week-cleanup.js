@@ -29,9 +29,20 @@
       .week-pager__link.is-preparing .week-pager__label,.week-pager__link.is-preparing .week-pager__title{color:#7f8ba0}
       .week-pager__link.is-preparing:hover,.week-pager__link.is-preparing:focus-visible{border-color:#b7c4d8;background:#f2f5fa;transform:translateY(-2px)}
       .week-pager__empty{visibility:hidden}
+      .notion-gray-text{color:#787774}
       @media(max-width:640px){.week-pager{grid-template-columns:1fr;gap:10px;margin-top:32px}.week-pager__link--next{text-align:left;align-items:flex-start}.week-pager__empty{display:none}}
     `;
     document.head.appendChild(style);
+  };
+
+  const normalizeNotionGrayText = () => {
+    root.querySelectorAll('p,blockquote,li,h1,h2,h3,h4,td').forEach(el => {
+      if (!el.innerHTML.includes('&lt;span color="gray"&gt;')) return;
+      el.innerHTML = el.innerHTML.replace(
+        /&lt;span color="gray"&gt;([\s\S]*?)&lt;\/span&gt;/g,
+        '<span class="notion-gray-text">$1</span>'
+      );
+    });
   };
 
   const renderPager = () => {
@@ -65,6 +76,7 @@
     [...root.querySelectorAll('p')].forEach(el => {
       if (el.textContent.trim() === '<empty-block/>') el.remove();
     });
+    normalizeNotionGrayText();
     ensurePagerStyle();
     renderPager();
   };

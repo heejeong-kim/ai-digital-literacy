@@ -91,21 +91,78 @@
 
     const lines = markdown.split('\n');
     const out = [];
-    let listType = null;
+    const listStack = [];
     let paragraph = [];
     let inFence = false;
     let fenceLines = [];
 
-    const closeList = () => {
-      if (listType) out.push(`</${listType}>`);
-      listType = null;
+    const indentDepth = whitespace => {
+      let depth = 0;
+      for (const ch of whitespace) depth += ch === '\t' ? 2 : 1;
+      return depth;
     };
+
+    const closeLists = () => {
+      while (listStack.length) {
+        const level = listStack.pop();
+        if (level.itemOpen) out.push('</li>');
+        out.push(`</${level.type}>`);
+      }
+    };
+
     const flushParagraph = () => {
       if (!paragraph.length) return;
       out.push(`<p>${inline(paragraph.join(' ').trim())}</p>`);
       paragraph = [];
     };
-    const flush = () => { flushParagraph(); closeList(); };
+    const flush = () => { flushParagraph(); closeLists(); };
+
+    const renderListItem = (raw, unordered, ordered) => {
+      flushParagraph();
+      const whitespace = (raw.match(/^(\s*)/) || ['',''])[1];
+      const depth = indentDepth(whitespace);
+      const type = ordered ? 'ol' : 'ul';
+      const text = (unordered || ordered)[1];
+
+      if (!listStack.length) {
+        out.push(`<${type}>`);
+        listStack.push({ type, depth, itemOpen: false });
+      } else {
+        let top = listStack[listStack.length - 1];
+
+        if (depth > top.depth) {
+          out.push(`<${type}>`);
+          listStack.push({ type, depth, itemOpen: false });
+        } else {
+          while (listStack.length && depth < listStack[listStack.length - 1].depth) {
+            const level = listStack.pop();
+            if (level.itemOpen) out.push('</li>');
+            out.push(`</${level.type}>`);
+          }
+
+          top = listStack[listStack.length - 1];
+          if (!top) {
+            out.push(`<${type}>`);
+            listStack.push({ type, depth, itemOpen: false });
+          } else {
+            if (top.itemOpen) {
+              out.push('</li>');
+              top.itemOpen = false;
+            }
+            if (top.type !== type) {
+              out.push(`</${top.type}>`);
+              listStack.pop();
+              out.push(`<${type}>`);
+              listStack.push({ type, depth, itemOpen: false });
+            }
+          }
+        }
+      }
+
+      const current = listStack[listStack.length - 1];
+      out.push(`<li>${inline(text)}`);
+      current.itemOpen = true;
+    };
 
     for (let i = 0; i < lines.length; i++) {
       const raw = lines[i];
@@ -130,7 +187,7 @@
 
       if (!line) {
         flushParagraph();
-        closeList();
+        closeLists();
         continue;
       }
 
@@ -193,17 +250,10 @@
         continue;
       }
 
-      const unordered = line.match(/^[-*]\s+(.+)$/);
-      const ordered = line.match(/^\d+[.)]\s+(.+)$/);
-      if (unordered || ordered) {
-        flushParagraph();
-        const nextType = ordered ? 'ol' : 'ul';
-        if (listType !== nextType) {
-          closeList();
-          listType = nextType;
-          out.push(`<${listType}>`);
-        }
-        out.push(`<li>${inline((unordered || ordered)[1])}</li>`);
+      const unorderedRaw = raw.match(/^\s*[-*]\s+(.+)$/);
+      const orderedRaw = raw.match(/^\s*\d+[.)]\s+(.+)$/);
+      if (unorderedRaw || orderedRaw) {
+        renderListItem(raw, unorderedRaw, orderedRaw);
         continue;
       }
 
@@ -214,7 +264,7 @@
       }
 
       flushParagraph();
-      closeList();
+      closeLists();
       paragraph.push(line);
     }
 
@@ -224,7 +274,14 @@
   }
 
   function inline(value='') {
-    let text = esc(value);
+    const graySpans = [];
+    let source = String(value).replace(/<span\s+color="gray">([\s\S]*?)<\/span>/gi, (_, inner) => {
+      const key = `%%GRAY${graySpans.length}%%`;
+      graySpans.push(inner);
+      return key;
+    });
+
+    let text = esc(source);
     const code = [];
     text = text.replace(/`([^`]+)`/g, (_,v) => {
       const key = `%%CODE${code.length}%%`;
@@ -236,6 +293,9 @@
     text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
     text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
     code.forEach((html, index) => { text = text.replace(`%%CODE${index}%%`, html); });
+    graySpans.forEach((value, index) => {
+      text = text.replace(`%%GRAY${index}%%`, `<span class="notion-text-gray">${inline(value)}</span>`);
+    });
     return text;
   }
 

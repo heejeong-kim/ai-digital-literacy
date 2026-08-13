@@ -2,7 +2,7 @@
   const root = document.getElementById('lessonContent');
   if (!root) return;
 
-  const availableItems = new Set(['ot','1']);
+  const availableItems = new Set(['ot','1','2']);
   const data = window.COURSE_DATA || [];
   const normalizeKey = value => {
     const raw = String(value || '').trim().toLowerCase();

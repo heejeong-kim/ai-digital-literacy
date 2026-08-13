@@ -2,9 +2,17 @@
   const root = document.getElementById('lessonContent');
   if (!root) return;
 
-  const availableWeeks = new Set([1]);
+  const availableItems = new Set(['ot','1']);
   const data = window.COURSE_DATA || [];
-  const currentWeek = Number(document.body.dataset.week) || null;
+  const normalizeKey = value => {
+    const raw = String(value || '').trim().toLowerCase();
+    if (raw === 'ot') return 'ot';
+    if (/^\d{1,2}$/.test(raw) && Number(raw) > 0) return String(Number(raw));
+    return null;
+  };
+  const keyOf = item => item.id || String(item.week);
+  const labelOf = item => item.label || `${item.week}주차`;
+  const currentKey = normalizeKey(document.body.dataset.week);
 
   const ensurePagerStyle = () => {
     if (document.getElementById('weekPagerStyle')) return;
@@ -27,8 +35,8 @@
   };
 
   const renderPager = () => {
-    if (!currentWeek || root.querySelector('.week-pager')) return;
-    const currentIndex = data.findIndex(item => item.week === currentWeek);
+    if (!currentKey || root.querySelector('.week-pager')) return;
+    const currentIndex = data.findIndex(item => keyOf(item) === currentKey);
     if (currentIndex < 0) return;
 
     const prev = currentIndex > 0 ? data[currentIndex - 1] : null;
@@ -36,13 +44,14 @@
 
     const makeItem = (item, direction) => {
       if (!item) return '<span class="week-pager__empty" aria-hidden="true"></span>';
-      const available = availableWeeks.has(item.week);
+      const key = keyOf(item);
+      const available = availableItems.has(key);
       const sideClass = direction === 'next' ? ' week-pager__link--next' : '';
       const preparingClass = available ? '' : ' is-preparing';
       const label = direction === 'prev' ? '← 이전주차' : '다음주차 →';
       const status = available ? '' : ' · 교안 준비중';
-      const href = `week-${String(item.week).padStart(2, '0')}.html`;
-      return `<a class="week-pager__link${sideClass}${preparingClass}" href="${href}"><span class="week-pager__label">${label}</span><span class="week-pager__title">${item.week}주차 · ${item.title}${status}</span></a>`;
+      const href = item.id === 'ot' ? 'ot.html' : `week-${String(item.week).padStart(2, '0')}.html`;
+      return `<a class="week-pager__link${sideClass}${preparingClass}" href="${href}"><span class="week-pager__label">${label}</span><span class="week-pager__title">${labelOf(item)} · ${item.title}${status}</span></a>`;
     };
 
     const pager = document.createElement('nav');

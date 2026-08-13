@@ -1,6 +1,6 @@
 (() => {
   const data = window.COURSE_DATA || [];
-  const availableWeeks = new Set([1]);
+  const availableItems = new Set(['ot','1']);
   const agendaNav = document.getElementById('agendaNav');
   const lectureGrid = document.getElementById('lectureGrid');
   const input = document.getElementById('courseSearch');
@@ -9,38 +9,42 @@
   const topButton = document.getElementById('topButton');
   let activeFilter = 'all';
 
-  // Home page desktop canvas: optimized for a 1560px content width.
   document.documentElement.style.setProperty('--max-width', '1560px');
 
-  const weekUrl = week => `content/week-${String(week).padStart(2, '0')}.html`;
-  const thumbnailUrl = week => `asset/${week}.png`;
-  const category = week => (week === 8 || week === 15 ? 'assessment' : 'class');
+  const keyOf = item => item.id || String(item.week);
+  const labelOf = item => item.label || `${item.week}주차`;
+  const itemUrl = item => item.id === 'ot' ? 'content/ot.html' : `content/week-${String(item.week).padStart(2, '0')}.html`;
+  const thumbnailUrl = item => item.id === 'ot' ? 'asset/ot.png' : `asset/${item.week}.png`;
+  const category = item => (item.week === 8 || item.week === 15 ? 'assessment' : 'class');
   const esc = (value='') => String(value)
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
     .replaceAll('"','&quot;').replaceAll("'",'&#039;');
 
   if (agendaNav) {
     agendaNav.innerHTML = data.map(item => {
-      const available = availableWeeks.has(item.week);
+      const key = keyOf(item);
+      const available = availableItems.has(key);
       const klass = available ? 'is-available' : 'is-preparing';
-      const href = available ? weekUrl(item.week) : '#';
-      return `<a class="agenda__link ${klass}" data-week="${item.week}" href="${href}" data-title="${esc(item.title)}">${item.week}주차</a>`;
+      const href = available ? itemUrl(item) : '#';
+      return `<a class="agenda__link ${klass}" data-week="${esc(key)}" href="${href}" data-title="${esc(item.title)}">${esc(labelOf(item))}</a>`;
     }).join('');
   }
 
   if (lectureGrid) {
     lectureGrid.innerHTML = data.map(item => {
-      const available = availableWeeks.has(item.week);
+      const key = keyOf(item);
+      const available = availableItems.has(key);
       const klass = available ? 'is-available' : 'is-preparing';
-      const keywords = `${item.week}주차 ${item.title} ${item.agenda.join(' ')}`;
+      const label = labelOf(item);
+      const keywords = `${label} ${item.title} ${item.agenda.join(' ')}`;
       const tag = available ? 'a' : 'article';
-      const linkAttrs = available ? ` href="${weekUrl(item.week)}"` : ' aria-disabled="true"';
-      return `<${tag} class="lecture-card ${klass}" data-week="${item.week}" data-category="${category(item.week)}" data-keywords="${esc(keywords)}"${linkAttrs}>
+      const linkAttrs = available ? ` href="${itemUrl(item)}"` : ' aria-disabled="true"';
+      return `<${tag} class="lecture-card ${klass}" data-week="${esc(key)}" data-category="${category(item)}" data-keywords="${esc(keywords)}"${linkAttrs}>
         <figure class="lecture-card__thumb">
-          <img src="${thumbnailUrl(item.week)}" alt="${item.week}주차 ${esc(item.title)} 비주얼" loading="lazy" decoding="async">
+          <img src="${thumbnailUrl(item)}" alt="${esc(label)} ${esc(item.title)} 비주얼" loading="lazy" decoding="async">
         </figure>
         <div class="lecture-card__heading">
-          <span class="lecture-card__week">${item.week}주차</span>
+          <span class="lecture-card__week">${esc(label)}</span>
           <h3>${esc(item.title)}</h3>
         </div>
         <p>${item.agenda.map(esc).join(' · ')}</p>

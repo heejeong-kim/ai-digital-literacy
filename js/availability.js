@@ -1,5 +1,5 @@
 (() => {
-  const availableItems = new Set(['ot','1']);
+  const availableItems = new Set(['ot','1','2']);
 
   const getItemKey = element => {
     const explicit = String(element.dataset.week || '').trim().toLowerCase();

@@ -14,7 +14,7 @@
   const keyOf = item => item.id || String(item.week);
   const labelOf = item => item.label || `${item.week}주차`;
   const itemUrl = item => item.id === 'ot' ? 'content/ot.html' : `content/week-${String(item.week).padStart(2, '0')}.html`;
-  const thumbnailUrl = item => item.id === 'ot' ? 'asset/ot.png' : `asset/${item.week}.png`;
+  const thumbnailUrl = item => item.id === 'ot' ? 'asset/0.png' : `asset/${item.week}.png`;
   const category = item => (item.week === 8 || item.week === 15 ? 'assessment' : 'class');
   const esc = (value='') => String(value)
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')

@@ -26,7 +26,7 @@
       const available = availableItems.has(key);
       const klass = available ? 'is-available' : 'is-preparing';
       const href = available ? itemUrl(item) : '#';
-      return `<a class="agenda__link ${klass}" data-week="${esc(key)}" href="${href}" data-title="${esc(item.title)}">${esc(labelOf(item))}</a>`;
+      return `<a class="agenda__link ${klass}" data-week="${esc(key)}" data-preparing="${available ? 'false' : 'true'}" href="${href}" data-title="${esc(item.title)}">${esc(labelOf(item))}</a>`;
     }).join('');
   }
 
@@ -39,7 +39,7 @@
       const keywords = `${label} ${item.title} ${item.agenda.join(' ')}`;
       const tag = available ? 'a' : 'article';
       const linkAttrs = available ? ` href="${itemUrl(item)}"` : ' aria-disabled="true"';
-      return `<${tag} class="lecture-card ${klass}" data-week="${esc(key)}" data-category="${category(item)}" data-keywords="${esc(keywords)}"${linkAttrs}>
+      return `<${tag} class="lecture-card ${klass}" data-week="${esc(key)}" data-preparing="${available ? 'false' : 'true'}" data-category="${category(item)}" data-keywords="${esc(keywords)}"${linkAttrs}>
         <figure class="lecture-card__thumb">
           <img src="${thumbnailUrl(item)}" alt="${esc(label)} ${esc(item.title)} 비주얼" loading="lazy" decoding="async">
         </figure>
@@ -54,10 +54,12 @@
   }
 
   document.addEventListener('click', event => {
-    const preparingAgenda = event.target.closest('.agenda__link.is-preparing');
-    if (!preparingAgenda) return;
+    const preparing = event.target.closest('.agenda__link.is-preparing, .lecture-card.is-preparing');
+    if (!preparing) return;
     event.preventDefault();
-  });
+    event.stopPropagation();
+    alert('교안 준비중입니다');
+  }, true);
 
   const normalize = (value='') => String(value).toLowerCase().normalize('NFKC').replace(/[^0-9a-z가-힣]+/g, '');
   const cards = [...document.querySelectorAll('#lectureGrid .lecture-card')];

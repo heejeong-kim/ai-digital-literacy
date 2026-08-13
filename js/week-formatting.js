@@ -15,9 +15,7 @@
         font-size: 13.5px !important;
         line-height: 1.65 !important;
       }
-      #lessonContent .ot-production-note strong {
-        color: #697386 !important;
-      }
+      #lessonContent .ot-production-note strong { color: #697386 !important; }
     `;
     document.head.appendChild(style);
   };
@@ -54,7 +52,12 @@
     markOtProductionNote();
   };
 
-  const observer = new MutationObserver(() => apply());
+  const observer = new MutationObserver(() => {
+    observer.disconnect();
+    apply();
+    observer.observe(root, { childList: true, subtree: true });
+  });
+
   observer.observe(root, { childList: true, subtree: true });
   apply();
 })();

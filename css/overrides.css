@@ -50,10 +50,10 @@ body[data-page="week"] .table-wrap { width:100%;max-width:100%;overflow-x:auto; 
 body[data-page="week"] .notion-content th,
 body[data-page="week"] .notion-content td { word-break:keep-all;overflow-wrap:break-word; }
 
-/* Week quick navigation: full list, no nested scrollbar, sticky on desktop. */
-body[data-page="week"] .week-side { position:sticky;top:116px;max-height:none;overflow:visible;align-self:start; }
+/* Week quick navigation: keep the panel visible and let long navigation scroll independently. */
+body[data-page="week"] .week-side { position:sticky;top:184px;max-height:calc(100vh - 208px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;align-self:start; }
 body[data-page="week"] .week-side #sectionNav { overflow:visible; }
-body[data-page="week"] .week-side #sectionNav a { padding:5px 0;line-height:1.4; }
+body[data-page="week"] .week-side #sectionNav a { padding:5px 0;line-height:1.4;scroll-margin-top:190px; }
 body[data-page="week"] .week-side__visual { max-height:150px; }
 body[data-page="week"] .week-side__visual img { width:100%;height:150px;object-fit:cover; }
 
@@ -66,7 +66,7 @@ body[data-page="week"] .week-side__visual img { width:100%;height:150px;object-f
 .prompt-copy.is-copied { border-color:#8ce3cd;background:#16362e;color:#cffff1; }
 .notion-content p > code:only-child { box-decoration-break:clone;-webkit-box-decoration-break:clone; }
 @media (max-width:1399px){#lectureGrid.lecture-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:1100px){body[data-page="week"] .week-side{position:static;top:auto;max-height:none;overflow:visible}body[data-page="week"] .week-side__visual{max-height:none}body[data-page="week"] .week-side__visual img{height:auto;aspect-ratio:16/10}}
+@media (max-width:1100px){body[data-page="week"] .week-side{position:static;top:auto;max-height:none;overflow:visible;scrollbar-gutter:auto}body[data-page="week"] .week-side__visual{max-height:none}body[data-page="week"] .week-side__visual img{height:auto;aspect-ratio:16/10}}
 @media (max-width:960px){#lectureGrid.lecture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.week-context__inner{grid-template-columns:1fr;gap:0;min-height:0;padding:11px 0 12px}}
 @media (max-width:720px){body[data-page="week"] .notion-content table{min-width:620px}.table-wrap{overflow-x:auto}}
 @media (max-width:640px){#lectureGrid.lecture-grid{grid-template-columns:1fr}#lectureGrid .lecture-card__heading{gap:10px;margin:16px 0 8px}#lectureGrid .lecture-card__heading h3{font-size:21px}.hero--detail{padding:58px 0 52px}.lecture-card__thumb{margin-bottom:16px;border-radius:14px}.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px;padding:11px 14px}.week-context h1{font-size:20px}.week-context p{font-size:14px}.prompt-block{min-height:96px;border-radius:19px}.prompt-block pre{padding:24px 82px 24px 22px}.prompt-block pre code{font-size:18px;line-height:1.65}.prompt-copy{top:14px;right:14px;min-width:48px;height:35px;padding:0 11px;font-size:13px}body[data-page="week"] .lesson-overview > h2:first-child,body[data-page="week"] .lesson-overview > h2:first-child + ol,body[data-page="week"] .notion-callout--summary,body[data-page="week"] .notion-callout--summary .callout-body > p:first-child,body[data-page="week"] .notion-callout--summary .callout-body > strong:first-child{font-size:13.5px}}

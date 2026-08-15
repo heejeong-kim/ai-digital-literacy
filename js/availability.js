@@ -2,6 +2,7 @@
   const availableItems = new Set(['ot','1','2']);
   const root = document.getElementById('lessonContent');
   const sectionNav = document.getElementById('sectionNav');
+  const courseData = window.COURSE_DATA || [];
 
   const normalizeKey = value => {
     const raw = String(value || '').trim().toLowerCase();
@@ -28,6 +29,56 @@
   const itemHref = key => key === 'ot' ? 'ot.html' : `week-${String(key).padStart(2, '0')}.html`;
   const currentKey = normalizeKey(document.body.dataset.week);
   const currentUnavailable = currentKey && !availableItems.has(currentKey);
+
+  const setupWeekSelector = () => {
+    if (document.body.dataset.page !== 'week') return;
+    const side = document.querySelector('.week-side');
+    if (!side || side.querySelector('.week-select')) return;
+
+    const style = document.createElement('style');
+    style.id = 'week-select-styles';
+    style.textContent = `
+      .week-select{margin:0 0 20px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 8px 22px rgba(30,64,175,.06)}
+      .week-select__label{display:block;margin:0 0 8px;color:var(--accent-strong);font-size:13px;font-weight:800;letter-spacing:-.01em}
+      .week-select__control{width:100%;min-height:44px;padding:9px 38px 9px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+      .week-select__control:hover{border-color:var(--accent)}
+      .week-select__control:focus{outline:2px solid var(--accent);outline-offset:2px;border-color:var(--accent)}
+      .week-select__control option:disabled{color:#a8afbc}
+    `;
+    document.head.appendChild(style);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'week-select';
+
+    const label = document.createElement('label');
+    label.className = 'week-select__label';
+    label.htmlFor = 'weekSelect';
+    label.textContent = '강의 주차 선택';
+
+    const select = document.createElement('select');
+    select.id = 'weekSelect';
+    select.className = 'week-select__control';
+    select.setAttribute('aria-label', '강의 주차 선택');
+
+    courseData.forEach(item => {
+      const key = item.id === 'ot' ? 'ot' : String(item.week);
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = item.id === 'ot' ? 'OT' : `${item.week}주차`;
+      option.disabled = !availableItems.has(key);
+      option.selected = key === currentKey;
+      select.appendChild(option);
+    });
+
+    select.addEventListener('change', () => {
+      const key = normalizeKey(select.value);
+      if (!key || !availableItems.has(key) || key === currentKey) return;
+      location.href = itemHref(key);
+    });
+
+    wrap.append(label, select);
+    side.prepend(wrap);
+  };
 
   const showPreparingPage = () => {
     if (!currentUnavailable || !root) return false;
@@ -106,5 +157,6 @@
 
   const observer = new MutationObserver(() => safeApply());
   observer.observe(document.body, { childList: true, subtree: true });
+  setupWeekSelector();
   safeApply();
 })();

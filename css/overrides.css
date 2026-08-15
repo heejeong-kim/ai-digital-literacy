@@ -21,10 +21,8 @@ body[data-page="week"] { --max-width:1560px; }
 
 .hero--detail { padding:88px 0 72px; }
 .week-context { position:sticky;top:var(--agenda-height);z-index:105;border-bottom:1px solid rgba(8,118,98,.18);background:rgba(247,255,252,.96);backdrop-filter:blur(18px);box-shadow:0 8px 24px rgba(8,83,70,.08); }
-.week-context__inner { display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center;min-height:96px;padding:14px 0; }
-.week-context__back { display:inline-flex;align-items:center;white-space:nowrap;color:var(--accent-strong);text-decoration:none;font-size:15px;font-weight:800; }
-.week-context__back:hover,.week-context__back:focus-visible { color:var(--accent-dark); }
-.week-context__copy { min-width:0; }
+.week-context__inner { display:grid;grid-template-columns:minmax(0,1fr);gap:0;align-items:center;min-height:96px;padding:14px 0; }
+.week-context__copy { min-width:0;width:100%; }
 .week-context__meta { margin-bottom:2px;color:var(--accent-strong);font-size:13px;font-weight:850; }
 .week-context h1 { margin:0;overflow:hidden;color:var(--text);font-size:clamp(22px,2.5vw,30px);line-height:1.25;letter-spacing:-.03em;text-overflow:ellipsis;white-space:nowrap; }
 .week-context p { margin:4px 0 0;overflow:hidden;color:var(--muted);font-size:15px;line-height:1.45;text-overflow:ellipsis;white-space:nowrap; }
@@ -69,6 +67,6 @@ body[data-page="week"] .week-side__visual img { width:100%;height:150px;object-f
 .notion-content p > code:only-child { box-decoration-break:clone;-webkit-box-decoration-break:clone; }
 @media (max-width:1399px){#lectureGrid.lecture-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:1100px){body[data-page="week"] .week-side{position:static;top:auto;max-height:none;overflow:visible}body[data-page="week"] .week-side__visual{max-height:none}body[data-page="week"] .week-side__visual img{height:auto;aspect-ratio:16/10}}
-@media (max-width:960px){#lectureGrid.lecture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.week-context__inner{grid-template-columns:1fr;gap:5px;min-height:0;padding:11px 0 12px}.week-context__back{font-size:13px}}
+@media (max-width:960px){#lectureGrid.lecture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.week-context__inner{grid-template-columns:1fr;gap:0;min-height:0;padding:11px 0 12px}}
 @media (max-width:720px){body[data-page="week"] .notion-content table{min-width:620px}.table-wrap{overflow-x:auto}}
 @media (max-width:640px){#lectureGrid.lecture-grid{grid-template-columns:1fr}#lectureGrid .lecture-card__heading{gap:10px;margin:16px 0 8px}#lectureGrid .lecture-card__heading h3{font-size:21px}.hero--detail{padding:58px 0 52px}.lecture-card__thumb{margin-bottom:16px;border-radius:14px}.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px;padding:11px 14px}.week-context h1{font-size:20px}.week-context p{font-size:14px}.prompt-block{min-height:96px;border-radius:19px}.prompt-block pre{padding:24px 82px 24px 22px}.prompt-block pre code{font-size:18px;line-height:1.65}.prompt-copy{top:14px;right:14px;min-width:48px;height:35px;padding:0 11px;font-size:13px}body[data-page="week"] .lesson-overview > h2:first-child,body[data-page="week"] .lesson-overview > h2:first-child + ol,body[data-page="week"] .notion-callout--summary,body[data-page="week"] .notion-callout--summary .callout-body > p:first-child,body[data-page="week"] .notion-callout--summary .callout-body > strong:first-child{font-size:13.5px}}

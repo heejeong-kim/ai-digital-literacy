@@ -3,6 +3,62 @@
   const page = document.body.dataset.page;
   const agendaNav = document.getElementById('agendaNav');
   const topButton = document.getElementById('topButton');
+  const WEEK_SIDE_STORAGE_KEY = 'ai-literacy-week-side-closed';
+
+  function setupWeekSideToggle() {
+    if (page !== 'week') return;
+    const layout = document.querySelector('.week-layout');
+    const side = layout?.querySelector('.week-side');
+    const lesson = layout?.querySelector('.lesson');
+    if (!layout || !side || !lesson) return;
+
+    const style = document.createElement('style');
+    style.id = 'week-side-toggle-styles';
+    style.textContent = `
+      .week-layout.has-side-toggle{row-gap:18px}
+      .week-side-toggle{grid-column:1/-1;justify-self:end;display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--accent-strong);font-size:13px;font-weight:750;cursor:pointer;transition:background .2s ease,border-color .2s ease}
+      .week-side-toggle:hover{background:var(--accent-soft);border-color:var(--accent)}
+      .week-side-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+      .week-layout.is-side-closed{grid-template-columns:minmax(0,1fr)!important}
+      .week-layout.is-side-closed .week-side{display:none}
+      .week-layout.is-side-closed .lesson{grid-column:1/-1}
+      @media(max-width:1100px){
+        .week-side-toggle{display:none}
+        .week-layout.is-side-closed .week-side{display:block}
+      }
+    `;
+    document.head.appendChild(style);
+
+    layout.classList.add('has-side-toggle');
+    side.id = side.id || 'week-side';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'week-side-toggle';
+    button.setAttribute('aria-controls', side.id);
+    layout.prepend(button);
+
+    const setClosed = closed => {
+      layout.classList.toggle('is-side-closed', closed);
+      button.setAttribute('aria-expanded', String(!closed));
+      button.innerHTML = closed
+        ? '<span aria-hidden="true">◀</span> 오른쪽 영역 열기'
+        : '오른쪽 영역 닫기 <span aria-hidden="true">▶</span>';
+    };
+
+    let savedClosed = false;
+    try {
+      savedClosed = localStorage.getItem(WEEK_SIDE_STORAGE_KEY) === 'true';
+    } catch {}
+    setClosed(savedClosed);
+
+    button.addEventListener('click', () => {
+      const closed = !layout.classList.contains('is-side-closed');
+      setClosed(closed);
+      try {
+        localStorage.setItem(WEEK_SIDE_STORAGE_KEY, String(closed));
+      } catch {}
+    });
+  }
 
   const esc = (value='') => String(value)
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
@@ -32,7 +88,10 @@
   }
 
   if (page === 'home') renderHome();
-  if (page === 'week') renderWeek();
+  if (page === 'week') {
+    setupWeekSideToggle();
+    renderWeek();
+  }
 
   function renderHome() {
     const list = document.getElementById('lectureList');

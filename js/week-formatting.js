@@ -28,6 +28,12 @@
     });
   };
 
+  const collapseDuplicateDividers = () => {
+    [...root.querySelectorAll('hr')].forEach(hr => {
+      if (hr.previousElementSibling?.tagName === 'HR') hr.remove();
+    });
+  };
+
   const markOtProductionNote = () => {
     if (week !== 'ot') return;
     const candidates = [...root.querySelectorAll('p, div, li')];
@@ -49,6 +55,7 @@
   const apply = () => {
     ensureStyle();
     unwrapBodyBold();
+    collapseDuplicateDividers();
     markOtProductionNote();
   };
 

@@ -3,9 +3,10 @@
   if (!root) return;
 
   const week = String(document.body.dataset.week || '').trim();
-  if (week !== '1' && week !== '2') return;
+  if (!['1', '2', '3'].includes(week)) return;
 
-  const imageCount = week === '2' ? 4 : 3;
+  const imageCountByWeek = { '1': 3, '2': 4, '3': 4 };
+  const imageCount = imageCountByWeek[week] || 0;
 
   const ensureStyle = () => {
     if (document.getElementById('weekSectionImageStyle')) return;

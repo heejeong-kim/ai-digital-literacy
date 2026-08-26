@@ -1,6 +1,6 @@
 (() => {
   const data = window.COURSE_DATA || [];
-  const availableItems = new Set(['ot','1','2','3']);
+  const availableItems = new Set(['ot','1','2','3','4']);
   const agendaNav = document.getElementById('agendaNav');
   const lectureGrid = document.getElementById('lectureGrid');
   const input = document.getElementById('courseSearch');

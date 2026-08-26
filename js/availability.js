@@ -1,5 +1,5 @@
 (() => {
-  const availableItems = new Set(['ot','1','2','3']);
+  const availableItems = new Set(['ot','1','2','3','4']);
   const root = document.getElementById('lessonContent');
   const sectionNav = document.getElementById('sectionNav');
   const courseData = window.COURSE_DATA || [];

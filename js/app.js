@@ -119,9 +119,16 @@
     const file = item.id === 'ot' ? 'ot.md' : `week-${String(item.week).padStart(2, '0')}.md`;
 
     try {
-      const response = await fetch(file, { cache: 'no-cache' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const markdown = await response.text();
+      const embeddedMarkdown = document.getElementById('embeddedLessonMarkdown')?.textContent;
+      let markdown;
+
+      if (embeddedMarkdown?.trim()) {
+        markdown = embeddedMarkdown.trim();
+      } else {
+        const response = await fetch(file, { cache: 'no-cache' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        markdown = await response.text();
+      }
 
       lesson.innerHTML = renderNotionMarkdown(markdown);
       normalizeNotionBlocks(lesson);

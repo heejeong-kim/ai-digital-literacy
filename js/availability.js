@@ -1,5 +1,5 @@
 (() => {
-  const availableItems = new Set(['ot','1','2','3','4']);
+  const availableItems = new Set(['ot','1','2','3','4','5']);
   const root = document.getElementById('lessonContent');
   const sectionNav = document.getElementById('sectionNav');
   const courseData = window.COURSE_DATA || [];
@@ -27,6 +27,8 @@
   };
 
   const itemHref = key => key === 'ot' ? 'ot.html' : `week-${String(key).padStart(2, '0')}.html`;
+  const keyOf = item => item?.id === 'ot' ? 'ot' : String(item?.week ?? '');
+  const labelOf = item => item?.id === 'ot' ? 'OT' : `${item.week}주차`;
   const currentKey = normalizeKey(document.body.dataset.week);
   const currentUnavailable = currentKey && !availableItems.has(currentKey);
 
@@ -78,6 +80,52 @@
 
     wrap.append(label, select);
     side.prepend(wrap);
+  };
+
+  const setupWeekPager = () => {
+    if (document.body.dataset.page !== 'week' || !currentKey) return;
+    const layout = document.querySelector('.week-layout');
+    if (!layout || layout.querySelector('.week-pager')) return;
+
+    if (!document.getElementById('week-pager-styles')) {
+      const style = document.createElement('style');
+      style.id = 'week-pager-styles';
+      style.textContent = `
+        .week-pager{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:6px 0 0;padding:8px 0 0}
+        .week-pager__link{display:flex;align-items:center;gap:14px;min-height:82px;padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--text);text-decoration:none;box-shadow:0 8px 24px rgba(30,64,175,.05);transition:.2s ease}
+        .week-pager__link--next{justify-content:flex-end;text-align:right}
+        .week-pager__link:hover,.week-pager__link:focus-visible{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-1px);outline:none}
+        .week-pager__arrow{flex:0 0 auto;color:var(--accent-strong);font-size:22px;font-weight:900}
+        .week-pager__copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+        .week-pager__eyebrow{color:var(--muted);font-size:12px;font-weight:800}
+        .week-pager__title{font-size:16px;font-weight:850;line-height:1.45}
+        .week-pager__link.is-preparing{background:#f7f9fc;color:#8993a5;border-color:#e1e6ef;box-shadow:none;cursor:not-allowed}
+        .week-pager__link.is-preparing .week-pager__arrow{color:#aab2bf}
+        @media(max-width:700px){.week-pager{grid-template-columns:1fr}.week-pager__link{min-height:72px}}
+      `;
+      document.head.appendChild(style);
+    }
+
+    const index = courseData.findIndex(item => keyOf(item) === currentKey);
+    if (index < 0) return;
+    const previous = index > 0 ? courseData[index - 1] : null;
+    const next = index < courseData.length - 1 ? courseData[index + 1] : null;
+    const linkMarkup = (item, direction) => {
+      if (!item) return '<span></span>';
+      const key = keyOf(item);
+      const available = availableItems.has(key);
+      const href = available ? itemHref(key) : '#';
+      const arrow = direction === 'prev' ? '←' : '→';
+      const eyebrow = direction === 'prev' ? '이전 강의교안' : '다음 강의교안';
+      const copy = `<span class="week-pager__copy"><span class="week-pager__eyebrow">${eyebrow}</span><span class="week-pager__title">${labelOf(item)} · ${item.title}${available ? '' : ' · 준비중'}</span></span>`;
+      return `<a class="week-pager__link week-pager__link--${direction}${available ? ' is-available' : ' is-preparing'}" data-week="${key}" data-preparing="${available ? 'false' : 'true'}" href="${href}">${direction === 'prev' ? `<span class="week-pager__arrow">${arrow}</span>${copy}` : `${copy}<span class="week-pager__arrow">${arrow}</span>`}</a>`;
+    };
+
+    const nav = document.createElement('nav');
+    nav.className = 'week-pager';
+    nav.setAttribute('aria-label', '이전·다음 강의교안');
+    nav.innerHTML = linkMarkup(previous, 'prev') + linkMarkup(next, 'next');
+    layout.appendChild(nav);
   };
 
   const showPreparingPage = () => {
@@ -158,5 +206,6 @@
   const observer = new MutationObserver(() => safeApply());
   observer.observe(document.body, { childList: true, subtree: true });
   setupWeekSelector();
+  setupWeekPager();
   safeApply();
 })();

@@ -120,10 +120,13 @@
 
     try {
       const embeddedMarkdown = document.getElementById('embeddedLessonMarkdown')?.textContent;
+      const bundledMarkdown = window.EMBEDDED_LESSONS?.[currentKey];
       let markdown;
 
       if (embeddedMarkdown?.trim()) {
         markdown = embeddedMarkdown.trim();
+      } else if (bundledMarkdown?.trim()) {
+        markdown = bundledMarkdown.trim();
       } else {
         const response = await fetch(file, { cache: 'no-cache' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -283,6 +286,17 @@
         flush();
         const text = line.replace(/^<summary>/i,'').replace(/<\/summary>$/i,'');
         out.push(`<summary>${inline(text)}</summary>`);
+        continue;
+      }
+
+      const image = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+      if (image) {
+        flush();
+        const src = image[2].trim();
+        const safeSrc = /^(?:https?:\/\/|\.\.\/asset\/|asset\/)[^"'<>]+$/i.test(src) ? src : '';
+        if (safeSrc) {
+          out.push(`<figure class="notion-image"><img src="${esc(safeSrc)}" alt="${esc(image[1])}" loading="lazy" decoding="async"></figure>`);
+        }
         continue;
       }
 

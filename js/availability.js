@@ -1,5 +1,5 @@
 (() => {
-  const availableItems = new Set(['ot','1','2','3','4','5']);
+  const availableItems = new Set(['ot','1','2','3','4','5','6']);
   const root = document.getElementById('lessonContent');
   const sectionNav = document.getElementById('sectionNav');
   const courseData = window.COURSE_DATA || [];
@@ -91,7 +91,7 @@
       const style = document.createElement('style');
       style.id = 'week-pager-styles';
       style.textContent = `
-        .week-pager{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:6px 0 0;padding:8px 0 0}
+        .week-pager{grid-column:1;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:6px 0 0;padding:8px 0 0}
         .week-pager__link{display:flex;align-items:center;gap:14px;min-height:82px;padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--text);text-decoration:none;box-shadow:0 8px 24px rgba(30,64,175,.05);transition:.2s ease}
         .week-pager__link--next{justify-content:flex-end;text-align:right}
         .week-pager__link:hover,.week-pager__link:focus-visible{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-1px);outline:none}
@@ -101,6 +101,7 @@
         .week-pager__title{font-size:16px;font-weight:850;line-height:1.45}
         .week-pager__link.is-preparing{background:#f7f9fc;color:#8993a5;border-color:#e1e6ef;box-shadow:none;cursor:not-allowed}
         .week-pager__link.is-preparing .week-pager__arrow{color:#aab2bf}
+        @media(max-width:1100px){.week-pager{grid-column:1/-1}}
         @media(max-width:700px){.week-pager{grid-template-columns:1fr}.week-pager__link{min-height:72px}}
       `;
       document.head.appendChild(style);

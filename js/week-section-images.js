@@ -3,9 +3,9 @@
   if (!root) return;
 
   const week = String(document.body.dataset.week || '').trim();
-  if (!['1', '2', '3', '4', '5'].includes(week)) return;
+  if (!['1', '2', '3', '4', '5', '6'].includes(week)) return;
 
-  const imageCountByWeek = { '1': 3, '2': 4, '3': 4, '4': 3, '5': 4 };
+  const imageCountByWeek = { '1': 3, '2': 4, '3': 4, '4': 3, '5': 4, '6': 4 };
   const imageCount = imageCountByWeek[week] || 0;
 
   const ensureStyle = () => {

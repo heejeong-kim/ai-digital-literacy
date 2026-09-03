@@ -3,9 +3,9 @@
   if (!root) return;
 
   const week = String(document.body.dataset.week || '').trim();
-  if (!['1', '2', '3', '4', '5', '6'].includes(week)) return;
+  if (!['1', '2', '3', '4', '5', '6', '7'].includes(week)) return;
 
-  const imageCountByWeek = { '1': 3, '2': 4, '3': 4, '4': 3, '5': 4, '6': 4 };
+  const imageCountByWeek = { '1': 3, '2': 4, '3': 4, '4': 3, '5': 4, '6': 4, '7': 4 };
   const imageCount = imageCountByWeek[week] || 0;
 
   const ensureStyle = () => {
@@ -56,7 +56,7 @@
       const img = document.createElement('img');
       img.src = `../asset/${week}_${index + 1}.png`;
       img.alt = `${heading.textContent.trim()} 섹션 이미지`;
-      img.loading = index === 0 ? 'eager' : 'lazy';
+      img.loading = week === '7' || index === 0 ? 'eager' : 'lazy';
       img.decoding = 'async';
 
       figure.appendChild(img);

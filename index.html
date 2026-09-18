@@ -1,250 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>생성형 AI 활용 · 강의교안</title>
-<meta name="description" content="2026학년도 2학기 생성형 AI 활용 15주차 강의교안과 팀 프로젝트 현황을 하나의 웹뷰에서 확인한다">
-
-<meta property="og:title" content="생성형 AI 활용 · 강의교안">
-<meta property="og:description" content="강의교안에서 팀 프로젝트 발표까지, 15주 커리큘럼">
-<meta property="og:type" content="website">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/motion.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="2026년 2학기 AI와 디지털 리터러시 주차별 강의교안">
+  <title>AI와 디지털 리터러시 | 2026-2</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/overrides.css">
+  <link rel="stylesheet" href="css/theme-blue.css">
+  <link rel="stylesheet" href="css/site-shell.css?v=20260815-2231">
+  <style>
+    .lecture-grid{grid-auto-rows:1fr;align-items:stretch}.lecture-card{height:100%;min-height:0;padding:20px 20px 18px}.lecture-card[hidden]{display:none!important}.lecture-card h3{min-height:0;margin:18px 0 8px;font-size:23px;line-height:1.4}.lecture-card p{flex:none;min-height:3.1em;max-height:none;margin:0;display:block;overflow:visible;font-size:13px;line-height:1.55;letter-spacing:-.015em}.lecture-card__cta{width:100%;align-self:stretch;justify-content:center;gap:10px;margin-top:20px;padding:12px 16px;border:1.5px solid var(--accent);background:#fff;color:var(--accent-strong);box-shadow:none;text-align:center}.lecture-card.is-available{border-color:#8db0ff!important;background:linear-gradient(180deg,#eaf2ff 0%,#fff 30%,#fff 100%)!important;box-shadow:0 12px 34px rgba(37,99,235,.12)}.lecture-card.is-available .lecture-card__week{background:#2563eb;color:#fff}.lecture-card.is-available .lecture-card__cta{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}.lecture-card.is-preparing{background:linear-gradient(180deg,#f6f8fc 0%,#fff 100%)!important;border-color:#e0e6f0!important;color:#59657a;box-shadow:none;cursor:default}.lecture-card.is-preparing:hover{transform:none;border-color:#e0e6f0!important;box-shadow:none}.lecture-card.is-preparing .lecture-card__week{background:#eef1f6;color:#7a8498}.lecture-card.is-preparing .lecture-card__cta{border-color:#cfd6e2!important;color:#8a94a8!important;background:#eef1f6!important;box-shadow:none!important;cursor:not-allowed;opacity:.72}.agenda__link.is-available{border-color:#7aa7ff;background:#eef4ff;color:#1d4ed8;box-shadow:0 0 0 2px rgba(37,99,235,.08) inset}.agenda__link.is-preparing{color:#8a94a8;background:#f7f9fc;border-color:#e2e7f0}.agenda__link.is-available::before{content:'';width:7px;height:7px;margin-right:6px;border-radius:50%;background:#2563eb}
+    .course-notice{margin:0 0 36px;padding:24px 26px;border:2px solid #ff4d4f;border-radius:20px;background:#fff5f3;color:#962b23;box-shadow:0 8px 24px rgba(180,45,35,.06)}.course-notice__title{margin:0 0 18px;font-size:20px;line-height:1.4;font-weight:800;color:#9c281f}.course-notice__body{display:grid;gap:7px;font-size:17px;line-height:1.65;font-weight:650}.course-notice__row{display:flex;align-items:flex-start;gap:26px;flex-wrap:nowrap}.course-notice__item{display:flex;align-items:flex-start;gap:8px;min-width:0}.course-notice__bullet{flex:0 0 auto;font-weight:900;color:#b3241d}.course-notice__text{min-width:0}
+    .course-tools{display:grid;grid-template-columns:minmax(280px,460px) 1fr;gap:24px;align-items:end;margin:24px 0 34px}.course-search{position:relative}.course-search__label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.course-search__input{width:100%;height:52px;padding:0 18px 0 46px;border:1px solid #cad6eb;border-radius:14px;background:#fff;color:#17213a;font:inherit;outline:none;box-shadow:0 4px 14px rgba(37,99,235,.04)}.course-search__input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.10)}.course-search__icon{position:absolute;left:17px;top:50%;transform:translateY(-50%);font-size:17px;color:#53617b;pointer-events:none}.course-filter{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}.course-filter__legend{display:flex;align-items:center;gap:12px;margin-right:6px;color:#6c7890;font-size:14px;font-weight:700}.course-filter__legend span{display:inline-flex;align-items:center;gap:6px}.course-filter__legend i{display:inline-block;width:8px;height:8px;border-radius:50%}.course-filter__legend .is-class i{background:#ff8a3d}.course-filter__legend .is-assessment i{background:#6d7cff}.course-filter__button{height:46px;padding:0 18px;border:1px solid #d6deeb;border-radius:999px;background:#fff;color:#2a354a;font:inherit;font-size:15px;font-weight:750;cursor:pointer}.course-filter__button.is-active{border-color:#111c32;background:#111c32;color:#fff}.course-search__empty{display:none;margin:0 0 30px;padding:20px;border:1px dashed #c8d3e7;border-radius:15px;background:#f8faff;color:#68758d;font-weight:650;text-align:center}.course-search__empty.is-visible{display:block}
+    @media(max-width:1000px){.course-notice__row{flex-wrap:wrap;gap:7px}.course-notice__row .course-notice__item{width:100%}}@media(max-width:900px){.course-tools{grid-template-columns:1fr}.course-filter{justify-content:flex-start}}@media(max-width:640px){.lecture-card{padding:18px}.lecture-card h3{min-height:0;margin-top:16px}.lecture-card p{min-height:0;max-height:none;font-size:13px;line-height:1.55}.lecture-card__cta{margin-top:18px}.course-filter__legend{width:100%}.course-filter__button{flex:1}.course-notice{padding:20px}.course-notice__body{font-size:16px}}
+  </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header" aria-label="사이트 헤더"><div class="container site-header__inner"><a class="site-header__brand" href="index.html" aria-label="AI와 디지털 리터러시 메인으로 이동">AI와 디지털 리터러시</a><span class="site-header__meta">2026 · 2학기</span></div></header>
+  <section class="hero hero--home" aria-labelledby="heroTitle"><div class="container hero__inner"><p class="hero__kicker">AI &amp; DIGITAL LITERACY · 2026</p><h1 class="hero__title" id="heroTitle"><span class="hero__title-line">AI를 이해하고,</span><span class="hero__title-line">디지털을 <span class="hero__title-accent">판단하는 힘</span></span></h1><p class="hero__desc">기술을 단순히 사용하는 것을 넘어, 정보의 신뢰성을 검증하고 AI를 비판적으로 활용하며 디지털 환경에서 더 나은 선택을 만드는 역량을 학습합니다.</p><a class="hero__scroll" href="#courseOverview">주차별 강의 살펴보기 <span aria-hidden="true">↓</span></a></div></section>
+  <nav class="agenda" aria-label="주차별 아젠다"><div class="container agenda__inner" id="agendaNav"></div></nav>
 
-<a class="skip-link" href="#weekly">본문 바로가기</a>
+  <main id="main"><section class="section intro-section" id="courseOverview"><div class="container">
+    <aside class="course-notice" aria-label="수강 및 성적 안내">
+      <h2 class="course-notice__title">⚠️ 수강 및 성적 안내</h2>
+      <div class="course-notice__body">
+        <div class="course-notice__row">
+          <div class="course-notice__item"><span class="course-notice__bullet">•</span><span class="course-notice__text">본 과목은 교양 필수로 미이수 시 졸업학점에 영향을 받습니다.</span></div>
+          <div class="course-notice__item"><span class="course-notice__bullet">•</span><span class="course-notice__text">온라인 영상·퀴즈·시험 미응시자는 F학점이 나갈 수 있습니다.</span></div>
+        </div>
+        <div class="course-notice__item"><span class="course-notice__bullet">•</span><span class="course-notice__text">성적은 학습 및 응시 내역을 철저하게 검증·확인하여 반영할 예정이므로 학습에 각별히 신경 써주시기 바랍니다.</span></div>
+        <div class="course-notice__item"><span class="course-notice__bullet">•</span><span class="course-notice__text">퀴즈와 시험 문제는 수업 내용을 제대로 학습해야 정확히 해결할 수 있습니다.</span></div>
+      </div>
+    </aside>
 
-<!-- ===== 헤더 ===== -->
-<header class="site-header" id="top">
-  <div class="shell header-inner">
-    <a class="brand" href="index.html">
-      <span class="brand-mark" aria-hidden="true">AI</span>
-      <span class="brand-text">
-        <strong class="brand-title">생성형 AI 활용</strong>
-        <span class="brand-sub">2026 · 2학기 · 강의교안</span>
-      </span>
-    </a>
+    <div class="section-heading"><p class="eyebrow">COURSE OVERVIEW</p><h2>주차별 강의목록</h2><p>교안이 연결된 주차는 파란색으로 표시되며, 준비 중인 주차는 비활성 상태로 표시됩니다.</p></div>
 
-    <nav class="header-nav" aria-label="주요 메뉴">
-      <a class="nav-link" href="#weekly">주차별 강의교안</a>
-      <a class="nav-link nav-link--cta" href="pages/team-project.html">팀 현황</a>
-    </nav>
-  </div>
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-</header>
-
-<main>
-
-  <!-- ===== 히어로 ===== -->
-  <section class="hero" aria-labelledby="hero-title">
-    <!-- 스크롤과 무관하게 상시 구동되는 앰비언트 배경 레이어 -->
-    <div class="hero-ambient" aria-hidden="true">
-      <span class="orb orb--violet"></span>
-      <span class="orb orb--mint"></span>
-      <span class="orb orb--deep"></span>
-      <span class="hero-grid"></span>
-      <span class="hero-scan"></span>
+    <div class="course-tools">
+      <div class="course-search" role="search"><label class="course-search__label" for="courseSearch">주차 또는 키워드 검색</label><span class="course-search__icon" aria-hidden="true">⌕</span><input class="course-search__input" id="courseSearch" type="search" placeholder="주차 또는 키워드 검색" autocomplete="off"></div>
+      <div class="course-filter" aria-label="강의 유형 필터"><div class="course-filter__legend" aria-hidden="true"><span class="is-class"><i></i>수업</span><span class="is-assessment"><i></i>평가</span></div><button class="course-filter__button is-active" type="button" data-filter="all" aria-pressed="true">전체</button><button class="course-filter__button" type="button" data-filter="class" aria-pressed="false">수업</button><button class="course-filter__button" type="button" data-filter="assessment" aria-pressed="false">평가</button></div>
     </div>
+    <p class="course-search__empty" id="courseSearchEmpty">조건에 맞는 주차가 없습니다.</p>
+    <div class="lecture-grid" id="lectureGrid"></div>
+  </div></section></main>
 
-    <div class="shell hero-inner" id="heroParallax">
-
-      <div class="hero-copy">
-        <p class="eyebrow reveal" data-reveal-delay="0">GENERATIVE AI · COURSE LAB</p>
-        <h1 class="hero-title reveal" data-reveal-delay="80" id="hero-title">
-          생성형 AI 활용부터<br>
-          <span class="grad grad--live">팀 프로젝트</span>까지
-        </h1>
-        <p class="hero-lead reveal" data-reveal-delay="160">
-          1주차부터 15주차까지 개념 학습과 프로젝트 산출물이 하나의 흐름으로 이어진다.<br>
-          매주 강의교안에서 개념을 확인하고, 같은 화면에서 팀 산출물을 쌓아 올린다.
-        </p>
-
-        <div class="hero-actions reveal" data-reveal-delay="240">
-          <a class="btn btn-primary" href="#weekly">
-            주차별 교안 보기 <span class="btn-arrow btn-arrow--down" aria-hidden="true">↓</span>
-          </a>
-          <a class="btn btn-ghost" href="pages/team-project.html">
-            팀 현황 바로가기 <span class="btn-arrow" aria-hidden="true">→</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- 시그니처: 학기 흐름 패널 (진행 표시가 상시 순환함) -->
-      <aside class="flow-panel reveal" data-reveal-delay="320" aria-labelledby="flow-title">
-        <p class="panel-label" id="flow-title">SEMESTER FLOW</p>
-        <ol class="flow-list">
-          <li class="flow-item" data-step="0">
-            <span class="flow-num">01</span>
-            <div class="flow-body">
-              <p class="flow-name">이해 · 탐색</p>
-              <p class="flow-desc">1~3주차 · LLM 원리 → 질문법 → 플랫폼 비교</p>
-            </div>
-          </li>
-          <li class="flow-item" data-step="1">
-            <span class="flow-num">02</span>
-            <div class="flow-body">
-              <p class="flow-name">기획 · 설계</p>
-              <p class="flow-desc">4~7주차 · 아이데이션 → AI 비서 → 방향성 검증</p>
-            </div>
-          </li>
-          <li class="flow-item" data-step="2">
-            <span class="flow-num">03</span>
-            <div class="flow-body">
-              <p class="flow-name">구현 · 검증</p>
-              <p class="flow-desc">9~12주차 · PRD → 중간 발표 → 사용자 테스트</p>
-            </div>
-          </li>
-          <li class="flow-item" data-step="3">
-            <span class="flow-num">04</span>
-            <div class="flow-body">
-              <p class="flow-name">완성 · 평가</p>
-              <p class="flow-desc">13~15주차 · 최종 QA → 발표 → 기말고사</p>
-            </div>
-          </li>
-        </ol>
-      </aside>
-
-    </div>
-  </section>
-
-  <!-- ===== 지표 바 ===== -->
-  <section class="statbar" aria-label="과목 요약">
-    <div class="shell statbar-inner">
-      <div class="stat reveal" data-reveal-delay="0">
-        <p class="stat-key">15주</p>
-        <p class="stat-val">하나의 프로젝트 흐름</p>
-      </div>
-      <div class="stat reveal" data-reveal-delay="60">
-        <p class="stat-key">기초</p>
-        <p class="stat-val">LLM 원리 · 프롬프트 · 플랫폼 비교</p>
-      </div>
-      <div class="stat reveal" data-reveal-delay="120">
-        <p class="stat-key">심화</p>
-        <p class="stat-val">AI 비서 · 멀티모달 · PRD · 사용자 테스트</p>
-      </div>
-      <div class="stat reveal" data-reveal-delay="180">
-        <p class="stat-key">최종</p>
-        <p class="stat-val">프로젝트 발표 및 기말 평가</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 주차별 강의교안 ===== -->
-  <section class="weekly" id="weekly" aria-labelledby="weekly-title">
-    <div class="shell">
-
-      <div class="section-head">
-        <div class="section-head-copy">
-          <p class="eyebrow eyebrow--dark reveal">WEEKLY CLASS</p>
-          <h2 class="section-title reveal" data-reveal-delay="60" id="weekly-title">주차별 강의교안</h2>
-          <p class="section-desc reveal" data-reveal-delay="120">
-            각 주차의 강의교안은 별도 페이지에서 읽고, 실습 프롬프트와 산출물 양식을 바로 확인한다.
-          </p>
-        </div>
-        <ul class="legend reveal" data-reveal-delay="120" aria-hidden="true">
-          <li><span class="dot dot--class"></span>수업</li>
-          <li><span class="dot dot--demo"></span>발표</li>
-          <li><span class="dot dot--eval"></span>평가</li>
-        </ul>
-      </div>
-
-      <div class="filter-bar reveal" data-reveal-delay="160">
-        <div class="search">
-          <span class="search-icon" aria-hidden="true">⌕</span>
-          <label class="sr-only" for="searchInput">주차 또는 키워드 검색</label>
-          <input type="search" id="searchInput" placeholder="주차 또는 키워드 검색" autocomplete="off">
-        </div>
-
-        <div class="chips" role="group" aria-label="유형 필터">
-          <button type="button" class="chip is-active" data-filter="all">전체</button>
-          <button type="button" class="chip" data-filter="class">수업</button>
-          <button type="button" class="chip" data-filter="demo">발표</button>
-          <button type="button" class="chip" data-filter="eval">평가</button>
-        </div>
-      </div>
-
-      <div class="card-grid" id="cardGrid">
-        <!-- js/data.js 의 WEEKS 배열을 기준으로 렌더링된다 -->
-      </div>
-
-      <p class="empty-state" id="emptyState" hidden>
-        검색어와 일치하는 주차가 없다. 다른 키워드로 다시 검색한다.
-      </p>
-
-      <noscript>
-        <p class="empty-state">주차 목록을 보려면 자바스크립트를 켠다.</p>
-      </noscript>
-
-    </div>
-  </section>
-
-  <!-- ===== 팀 현황 ===== -->
-  <section class="teams" id="teams" aria-labelledby="teams-title">
-    <div class="teams-ambient" aria-hidden="true"><span class="orb orb--mint-sm"></span></div>
-    <div class="shell">
-
-      <div class="section-head">
-        <div class="section-head-copy">
-          <p class="eyebrow reveal">TEAM STATUS</p>
-          <h2 class="section-title section-title--light reveal" data-reveal-delay="60" id="teams-title"><a class="section-title-link" href="https://heejeong-kim.github.io/utilization-of-generativeai/pages/team-project.html">팀 현황</a></h2>
-          <p class="section-desc section-desc--light reveal" data-reveal-delay="120">
-            분반별 팀 구성과 프로젝트를 요약해 보여준다. 등록과 수정은 팀 현황 페이지에서 한다.
-          </p>
-        </div>
-
-        <div class="chips chips--light reveal" data-reveal-delay="120" role="group" aria-label="분반 필터">
-          <button type="button" class="chip is-active" data-class="all">전체</button>
-          <button type="button" class="chip" data-class="A">A반</button>
-          <button type="button" class="chip" data-class="C">C반</button>
-        </div>
-      </div>
-
-      <div class="team-grid" id="teamGrid">
-        <!-- 구글 시트에 실제 등록된 팀을 js/main.js 가 불러와 렌더링한다 -->
-      </div>
-
-      <p class="empty-state empty-state--light" id="teamEmpty" hidden>
-        등록된 팀이 없습니다. 팀 현황 페이지에서 팀을 등록하세요.
-      </p>
-
-      <div class="teams-cta">
-        <a class="btn btn-mint" id="teamStatusCta" href="pages/team-project.html">
-          팀 등록 · 전체 현황 보기 <span class="btn-arrow" aria-hidden="true">→</span>
-        </a>
-        <p class="teams-cta-note">팀 등록, 수정, 산출물 URL 관리는 팀 현황 페이지에서 한다</p>
-      </div>
-
-    </div>
-  </section>
-
-</main>
-
-<!-- ===== 푸터 ===== -->
-<footer class="site-footer">
-  <div class="shell footer-inner">
-    <p class="footer-title">생성형 AI 활용 · Course Lab</p>
-    <p class="footer-meta">2026학년도 2학기 · 강의교안 웹뷰 · 문의는 강의 공지 채널에서 받는다</p>
-    <a class="footer-top" href="#top">맨 위로 <span class="btn-arrow btn-arrow--up" aria-hidden="true">↑</span></a>
-  </div>
-</footer>
-
-<!-- 스크롤을 따라다니는 맨 위로 버튼 -->
-<button type="button" class="back-top" id="backTop" aria-label="맨 위로 이동">
-  <span class="back-top-arrow" aria-hidden="true">↑</span>
-</button>
-
-<script src="js/config.js"></script>
-<script src="js/data.js"></script>
-<script src="js/main.js"></script>
-<script src="js/backtop.js"></script>
+  <footer class="site-footer"><div class="container"><strong>AI와 디지털 리터러시</strong><span>2026년 2학기 · 주차별 강의교안</span></div></footer>
+  <button class="top-button" id="topButton" type="button" aria-label="페이지 맨 위로 이동">TOP</button>
+  <script src="js/data.js?v=20260826-1700"></script>
+  <script src="js/home.js?v=20260903-1500"></script>
 </body>
 </html>

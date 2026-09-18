@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WEEK 02 · LLM의 원리와 기본 질문법 | 생성형 AI 활용 2026-2</title>
+<meta name="description" content="2주차 LLM의 원리와 기본 질문법 — Notion 교안 전체 동기화본">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/motion.css">
+<link rel="stylesheet" href="../css/lecture.css">
+</head>
+<body>
+<a class="skip-link" href="#lecture-content">본문 바로가기</a>
+<header class="site-header" id="top">
+  <div class="shell header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-mark" aria-hidden="true">AI</span>
+      <span class="brand-text"><strong class="brand-title">생성형 AI 활용</strong><span class="brand-sub">2026 · 2학기 · 강의교안</span></span>
+    </a>
+    <nav class="header-nav" aria-label="주요 메뉴">
+      <a class="nav-link" href="../index.html#weekly">주차별 강의교안</a>
+      <a class="nav-link nav-link--cta" href="team-project.html">팀 현황</a>
+    </nav>
+  </div>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+</header>
+<main>
+<section class="lecture-hero" aria-labelledby="lecture-title">
+  <div class="shell">
+    <p class="lecture-eyebrow">COURSE LAB · <strong>WEEK 02</strong></p>
+    <h1 class="lecture-title" id="lecture-title">LLM의 원리와 기본 질문법</h1>
+    <p class="lecture-sub">LLM 원리 · 토큰·컨텍스트 · 확률적 생성 · 프롬프트 구조 · 사실 검증 · 개인 실습</p>
+  </div>
+</section>
+<div class="shell lecture-layout" id="lectureLayout">
+  <button type="button" class="lecture-side-toggle" id="lectureSideToggle" aria-controls="lectureSide" aria-expanded="true"><span aria-hidden="true">◀</span> 왼쪽 영역 닫기</button>
+  <aside class="lecture-side" id="lectureSide">
+    <div class="side-select">
+      <p class="side-label">주차 선택</p>
+      <label class="sr-only" for="weekSelect">주차 이동</label>
+      <select class="week-select" id="weekSelect">
+        <optgroup label="개설 강의">
+          <option value="lecture-ot.html">OT · 오리엔테이션</option>
+          <option value="lecture-week01.html">01주차 · 생성형 AI 개요</option>
+          <option value="lecture-week02.html" selected>02주차 · LLM의 원리와 기본 질문법</option>
+          <option value="lecture-week03.html">03주차 · 주요 AI 플랫폼과 확장 기능 탐색</option>
+        </optgroup>
+        <optgroup label="준비중">
+          <option value="lecture-week04.html">04주차 · 프로젝트 유형 탐색과 AI 아이데이션</option>
+          <option disabled>05주차 · 나만의 AI 비서 설계</option>
+          <option disabled>06주차 · 멀티모달 AI와 프로젝트 활용</option>
+          <option disabled>07주차 · 프로젝트 방향성 검증과 AI 활용 사례</option>
+          <option disabled>08주차 · 직무수행능력평가 1차 (중간고사)</option>
+          <option disabled>09주차 · MVP 정의와 PRD 작성</option>
+          <option disabled>10주차 · 프로젝트 중간 발표와 피드백</option>
+          <option disabled>11주차 · AI 기반 슬라이드 제작과 발표 자동화</option>
+          <option disabled>12주차 · 사용자 테스트와 프로젝트 개선</option>
+          <option disabled>13주차 · 최종 구현 점검과 발표 준비</option>
+          <option disabled>14주차 · 최종 프로젝트 발표</option>
+          <option disabled>15주차 · 기말고사: 최종 평가와 프로젝트 회고</option>
+        </optgroup>
+      </select>
+    </div>
+    <nav class="side-toc" aria-label="목차">
+      <p class="side-label">Contents</p>
+      <figure class="side-thumb"><img src="../assets/img/2.png" alt="2주차 대표 이미지" loading="lazy"></figure>
+      <ul class="toc-list">
+        <li><a href="#goal">🎯 학습 목표</a></li>
+        <li><a href="#s1">1. LLM 개념과 생성형 AI 작동 원리 이해</a></li>
+        <li><a href="#s2">2. 토큰·컨텍스트·확률적 생성</a></li>
+        <li><a href="#s3">3. 대화형 AI 인터페이스의 이해</a></li>
+        <li><a href="#s4">4. 프롬프트 5요소와 반복 개선 전략</a></li>
+        <li><a href="#s5">5. 환각·편향·최신성 한계와 사실 검증</a></li>
+        <li><a href="#s6">6. 🖇️ [실습] 이론을 적용한 프롬프트 작성·비교·검증</a></li>
+        <li><a href="#outputs">📝 활동내역 및 산출물</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <article class="lecture-content" id="lecture-content">
+    <h2 class="lc-h2" id="goal">🎯 학습 목표</h2>
+    <ol class="lc-num">
+      <li>LLM의 기본 작동 원리와 토큰·컨텍스트를 설명할 수 있다</li>
+      <li>목적·맥락·조건·형식을 갖춘 프롬프트를 작성하고 개선할 수 있다</li>
+      <li>환각과 최신성 한계를 이해하고 AI 응답을 검증할 수 있다</li>
+    </ol>
+
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col width="406"><col width="274.46875"></colgroup><thead><tr><th>고민해볼 문제</th><th>이번 주차에서 연결되는 내용</th></tr></thead><tbody>
+      <tr><td>같은 질문인데 왜 답이 달라질까?</td><td>확률적 생성과 온도</td></tr>
+      <tr><td>질문을 길게 쓰면 답이 더 좋아질까?</td><td>프롬프트 구조와 컨텍스트</td></tr>
+      <tr><td>AI가 그럴듯하게 틀릴 때 어떻게 확인할까?</td><td>환각과 사실 검증</td></tr>
+    </tbody></table></div>
+
+    <div class="lc-callout lc-callout--green"><div class="lc-callout-body"><p>1주차에서 생성형 AI가 학습한 패턴으로 결과를 구성한다는 기본 성격을 살펴봤다면, 2주차는 그 결과가 <strong>어떤 계산 과정을 거쳐 만들어지는가</strong>에 초점을 두고 진행</p></div></div>
+
+    <details class="lc-details">
+      <summary><strong>[참고] 교재 속 용어</strong></summary>
+      <div class="lc-details-body">
+        <ol class="lc-num">
+          <li><strong>생성형 AI (Generative AI)</strong>: 인공지능의 한 분야로, 기존의 데이터를 학습하여 새로운 텍스트, 이미지, 음악, 비디오 등의 콘텐츠를 창조하는 기술</li>
+          <li><strong>거대 언어 모델 (LLM: Large Language Model)</strong>: 방대한 양의 텍스트 데이터를 학습하여 인간과 유사한 자연어 이해 및 생성 능력을 갖춘 인공지능 모델. ChatGPT, Gemini 등이 대표적임</li>
+          <li><strong>자연어 처리 (NLP: Natural Language Processing)</strong>: 컴퓨터가 인간의 언어를 이해하고 분석하며 생성할 수 있도록 하는 인공지능의 한 분야</li>
+          <li><strong>GPT (Generative Pre-trained Transformer)</strong>: OpenAI에서 개발한 트랜스포머 아키텍처 기반의 거대 언어 모델 시리즈. 사전 학습과 미세 조정을 통해 다양한 자연어 처리 task를 수행함</li>
+          <li><strong>사전 훈련 (Pre-training)</strong>: 모델이 방대한 양의 일반적인 텍스트 데이터를 학습하여 언어의 기본적인 패턴과 문맥을 이해하는 과정</li>
+          <li><strong>미세 조정 (Fine-tuning)</strong>: 사전 훈련된 모델을 특정 작업이나 데이터셋에 맞춰 추가적으로 학습시켜 성능을 향상시키는 과정</li>
+          <li><strong>ChatGPT</strong>: OpenAI에서 개발한 GPT 모델 기반의 대화형 인공지능 챗봇 서비스. 질문 응답, 텍스트 생성, 번역, 코딩 등 다양한 기능을 제공함</li>
+          <li><strong>멀티모달 (Multimodal)</strong>: 하나의 AI 모델이 텍스트, 이미지, 오디오, 비디오 등 여러 종류의 데이터를 동시에 처리하고 이해할 수 있는 능력</li>
+          <li><strong>RLHF (Reinforcement Learning from Human Feedback)</strong>: 인간의 피드백을 보상으로 사용하여 인공지능 모델을 학습시키는 강화 학습 방법. ChatGPT의 답변 품질 향상에 기여함</li>
+          <li><strong>할루시네이션 (Hallucination)</strong>: 거대 언어 모델이 사실에 기반하지 않은 정보를 그럴듯하게 생성하여 답변하는 현상</li>
+          <li><strong>OpenAI</strong>: 인공지능 기술을 연구하고 개발하는 미국의 연구 기업. ChatGPT, GPT 모델 시리즈 등을 개발함</li>
+          <li><strong>트랜스포머 (Transformer)</strong>: 자연어 처리 분야에서 혁신적인 성능을 보인 딥러닝 모델 아키텍처. 병렬 처리와 장거리 의존성 모델링에 강점을 가짐</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="lc-details">
+      <summary><strong>[참고] 교재 써머리</strong></summary>
+      <div class="lc-details-body">
+        <div class="lc-lock" id="lock-summary" data-lock-encrypted="week02-summary.enc.json">
+          <div class="lc-lock-gate">
+            <p class="lc-lock-icon" aria-hidden="true">🔒</p>
+            <p class="lc-lock-title">비밀번호가 필요한 자료입니다</p>
+            <p class="lc-lock-desc">[참고] 교재 써머리는 비밀번호 확인 후 열람할 수 있음</p>
+            <form class="lc-lock-form">
+              <label class="sr-only" for="lock-summary-input">비밀번호</label>
+              <input type="password" id="lock-summary-input" class="lc-lock-input" placeholder="비밀번호" inputmode="numeric" autocomplete="off">
+              <button type="submit" class="lc-lock-btn">열람하기</button>
+            </form>
+            <p class="lc-lock-error" hidden>비밀번호가 올바르지 않음. 다시 확인 바람</p>
+          </div>
+          <iframe class="lc-lock-frame" title="[참고] 교재 써머리" loading="lazy" hidden></iframe>
+        </div>
+      </div>
+    </details>
+
+    <h1 class="lc-h1" id="s1">1. LLM 개념과 생성형 AI 작동 원리 이해</h1>
+    <figure class="lc-banner"><img src="../assets/img/2_1.png" alt="LLM 개념과 생성형 AI 작동 원리 이해" loading="lazy"></figure>
+
+    <h2 class="lc-h2">1.1 LLM이란 무엇인가</h2>
+    <h3 class="lc-h3">1.1.1 개념 정의</h3>
+    <ul class="lc-list">
+      <li>LLM(Large Language Model, 거대언어모델) 은 수천억 개의 텍스트 데이터(전 세계 웹사이트, 논문, 오픈소스 코드 등)를 통째로 공부하여 인간의 언어와 논리 구조를 습관처럼 익힌 초대형 언어 모델
+        <ul class="lc-list">
+          <li>Large (거대): 공부한 양이 엄청나게 많다는 뜻. 도서관 수십만 개 분량의 책, 인터넷 글, 논문 등을 다 읽음 (뇌세포 역할을 하는 '파라미터'가 수천억 개 이상)</li>
+          <li>Language (언어): 사람의 말을 이해하고 생성하는 데 특화되어 있다는 뜻</li>
+          <li>Model (모델): 입력된 정보를 바탕으로 결과를 확률적으로 계산해내는 수학적 패턴 덩어리</li>
+        </ul>
+      </li>
+      <li>단순히 키워드를 검색하거나 번역하는 수준을 넘어, 레거시 기존 AI는 "이메일 스팸 분류기", "한영 번역기"처럼 정해진 한 가지 일만 할 수 있었으나 LLM은 문맥 전체를 읽기 때문에, 처음 보는 논문을 요약하거나 새로운 코드를 짜는 등 인간처럼 범용적인 업무가 가능</li>
+      <li>LLM은 앞에 나온 문맥을 바탕으로 다음 토큰을 확률적으로 예측하며 결과를 생성하는 자기회귀 언어 모델로, 인간과 같은 방식으로 의미를 이해한다고 단정하기는 어려움</li>
+      <li>복잡한 추론처럼 보이는 결과도 생성할 수 있으나 생성 과정 자체가 사실성을 보장하는 것은 아니므로, 구조가 자연스러운 문장이라도 내용은 별도로 검증할 필요가 있음</li>
+    </ul>
+
+    <h2 class="lc-h2">1.2 LLM의 세부 구조 (Transformer 모델 분해)</h2>
+    <div class="lc-callout lc-callout--gray"><span class="lc-callout-icon" aria-hidden="true">💡</span><div class="lc-callout-body">
+      <p>LLM은 "Self-Attention → FFN(Feed-Forward Network )"을 한 쌍으로 묶은 동일한 블록을 수십 층 반복 쌓은 네트워크로 입력된 문장은 이 블록을 통과할 때마다 두 단계의 가공을  거침</p>
+      <p>먼저 Self-Attention이 문장 안 모든 단어가 서로를 바라보며 "누구와 연결되고 누가 더 중요한지"를 계산하고, 이어서 FFN이 그 결과를 확장·비선형 변환·압축의 3단계로 정제</p>
+      <p>이 과정을 수십 층 반복하면서 초기 레이어의 단어 수준 패턴 파악이 중간 레이어의 문장 구조 이해를 거쳐 깊은 레이어의 문단 전체 의도와 맥락 파악으로 점진적으로 추상화됨</p>
+      <p>즉 LLM의 구조는 "여러 시선으로 관계를 읽고 → 정제하는 과정을 수십 번 반복하며 점점 깊은 이해에 도달하는 다단계 추상화 기계라고 할 수 있음</p>
+    </div></div>
+
+    <h3 class="lc-h3">1.2.1 Transformer</h3>
+    <p class="lc-p">Self-Attention 블록과 Feed-Forward Network(FFN)블록이 한쌍으로 구성되고 이 쌍을 수십번 반복하며 표현을 점점 정교하게 만드는 방식</p>
+    <p class="lc-p">2017년 구글이 발표한 인공신경망 구조로, 현재 존재하는 모든 초거대 AI(ChatGPT, Claude, Gemini 등)의 뿌리가 되는 핵심 알고리즘</p>
+    <ul class="lc-list">
+      <li>레거시 AI(RNN/LSTM)의 한계: 예전 AI는 문장을 앞에서부터 한 글자씩 순차적으로 읽었기 때문에 문장이 길어지면 앞부분 내용을 잊어버리는 '장기 의존성(Long-Term Dependency) 단절' 문제가 발생했고, GPU를 이용한 병렬 연산이 불가능해 학습 속도가 매우 느렸음</li>
+      <li>트랜스포머(Transformer)의 혁신: 문장 안 여러 토큰의 관계를 병렬적으로 계산할 수 있어 순차 처리 중심 구조보다 대규모 학습에 유리하며, GPU 기반 병렬 연산의 효율을 크게 높여 초거대 모델 시대의 기반이 된 구조임 (드론의 시선이라고 이해하면 됨)</li>
+    </ul>
+
+    <h3 class="lc-h3">1.2.2 레이어(Layer)</h3>
+    <p class="lc-p">LLM은 같은 모양의 블록을 수십 층 쌓아 올린 네트워크 구조로 각 층에서 표현이 조금씩 정교해지고 추상화되는 흐름으로 얕은 이해에서 깊은 이해로 확장되는 구조로 한 문장을 여러 깊이의 관점으로 반복 가공하는 다단계 생각 과정으로 이해하는 흐름</p>
+    <ul class="lc-list"><li>초기 레이어: 단어 수준의 단순 패턴 파악</li><li>중간 레이어: 문장 구조와 관계 이해</li><li>깊은 레이어: 문단 전체의 의도, 느낌, 맥락을 파악하는 구조</li></ul>
+
+    <h3 class="lc-h3">1.2.3 Self-Attention 구조</h3>
+    <p class="lc-p">Self-Attention은 문장 안의 모든 단어가 서로를 비교하며 “누가 더 중요하고 누구와 연결되는지”를 점수로 판단하는 메커니즘으로 이 메커니즘 덕분에 문장이 길어져도 앞뒤 단어 관계를 놓치지 않는 능력이 생기는 흐름</p>
+    <p class="lc-p">예: “어제 팀장님이 보낸 메일에 답장을 아직 못 했다”</p>
+    <ul class="lc-list"><li>“답장을” ↔ “메일” 연결</li><li>“보낸” ↔ “팀장님이” 연결</li><li>“어제”는 전체 상황의 시간 정보로 작동</li></ul>
+
+    <h3 class="lc-h3">1.2.4 Multi-Head Attention</h3>
+    <p class="lc-p">Attention 연산을 여러 개의 'Head'로 나누어 서로 다른 표현 공간에서 단어 간 관계를 동시에 살펴보는 구조로, 회의실에 주어-동사 관계, 시간 정보, 감정 톤 등 서로 다른 관점을 가진 여러 전문가가 함께 참여하는 방식으로 이해할 수 있음</p>
+    <p class="lc-p">각 Head가 반드시 특정 역할만 담당하는 것은 아니며, 학습 과정에서 서로 다른 관계와 패턴에 주목하도록 형성되는 구조가 Multi-Head Attention임</p>
+    <p class="lc-note">[아래는 예시이며 실제로는 학습을 통해 모델이 스스로 역할을 결정함]</p>
+    <ul class="lc-list"><li>Head 1: 주어–동사 관계에 집중</li><li>Head 2: 시간 정보에 집중</li><li>Head 3: 감정·톤에 집중</li><li>Head 4: 대상·관계에 집중</li></ul>
+
+    <h3 class="lc-h3">1.2.5 Feed-Forward Network (FFN)</h3>
+    <p class="lc-p">Attention으로 중요도와 연결성이 정해지면 FFN(Feed-Forward Network) 블록이 그 표현을 확장(Expand) → 필터링(Filtering) → 압축(Compress) 3단계를 통해, 선형 조합만으로는 표현할 수 없는 복잡한 패턴을 학습하는 가공 과정으로 두 과정이 반복되면서 단순 숫자 벡터가 의미적으로 풍부한 표현으로 변환되는 구조</p>
+    <p class="lc-p">비유</p>
+    <ul class="lc-list"><li>Attention: 어떤 재료가 서로 잘 어울리는지 판단, 관계를 찾아내는 것</li><li>FFN: 실제 지식(데이터)를 꺼내 단어의 의미를 풍부하게 가공</li></ul>
+    <div class="lc-note">
+      <p>[Attention을 거친 사과 벡터]</p>
+      <p>1) 확장 (Expand)<br>'과일 사과'와 관련된 수많은 지식 뉴런을 동시에 깨움 : 빨간색, 아삭함, 비타민C, 껍질, 당도, 가을 수확 등</p>
+      <p>2) 필터링 (Filter)<br>현재 문장("디저트로 먹었다")에 불필요한 정보는 차단하고, 단어의 숨은 의미적 뉘앙스를 필터링(활성화 함수 연산)함 : '가을 수확', '농장' 정보는 버리고, '맛', '식감' 정보만 통과</p>
+      <p>3) 압축 (Compress)<br>필터링된 알짜배기 지식("새콤달콤함", "아삭한 디저트")을 원래의 차원으로 다시 압축하여 최종 단어 표현으로 고착화</p>
+      <p>[최종 가공된 사과 벡터] 단순히 글자 '사과'가 아니라, "레몬 타르트와 어울리는 새콤달콤하고 아삭한 과일 디저트"라는 깊은 의미 정보가 꽉 찬 벡터로 변환됨</p>
+    </div>
+
+    <h2 class="lc-h2">1.3 LLM(생성형 AI) 작동 원리</h2>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col width="77"><col width="284"><col width="258.921875"></colgroup><thead><tr><th>단계</th><th>명칭</th><th>핵심 역할</th></tr></thead><tbody>
+      <tr><td>1단계</td><td>토큰화 (Tokenization)</td><td>문장을 숫자로 쪼개기</td></tr>
+      <tr><td>2단계</td><td>임베딩 (Embedding)</td><td>의미를 공간 좌표로 변환</td></tr>
+      <tr><td>3단계</td><td>다음 단어 예측 (Next-Token Prediction)</td><td>확률적으로 가장 자연스러운 단어 선택</td></tr>
+      <tr><td>4단계</td><td>AI 답변 출력 및 루프(Autoregressive)</td><td>생성된 단어를 다시 입력에 추가하며 단어 하나씩 반복 출력</td></tr>
+    </tbody></table></div>
+
+    <h3 class="lc-h3">1.3.1 토큰화 (Tokenization) → 자연어를 모델이 처리할 단위로 나누기</h3>
+    <p class="lc-p">LLM은 우리가 입력한 문장을 글자나 단어 그대로 처리하지 않고 토큰(Token)이라는 작은 단위로 나눈 뒤 각 토큰을 숫자 ID로 변환하여 계산</p>
+    <p class="lc-p">토큰은 항상 단어 하나와 일치하는 것이 아니라 단어 전체, 단어의 일부, 숫자, 기호, 공백 등이 하나 또는 여러 토큰으로 나뉠 수 있다. 이처럼 자연어를 모델이 계산할 수 있는 단위로 분해하는 과정이 토큰화(Tokenization)</p>
+    <p class="lc-note">예를 들어 사람이 "인공지능을 공부한다"라는 문장을 하나의 문장으로 읽더라도, LLM 내부에서는 토크나이저의 규칙에 따라 여러 개의 토큰으로 나뉘어 처리된다. 정확히 어떻게 나뉘는지는 사용하는 모델과 토크나이저에 따라 달라질 수 있음</p>
+
+    <h3 class="lc-h3">1.3.2 임베딩 (Embedding) → 의미를 공간 좌표로 변환</h3>
+    <p class="lc-p">토큰화된 단어를 고차원 벡터(좌표값)로 변환하는 과정. 단순히 문자를 숫자로 바꾸는 것을 넘어 단어가 가진 의미적 유사성을 수학적 거리로 표현하여 단어의 의미를 좌표값으로 변환하여 AI가 단어 간 관계를 수학적으로 계산할 수 있게 만드는 과정</p>
+    <p class="lc-p">예시)</p>
+    <pre><code>왕(King) ↔ 여왕(Queen)       : 가까움  ✅
+왕(King) ↔ 반도체(Semiconductor) : 멀리 떨어짐  ❌
+
+수학적 연산: [국왕] - [남성] + [여성] = [여왕]</code></pre>
+    <p class="lc-p">AI가 단어를 단순 암기하는 것이 아니라 단어 간 의미 관계를 수학적으로 이해하고 있다는 증거</p>
+    <p class="lc-note">참고: 위 예시는 Word2Vec 등 고전적인 정적 임베딩 방식의 대표적 비유이며, 실제 LLM의 임베딩은 문맥에 따라 동적으로 달라지는 컨텍스트 임베딩임. 다만 '단어를 의미 공간의 좌표로 이해한다'는 핵심 개념을 직관적으로 전달하는 용도로는 유효함</p>
+
+    <h3 class="lc-h3">1.3.3 다음 단어 예측 (Next-Token Prediction) → LLM의 핵심 원리</h3>
+    <p class="lc-p">LLM은 인간처럼 '생각'해서 답변을 만드는 것이 아니라 주어진 문맥에서 다음에 올 통계적 확률이 가장 높은 단어를 연속으로 선택하여 출력하는 확률 모델로 앞에 나온 문맥을 바탕으로 다음에 올 단어를 확률적으로 계산해 출력하는 과정</p>
+    <p class="lc-note">예시) 이러한 원리 때문에 LLM은 문법적으로 완벽하지만 내용이 거짓인 문장을 생성할 수 있음. '그럴듯함'과 '사실'은 전혀 다른 개념</p>
+
+    <h3 class="lc-h3">1.3.4 AI 답변 출력 및 루프 (Autoregressive) → 생성된 단어를 다시 입력에 추가하며 반복 출력</h3>
+    <p class="lc-p">앞서 선택된 단어를 새로운 입력 데이터로 포함시켜, 단어 하나씩 순차적으로 연속 생성하는 과정임으로 LLM이 문장을 한 번에 통째로 찍어내는 것이 아니라, 실시간으로 단어를 이어 붙여 나가는 자동 회귀(Autoregressive) 구조의 핵심 단계</p>
+    <p class="lc-p">앞 단계에서 출력된 단어를 다시 입력창에 밀어 넣어 다음 단어를 예측하는 연쇄적 피드백 루프 과정으로 예를 들어 첫 단어를 쓸 때는 책 한 장만 읽으면 되지만, 마지막 단어를 쓸 때는 책 한 권을 처음부터 끝까지 다 다시 읽어야 하는 비효율성이 있음</p>
+    <div class="lc-note"><p>예시)</p><p>"나는 오늘"이라는 입력이 주어졌을 때의 출력 메커니즘은 다음과 같음:</p>
+      <ul class="lc-list"><li>1회차 루프: "나는 오늘" → [맛있는] 예측 및 출력</li><li>2회차 루프: "나는 오늘 맛있는" → [밥을] 예측 및 출력</li><li>3회차 루프: "나는 오늘 맛있는 밥을" → [먹었다] 예측 및 출력</li><li>4회차 루프: "나는 오늘 맛있는 밥을 먹었다" → 문장 종료 토큰 감지 후 멈춤</li></ul>
+    </div>
+    <p class="lc-p"><strong>비효율성의 흐름</strong></p>
+    <p class="lc-p"><strong>성능의 병목 구간</strong> : 문장이 길어질수록 과거에 생성한 모든 토큰을 다시 읽어와 연산해야 하므로, 후반부로 갈수록 컴퓨팅 리소스(GPU 비용)가 기하급수적으로 증가</p>
+    <p class="lc-p"><strong>에러 전파(Error Propagation) 위험</strong> : 루프 중간에 단어 하나를 잘못 선택하면(확률적 오차 발생), 그 잘못된 단어가 다음 단어 예측의 기준(문맥)이 되므로 이후 문장 전체가 엉뚱한 방향으로 흘러가는 '스노우볼 효과', 즉 이는 할루시네이션을 가속화하는 주된 요인이라 할 수 있음</p>
+
+    <h2 class="lc-h2">1.4 구조적 한계 · 할루시네이션 (Hallucination)</h2>
+    <p class="lc-p">AI가 실제로 존재하지 않는 사실·판례·통계·논문을 마치 사실인 것처럼 창작해 내는 현상</p>
+    <ul class="lc-list"><li>사실 관계(Fact) 검증이 아닌 문맥적으로 "그럴듯한 문장" 생성에 최적화된 구조적 한계</li><li>3단계의 확률적 예측 구조 자체에서 필연적으로 발생</li></ul>
+    <p class="lc-note">예시) 뉴욕 변호사 가짜 판례 제출 사건 (2023)<br><br>미국 변호사가 ChatGPT가 생성한 변론서를 그대로 법원에 제출했다가 인용된 판례 6건이 모두 AI가 창작한 가짜임이 밝혀져 벌금 $5,000(약 650만 원) 선고</p>
+
+    <h1 class="lc-h1" id="s2">2. 토큰·컨텍스트·확률적 생성</h1>
+    <figure class="lc-banner"><img src="../assets/img/2_2.png" alt="토큰·컨텍스트·확률적 생성" loading="lazy"></figure>
+
+    <h2 class="lc-h2">2.1 토큰 수가 LLM 사용에 미치는 영향</h2>
+    <p class="lc-p">토큰은 쉽게 말해 AI가 한 번의 대화에서 읽고 처리해야 하는 정보의 양을 세는 단위로 이해. 참고하자면 사람이 책을 읽을 때 페이지가 많아질수록 읽어야 할 양이 늘어나는 것처럼, AI도 입력된 토큰이 많아질수록 한 번에 처리해야 할 정보가 많아지는 구조</p>
+    <p class="lc-note">예시) AI에게 보고서 한 문단만 주고 요약을 요청하는 경우와 100페이지 분량의 자료 전체를 한꺼번에 넣고 요약을 요청하는 경우를 비교하면, 두 작업은 같은 '요약'이지만 AI가 읽어야 하는 토큰의 양은 크게 달라지는데 이 차이가 한 번에 처리할 수 있는 정보량, 응답에 사용할 수 있는 공간, API 사용량 등과 연결되는 것</p>
+    <div class="lc-callout lc-callout--gray"><span class="lc-callout-icon" aria-hidden="true">💡</span><div class="lc-callout-body"><p><strong>쉽게 이해하기</strong></p><p>토큰을 여행 가방의 공간으로 보면, 가방의 크기는 한정되어 있고 자료를 많이 넣을수록 남는 공간이 줄어드는 것처럼, 한 번의 요청에 너무 많은 정보를 넣으면 모델이 한 번에 다룰 수 있는 범위 안에서 입력과 출력이 함께 공간을 사용</p></div></div>
+    <h3 class="lc-h3">토큰이 많으면 무조건 나쁜가?</h3>
+    <p class="lc-p">토큰이 적다고 항상 좋은 프롬프트인 것은 아니라 필요한 배경까지 없애면 오히려 AI가 상황을 제대로 판단하지 못해 답변 품질이 낮아질 수 있음</p>
+    <p class="lc-p">예를 들어</p>
+    <p class="lc-note">마케팅 전략 알려줘</p>
+    <p class="lc-p">처럼 지나치게 짧게 질문하면 토큰 수는 적지만 목적과 상황이 부족하며 반대로</p>
+    <p class="lc-note">대학생 대상 온라인 교육 서비스를 출시하려고 함. 초기 광고 예산은 월 300만 원이며 인스타그램과 유튜브를 주요 채널로 고려 중임. 첫 3개월 동안 실행할 마케팅 전략을 우선순위 중심으로 제안할 것</p>
+    <p class="lc-p">처럼 필요한 맥락을 제공하면 입력은 길어지지만 AI가 판단할 수 있는 정보가 많아져 결과의 구체성이 높아질 수 있음</p>
+    <p class="lc-p">따라서 핵심은 프롬프트를 무조건 짧게 만드는 것이 아니라 필요한 목적·맥락·조건은 충분히 제공하고, 같은 설명의 반복이나 관계없는 자료는 제거하는 것</p>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col width="158"><col width="470"><col width="363"></colgroup><thead><tr><th>영향</th><th>무엇이 달라지는가</th><th>사용자가 알아둘 점</th></tr></thead><tbody>
+      <tr><td>처리 가능한 정보량</td><td>입력과 출력에 사용되는 토큰이 컨텍스트 창 안에서 함께 사용됨</td><td>매우 긴 문서나 대화는 한 번에 모두 처리하기보다 필요한 범위를 나누어 제공함</td></tr>
+      <tr><td>응답 길이</td><td>입력에 많은 토큰을 사용하면 모델과 서비스 조건에 따라 출력에 사용할 수 있는 여유에도 영향을 줄 수 있음</td><td>필요한 정보와 원하는 출력 분량을 명확하게 제시함</td></tr>
+      <tr><td>비용·처리량</td><td>API 등 일부 환경에서는 입력·출력 토큰 수가 사용량과 비용 산정의 기준이 됨</td><td>같은 내용을 불필요하게 반복하지 않고 필요한 자료만 제공함</td></tr>
+      <tr><td>언어·표현 방식</td><td>같은 의미의 문장도 언어와 표현, 사용하는 모델의 토크나이저에 따라 토큰 수가 달라질 수 있음</td><td>특정 언어가 항상 더 효율적이라고 단정하기보다 실제 사용하는 모델 기준으로 확인함</td></tr>
+      <tr><td>코드·표·기호</td><td>코드와 표처럼 기호와 구조가 많은 입력도 여러 토큰으로 분해됨</td><td>대용량 자료는 필요한 부분만 선택하거나 작업을 단계별로 나누어 처리함</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">2.2 컨텍스트 창 — AI는 한 번에 얼마나 많은 정보를 볼 수 있을까</h2>
+    <p class="lc-p">컨텍스트 창(Context Window)은 모델이 한 번에 참조할 수 있는 토큰의 최대 범위이며 대화 내용·첨부 자료·지시사항·생성 중인 답변 등이 함께 들어가는 AI의 작업 기억 공간에 해당하는 것으로 쉽게 말하면 컨텍스트 창은 AI가 한 번의 작업에서 펼쳐놓고 볼 수 있는 책상 크기와 비슷함(단, 책상이 넓을수록 더 많은 문서와 이전 대화를 동시에 참고할 수 있지만, 책상 위에 자료가 많다고 해서 모든 내용을 똑같이 중요하게 읽는 것은 아님)</p>
+    <p class="lc-p">따라서 컨텍스트 창이 크더라도 핵심 조건과 중요한 자료를 명확하게 제시하는 것이 중요</p>
+    <h3 class="lc-h3">최신 주요 모델의 컨텍스트 창</h3>
+    <p class="lc-p">※ 아래 수치는 API 공식 사양 기준이며 실제 ChatGPT·Claude·Gemini 웹/앱에서 사용할 수 있는 컨텍스트 범위는 선택 모델·요금제·기능에 따라 달라질 수 있음</p>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col width="178"><col width="194"><col width="157"><col width="363.265625"></colgroup><thead><tr><th>서비스</th><th>최신 모델 예시</th><th>컨텍스트 규모</th><th>학생 관점에서의 의미</th></tr></thead><tbody>
+      <tr><td>ChatGPT / OpenAI</td><td>GPT-5.6 계열</td><td>약 105만 토큰</td><td>매우 긴 문서·코드·대화 기록을 한 작업 안에서 함께 참고할 수 있는 수준</td></tr>
+      <tr><td>Claude / Anthropic</td><td>Claude Sonnet 5 (1M 컨텍스트 기본 제공)</td><td>최대 100만 토큰</td><td>긴 보고서나 여러 문서를 한꺼번에 넣고 비교·요약하는 작업에 활용 가능한 수준</td></tr>
+      <tr><td>Gemini / Google</td><td>Gemini 3.6 Flash</td><td>약 105만 토큰 입력</td><td>텍스트뿐 아니라 이미지·영상·음성·PDF까지 포함한 대용량 멀티모달 입력을 다루는 데 활용 가능한 수준</td></tr>
+    </tbody></table></div>
+    <p class="lc-p"><strong>[컨텍스트 창 출처] 2026년 8월 공식 문서 기준</strong></p>
+    <ul class="lc-list">
+      <li>OpenAI, <em>GPT-5.6 Sol Model : </em> <a href="https://developers.openai.com/api/docs/models/gpt-5.6-sol">Context window 1,050,000 tokens</a></li>
+      <li>Anthropic : <a href="https://docs.anthropic.com/en/docs/about-claude/pricing">Claude Sonnet 5의 1M token context window</a></li>
+      <li>Google AI for Developers, Gemini 3.6 Flash, <a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash">Input token limit 1,048,576</a></li>
+    </ul>
+    <div class="lc-callout lc-callout--gray"><span class="lc-callout-icon" aria-hidden="true">💡</span><div class="lc-callout-body"><p><strong>숫자가 크다고 항상 답변 품질이 높아지는 것은 아님</strong></p><p>컨텍스트 창은 AI가 참고할 수 있는 최대 공간을 의미하는 것이며, 그 안의 모든 정보를 동일한 정확도로 기억하거나 활용한다는 의미는 아님</p><p>실제 ChatGPT·Claude·Gemini 서비스 화면에서 사용할 수 있는 범위는 선택한 모델·요금제·기능에 따라 달라질 수 있음</p></div></div>
+    <p class="lc-p"><strong>컨텍스트가 길어질 때 나타나는 대표 현상</strong></p>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col><col width="383"><col width="322"></colgroup><thead><tr><th>현상</th><th>설명</th><th>대응 방법</th></tr></thead><tbody>
+      <tr><td>컨텍스트 소실</td><td>창을 넘어선 초반 대화가 더 이상 반영되지 않음</td><td>중요한 조건을 주기적으로 다시 명시함</td></tr>
+      <tr><td>컨텍스트 오염</td><td>잘못된 정보나 실패한 시도가 대화에 남아 계속 영향을 줌</td><td>수정을 반복하기보다 새 대화창을 엶</td></tr>
+      <tr><td>지시 희석</td><td>대화가 길어질수록 초반 지시의 영향력이 약해짐</td><td>핵심 지시를 마지막 입력에 다시 붙임</td></tr>
+      <tr><td>세션 독립</td><td>대화창마다 기억이 서로 분리되어 유지됨</td><td>주제와 프로젝트 단위로 대화창을 나눔</td></tr>
+    </tbody></table></div>
+    <ul class="lc-list"><li>최근 모델은 컨텍스트 창이 크게 늘었으나 창이 크다고 해서 앞부분을 균일하게 잘 참조하는 것은 아님</li><li>중요한 정보는 대화의 맨 앞이나 맨 뒤에 배치할 때 반영률이 높아짐</li></ul>
+
+    <h2 class="lc-h2">2.3 확률적 생성 — 왜 같은 질문에도 답이 달라질까</h2>
+    <p class="lc-p">LLM은 정해진 문장을 저장해 두었다가 꺼내는 방식이 아니라 앞에 나온 문맥을 바탕으로 다음에 올 토큰들의 가능성을 계산하고 그중 하나를 선택하며 문장을 이어 가는 구조이기 때문에 같은 질문에도 답이 달라질 수 있음</p>
+    <div class="lc-note"><p>예시) <code>오늘 점심으로</code>라는 문장이 주어지면 다음 토큰 후보가 하나만 존재하는 것이 아니라 <code>김치찌개</code>, <code>샌드위치</code>, <code>국밥</code>, <code>파스타</code>처럼 여러 후보에 서로 다른 확률이 부여될 수 있음</p><ul class="lc-list"><li>김치찌개 35%</li><li>샌드위치 25%</li><li>국밥 20%</li><li>파스타 10%</li><li>기타 후보 10%</li></ul></div>
+    <p class="lc-p">가장 가능성이 높은 후보가 선택될 가능성이 크지만 항상 같은 후보만 선택되는 것은 아니며 한 번 선택된 토큰은 다음 토큰을 예측하는 새로운 문맥이 되기 때문에 초반의 작은 선택 차이가 뒤의 문장 전체를 다른 방향으로 이어지게 할 수 있음</p>
+    <h3 class="lc-h3">확률적 생성이 실제 사용에서 의미하는 것</h3>
+    <ul class="lc-list"><li>같은 프롬프트를 다시 입력해도 표현·예시·구성 순서가 조금씩 달라질 수 있음</li><li>정답 범위가 넓은 기획·아이디어 작업에서는 여러 후보를 얻는 장점으로 작용함</li><li>사실 확인·계산·규정 확인처럼 정확성이 중요한 작업에서는 한 번의 답변만 믿지 않고 검증할 필요가 있음</li><li>중요한 결과는 여러 번 생성하여 공통점과 차이를 비교하는 방식이 유용함</li></ul>
+    <p class="lc-p">즉 LLM의 답변은 하나의 고정된 정답을 꺼내는 과정이 아니라, 매 순간 여러 후보 중 하나를 선택하며 만들어지는 결과로 이해할 것</p>
+    <h3 class="lc-h3">온도(Temperature)</h3>
+    <p class="lc-p">온도는 다음 토큰을 선택할 때 확률이 높은 후보에 얼마나 집중할지, 낮은 확률의 후보까지 얼마나 폭넓게 고려할지 조절하는 값을 말하는 것으로 프롬프트에서는 온도 자체를 바꾸는 것이 아니라 ‘사실성과 일관성을 우선할 것’, ‘서로 다른 관점의 아이디어를 5개 제안할 것’처럼 원하는 결과의 방향을 조건으로 명시 하는 것</p>
+    <ul class="lc-list"><li>낮은 온도: 높은 확률의 후보를 중심으로 선택하여 비교적 일관된 결과가 생성됨</li><li>높은 온도: 다양한 후보가 선택될 가능성이 커져 표현과 아이디어의 변동 폭이 커짐</li><li>일반적인 ChatGPT·Claude·Gemini 대화 화면에서는 사용자가 온도 값을 직접 설정하지 않는 경우가 많으므로 개념을 이해하는 수준으로 볼 것</li></ul>
+
+    <h1 class="lc-h1" id="s3">3. 대화형 AI 인터페이스의 이해</h1>
+    <figure class="lc-banner"><img src="../assets/img/2_3.png" alt="대화형 AI 인터페이스의 이해" loading="lazy"></figure>
+    <p class="lc-p">대화형 AI는 질문을 입력하고 답을 받는 단순한 검색창이 아니라 작업에 맞는 기능을 선택하고, 필요한 자료를 제공하고, 결과를 확인하며 반복 개선하는 작업 환경으로  실제 ChatGPT·Claude·Gemini와 같은 대화형 AI를 사용할 때 어떤 기능을 어떤 순서로 활용할 것인지를 중심으로 확인</p>
+
+    <h2 class="lc-h2">3.1 화면 구성 요소</h2>
+    <p class="lc-p" style="color:#445ED6">* 실제 3대장을 열어서 함께 리뷰 합니다.</p>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col><col><col width="330"></colgroup><thead><tr><th>구성 요소</th><th>기능</th><th>활용 시점</th></tr></thead><tbody>
+      <tr><td>입력창</td><td>프롬프트 입력과 파일 첨부</td><td>모든 작업의 시작점</td></tr>
+      <tr><td>모델 선택</td><td>속도형과 추론형 모델 전환</td><td>복잡한 분석은 추론형을 선택함</td></tr>
+      <tr><td>대화 목록</td><td>주제별 세션 관리와 검색</td><td>프로젝트 단위로 분리해 관리함</td></tr>
+      <tr><td>웹 검색</td><td>최신 정보 조회와 출처 표시</td><td>시의성 있는 질문에 사용함</td></tr>
+      <tr><td>파일 업로드</td><td>문서·이미지 기반 답변 생성</td><td>내부 자료 분석에 사용함</td></tr>
+      <tr><td>응답 재생성</td><td>다른 후보 답변 생성과 비교</td><td>품질이 낮거나 편차 확인이 필요할 때 사용함</td></tr>
+      <tr><td>메모리·설정</td><td>사용자 정보와 답변 성향 저장</td><td>반복 조건을 매번 쓰지 않기 위해 사용함</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">3.2 모델 선택 기준</h2>
+    <p class="lc-p">같은 서비스 안에서도 응답 속도를 우선한 모델과 사고 과정을 길게 거치는 추론형 모델이 나뉘므로 작업 성격에 따라 선택해야 함</p>
+    <p class="lc-p" style="color:#445ED6">* 구체적인 모델명과 무료 사용 한도는 수시로 변경되므로 강의 당일 화면에서 함께 확인</p>
+    <div class="lc-table-wrap"><table class="lc-table"><thead><tr><th>작업 성격</th><th>권장 모델 유형</th><th>이유</th></tr></thead><tbody>
+      <tr><td>요약, 번역, 문장 다듬기</td><td>속도형</td><td>정답 폭이 좁아 빠른 응답이 유리함</td></tr>
+      <tr><td>논리 전개, 수식 계산, 코드 설계</td><td>추론형</td><td>중간 단계 오류가 결과를 좌우함</td></tr>
+      <tr><td>최신 정보 조사</td><td>웹 검색 기능 활성화</td><td>학습 시점 이후 정보가 필요함</td></tr>
+      <tr><td>긴 문서 분석</td><td>파일 업로드와 컨텍스트가 큰 모델</td><td>원문을 직접 참조해야 정확함</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">3.3 표준 7단계 사용 흐름</h2>
+    <p class="lc-p">한 번에 완성된 답을 기대하지 않고 2~3회 반복을 기본 전제로 진행</p>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col width="157"><col><col width="262.59375"></colgroup><thead><tr><th>단계</th><th>행동</th><th>점검 질문</th></tr></thead><tbody>
+      <tr><td>1 목적 정의</td><td>얻고자 하는 결과물을 한 문장으로 적음</td><td>결과물의 형태를 말할 수 있는가</td></tr>
+      <tr><td>2 프롬프트 작성</td><td>5요소를 채워 입력함</td><td>빠진 요소는 없는가</td></tr>
+      <tr><td>3 응답 확인</td><td>목적 대비 부족한 지점을 표시함</td><td>무엇이 왜 부족한가</td></tr>
+      <tr><td>4 조건 보강</td><td>부족한 요소 하나만 지목해 재질문함</td><td>한 번에 하나만 고치고 있는가</td></tr>
+      <tr><td>5 재질문</td><td>개선된 응답을 다시 확인함</td><td>이전보다 나아졌는가</td></tr>
+      <tr><td>6 검증</td><td>사실 주장을 출처와 대조함</td><td>인용해도 되는 정보인가</td></tr>
+      <tr><td>7 확정</td><td>최종본을 정리하고 활용 사실을 기록함</td><td>어떤 부분을 내가 수정했는가</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">3.4 대화창 관리 원칙</h2>
+    <ul class="lc-list"><li>하나의 대화창에는 하나의 목적만 담아 컨텍스트 오염을 예방</li><li>수정과 재질문이 반복되어 이전의 잘못된 정보나 실패한 시도가 대화에 많이 남았다고 판단되면 새 대화창에서 핵심 조건을 다시 정리해 시작할 것</li><li>반복 사용할 조건은 설정이나 템플릿으로 옮겨 매번 입력하지 않음</li></ul>
+
+    <h1 class="lc-h1" id="s4">4. 프롬프트 5요소와 반복 개선 전략</h1>
+    <figure class="lc-banner"><img src="../assets/img/2_4.png" alt="프롬프트 5요소와 반복 개선 전략" loading="lazy"></figure>
+
+    <h2 class="lc-h2">4.1 프롬프트 5요소</h2>
+    <p class="lc-p">프롬프트는 모델에게 주는 작업 지시서이며 복잡한 작업에서는 역할·목적·맥락·조건·형식을 구분해 제시할수록 모델이 요구사항을 파악하고 결과를 통제하기 쉬워짐</p>
+    <ul class="lc-list"><li>단순한 질문에는 다섯 요소가 모두 필요한 것은 아니며 작업이 복잡할수록 필요한 요소를 추가하는 방식으로 활용할 것</li></ul>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col width="188"><col width="245"><col width="276.9375"><col width="264.59375"></colgroup><thead><tr><th>요소</th><th>답해야 할 질문</th><th>작성 예시</th><th>빠뜨렸을 때의 증상</th></tr></thead><tbody>
+      <tr><td>역할(Role)</td><td>누구로서 답하는가</td><td>10년 차 IT 직무 취업 컨설턴트로서</td><td>어조와 전문성 수준이 들쭉날쭉함</td></tr>
+      <tr><td>목적(Goal)</td><td>무엇을 얻으려 하는가</td><td>자기소개서 성장과정 문항 초안을 만든다</td><td>주제만 겉도는 일반론이 나옴</td></tr>
+      <tr><td>맥락(Context)</td><td>어떤 상황과 배경인가</td><td>컴퓨터공학 전공 4학년, 백엔드 인턴 6개월 경험</td><td>내 상황과 무관한 예시가 채워짐</td></tr>
+      <tr><td>조건(Constraint)</td><td>무엇을 지키고 무엇을 피해야 하는가</td><td>800자 이내, 경험 중심 서술, 과장 표현 금지</td><td>분량과 톤이 매번 달라짐</td></tr>
+      <tr><td>형식(Format)</td><td>어떤 모양으로 받는가</td><td>소제목 3개와 본문으로 구성한 표</td><td>후속 편집에 시간이 더 들어감</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">4.2 요소별 작성 요령</h2>
+    <ul class="lc-list"><li>역할은 직업명과 경력 연차를 함께 적을 때 답변의 구체성이 올라감</li><li>목적은 명사가 아니라 동사로 적어야 모델이 수행할 행동을 특정할 수 있음</li><li>맥락은 대상 독자, 나의 수준, 사용될 장면의 세 가지를 최소 단위로 포함함</li><li>조건은 지켜야 할 것과 하지 말아야 할 것을 나누어 적을 때 준수율이 높아짐</li><li>형식은 표, 목록, 단락 중 하나를 명시하고 가능하면 예시 한 줄을 함께 줌</li></ul>
+
+    <h2 class="lc-h2">4.3 좋은 질문과 나쁜 질문</h2>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col><col><col width="481"></colgroup><thead><tr><th>개선 축</th><th>나쁜 질문</th><th>좋은 질문</th></tr></thead><tbody>
+      <tr><td>범위</td><td>마케팅 알려 줘</td><td>20대 대상 앱 출시 첫 달 SNS 마케팅 실행안을 알려 줘</td></tr>
+      <tr><td>조건</td><td>짧게 써 줘</td><td>300자 이내로 전문 용어 없이 써 줘</td></tr>
+      <tr><td>형식</td><td>정리해 줘</td><td>항목·현황·개선안 3열 표로 정리해 줘</td></tr>
+      <tr><td>판단 기준</td><td>좋은 걸로 골라 줘</td><td>비용과 학습 난이도를 기준으로 3개를 비교해 골라 줘</td></tr>
+      <tr><td>근거</td><td>사실인지 알려 줘</td><td>출처와 발표 연도를 함께 제시하고 불확실하면 모른다고 답해 줘</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">4.4 반복 개선 3전략</h2>
+    <ul class="lc-list"><li>한 번에 여러 가지를 동시에 고치라고 지시하면 개선 원인을 특정할 수 없음</li><li>개선이 멈추면 프롬프트를 손보기보다 새 대화창에서 처음부터 다시 작성하는 편이 빠름</li></ul>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col><col width="368"><col width="405"></colgroup><thead><tr><th>전략</th><th>방법</th><th>지시문 예시</th></tr></thead><tbody>
+      <tr><td>재질문</td><td>부족한 요소 하나만 지목해 보강을 요청함</td><td>세 번째 항목만 실제 사례를 넣어 다시 써 줘</td></tr>
+      <tr><td>자기평가 요청</td><td>모델이 자기 답변을 기준에 따라 채점하고 수정하게 함</td><td>위 답변을 채용 담당자 관점에서 5점 만점으로 평가하고 근거를 제시한 뒤 수정본을 작성해 줘</td></tr>
+      <tr><td>역질문 유도</td><td>모델이 필요한 정보를 먼저 묻게 해 조건 누락을 줄임</td><td>답하기 전에 필요한 정보를 세 가지만 나에게 먼저 질문해 줘</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">4.5 완성형 프롬프트 예시</h2>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col width="78"><col width="672"></colgroup><thead><tr><th>구간</th><th>작성 내용</th></tr></thead><tbody>
+      <tr><td>역할</td><td>너는 10년 차 IT 서비스 기업 채용 담당자야</td></tr>
+      <tr><td>목적</td><td>내 경험을 바탕으로 자기소개서 성장과정 문항 초안을 작성해</td></tr>
+      <tr><td>맥락</td><td>나는 컴퓨터공학 전공 4학년이며 백엔드 인턴 6개월과 팀 프로젝트 2건 경험이 있어</td></tr>
+      <tr><td>조건</td><td>800자 이내로 쓰고 경험과 수치를 중심으로 서술하며 과장 표현과 상투적 문구는 쓰지 마</td></tr>
+      <tr><td>형식</td><td>소제목 3개와 각 소제목별 본문 형태로 출력하고 마지막에 보완이 필요한 정보를 3가지 질문으로 제시해줘</td></tr>
+    </tbody></table></div>
+
+    <h1 class="lc-h1" id="s5">5. 환각·편향·최신성 한계와 사실 검증</h1>
+    <h2 class="lc-h2">5.1 환각</h2>
+    <p class="lc-p">환각은 모델이 학습한 패턴에 따라 그럴듯한 문장을 생성하는 과정에서 존재하지 않는 사실을 사실처럼 서술하는 현상</p>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col><col width="308.875"><col width="319"></colgroup><thead><tr><th>유형</th><th>증상</th><th>판별 신호</th></tr></thead><tbody>
+      <tr><td>출처 조작</td><td>존재하지 않는 논문·기사·저자를 인용함</td><td>검색으로 원문이 확인되지 않음</td></tr>
+      <tr><td>수치 조작</td><td>통계와 연도를 그럴듯하게 제시함</td><td>발표 기관 자료와 값이 불일치함</td></tr>
+      <tr><td>인용문 조작</td><td>실존 인물의 발언을 창작함</td><td>1차 자료에 해당 발언이 없음</td></tr>
+      <tr><td>기능 조작</td><td>존재하지 않는 메뉴·기능·조항을 설명함</td><td>공식 문서에 항목이 없음</td></tr>
+    </tbody></table></div>
+    <ul class="lc-list"><li>환각은 다음 토큰을 예측하며 문장을 생성하는 과정, 학습 데이터의 한계, 불확실성을 처리하는 방식 등 여러 요인으로 발생할 수 있음</li><li>모델이 잘 모르는 좁은 영역일수록, 그리고 구체적인 고유명사를 요구할수록 발생률이 높아짐</li><li>프롬프트에 불확실성 표기 지시를 넣으면 발생 빈도를 낮출 수 있으나 완전히 없앨 수 없음</li></ul>
+
+    <h2 class="lc-h2">5.2 편향</h2>
+    <ul class="lc-list"><li>학습 데이터에 포함된 사회적 고정관념이 답변에 그대로 재생산될 수 있음</li><li>다수 언어와 다수 문화권 자료가 많아 소수 관점과 국내 맥락이 축소될 수 있음</li><li>사용자의 주장에 동조하려는 경향으로 비판적 관점과 반대 근거가 누락될 수 있음</li><li>특정 직업이나 집단을 묘사하게 하는 질문으로 편향을 직접 관찰할 수 있음</li></ul>
+
+    <h2 class="lc-h2">5.3 최신성 한계</h2>
+    <p class="lc-p">모델은 학습이 종료된 시점 이후의 사건을 알지 못하므로 시의성 있는 정보는 웹 검색 기능이나 사용자가 제공한 자료로 보완</p>
+    <div class="lc-table-wrap"><table class="lc-table"><thead><tr><th>정보 유형</th><th>모델 단독 신뢰도</th><th>보완 방법</th></tr></thead><tbody>
+      <tr><td>변하지 않는 개념과 원리</td><td>높음</td><td>추가 조치가 거의 필요 없음</td></tr>
+      <tr><td>제품 사양과 요금</td><td>낮음</td><td>공식 페이지를 직접 확인함</td></tr>
+      <tr><td>최근 사건과 인사</td><td>매우 낮음</td><td>웹 검색을 켜고 출처를 확인함</td></tr>
+      <tr><td>교내 규정과 내부 자료</td><td>없음</td><td>원문을 직접 첨부함</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">5.4 사실 검증 4단계</h2>
+    <div class="lc-table-wrap"><table class="lc-table"><thead><tr><th>단계</th><th>점검 질문</th><th>조치</th></tr></thead><tbody>
+      <tr><td>분류</td><td>이 문장은 사실인가 의견인가</td><td>사실 주장만 검증 대상으로 선별함</td></tr>
+      <tr><td>출처</td><td>근거 출처가 명시되어 있는가</td><td>출처를 요구하고 링크의 실재를 확인함</td></tr>
+      <tr><td>대조</td><td>1차 자료의 내용과 일치하는가</td><td>공식 기관과 원문에 직접 접속해 대조함</td></tr>
+      <tr><td>판정</td><td>그대로 인용해도 되는가</td><td>확인·수정·삭제 중 하나로 판정해 기록함</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">5.5 책임 있는 사용 원칙</h2>
+    <ul class="lc-list"><li>최종 결과물의 책임은 사용자에게 있으므로 검증하지 않은 내용을 인용하지 않음</li><li>개인정보와 미공개 자료는 입력하지 않으며 필요하면 익명화해 사용함</li><li>AI 활용 사실과 검증 과정을 산출물에 명시해 학술적·직업적 정직성을 유지함</li></ul>
+
+    <h1 class="lc-h1 lc-h1--mint" id="s6">6. 🖇️ [실습] 이론을 적용한 프롬프트 작성·비교·검증</h1>
+    <div class="lc-callout lc-callout--gray"><span class="lc-callout-icon" aria-hidden="true">💡</span><div class="lc-callout-body"><p>이번 실습은 1~5장에서 학습한 LLM 원리, 토큰·컨텍스트, 확률적 생성, 좋은 질문 구조, 결과 검증을 하나의 작업에 적용하는 개인 실습임</p><p>ChatGPT·Claude·Gemini에 동일한 프롬프트를 입력해 결과를 비교하고, 가장 적합한 결과를 선택한 뒤 개선·검증하여 2주차 개인 결과물로 제출할 것</p></div></div>
+
+    <h2 class="lc-h2">6.1 주제</h2>
+    <p class="lc-p">생성형 AI를 처음 사용하는 대학생에게 학업·과제·프로젝트에서 AI를 어떻게 활용할 수 있는지 설명하는 안내 자료를 만드는 상황을 가정</p>
+    <div class="lc-table-wrap"><table class="lc-table"><colgroup><col><col width="482"></colgroup><thead><tr><th>이론 내용</th><th>실습에서의 적용</th></tr></thead><tbody>
+      <tr><td>토큰·컨텍스트</td><td>필요한 배경은 충분히 제공하되 중복되거나 관계없는 설명은 줄일 것</td></tr>
+      <tr><td>확률적 생성</td><td>같은 프롬프트라도 세 AI의 결과가 달라질 수 있음을 비교할 것</td></tr>
+      <tr><td>좋은 질문법</td><td>목적·맥락·조건·형식을 구체적으로 제시할 것</td></tr>
+      <tr><td>반복 개선</td><td>가장 적합한 결과를 선택한 뒤 부족한 점을 한 번 이상 수정할 것</td></tr>
+      <tr><td>사실 검증</td><td>사실 주장과 최신 정보가 포함되면 출처와 근거를 확인할 것</td></tr>
+    </tbody></table></div>
+
+    <h2 class="lc-h2">6.2 프롬프트</h2>
+    <p class="lc-p">아래 기본 프롬프트를 참고해서 자신만의 주제를 선정, 수정하여 활용</p>
+    <p class="lc-p"><strong>[프롬프트 1 : 맥락 없는 요구사항]</strong></p>
+    <pre><code>[생성형 AI 활용 가이드를 만드는 목적]을 위해 대학생이 실제로 사용할 수 있는 생성형 AI 활용 방법을 정리해줘</code></pre>
+    <p class="lc-p"><strong>[프롬프트 2: 프롬프트 5요소에 기반한 요구사항]</strong></p>
+    <pre><code># 역할
+대학생을 대상으로 생성형 AI 활용법을 설명하는 디지털 리터러시 강사
+
+# 목적
+[생성형 AI 활용 가이드를 만드는 목적]을 위해 대학생이 실제로 사용할 수 있는 생성형 AI 활용 방법을 정리할 것
+
+# 맥락
+- 대상: [학년 또는 대상 학생]
+- 활용 상황: [수업 / 과제 / 취업 준비 / 개인 프로젝트 등]
+- AI 사용 경험: [처음 사용 / 기본 사용 경험 있음 등]
+- 설명 수준: 비전공자도 이해할 수 있는 수준
+
+# 조건
+- 실제 활용 사례를 3가지 제시할 것
+- 각 사례마다 구체적인 사용 방법을 설명할 것
+- AI가 틀린 정보를 만들 수 있다는 점과 검증 방법을 포함할 것
+- 확인되지 않은 사실은 단정하지 말 것
+- 불필요하게 장황한 설명은 제외할 것
+
+# 형식
+1. 핵심 개념 요약
+2. 활용 사례 3가지를 표로 정리
+3. 사용할 때 주의할 점 3가지
+4. 결과를 검증하는 방법
+5. 마지막에 핵심 내용을 한 문장으로 정리</code></pre>
+    <h3 class="lc-h3">프롬프트 작성 후 확인</h3>
+    <ul class="lc-list"><li>2개의 프롬프트 결과물을 비교할 것</li><li>목적이 무엇인지 한 문장으로 확인할 것</li><li>필요한 배경과 대상이 포함되었는지 확인할 것</li><li>반드시 지켜야 할 조건이 명확한지 확인할 것</li><li>원하는 출력 형식이 구체적인지 확인할 것</li><li>같은 의미의 설명이 반복되지 않았는지 확인할 것</li></ul>
+
+    <h2 class="lc-h2">6.3 실제 실습</h2>
+    <ol class="lc-num"><li>위 템플릿의 [ ] 부분을 자신의 상황에 맞게 수정할 것</li><li>완성한 프롬프트를 ChatGPT·Claude·Gemini의 새 대화창에 동일하게 입력할 것</li><li>첫 번째 응답에는 추가 지시를 넣지 않고 그대로 저장할 것</li><li>세 결과를 비교표에 기록할 것</li><li>자신의 목적에 가장 적합한 결과 1개를 선택할 것</li><li>선택한 결과에서 부족한 점 1~2가지를 찾아 추가 프롬프트로 개선할 것</li><li>최종 결과에 사실 주장이나 최신 정보가 있다면 원문·공식 자료·검색 결과와 대조할 것</li></ol>
+    <h3 class="lc-h3">개선 프롬프트 예시</h3>
+    <pre><code>방금 작성한 결과에서 다음 부분을 개선해줘
+
+- 부족한 점: [수정이 필요한 부분]
+- 유지할 점: [잘 작성된 부분]
+- 추가 조건: [새롭게 반영할 조건]
+
+기존 구조는 유지하되 수정된 부분이 분명하게 드러나도록 최종본을 다시 작성해줘</code></pre>
+
+    <h2 class="lc-h2">6.4 비교 기록표</h2>
+    <div class="lc-table-wrap"><table class="lc-table"><thead><tr><th>비교 항목</th><th>ChatGPT</th><th>Claude</th><th>Gemini</th></tr></thead><tbody>
+      <tr><td>핵심 내용의 충실도</td><td></td><td></td><td></td></tr>
+      <tr><td>구성과 가독성</td><td></td><td></td><td></td></tr>
+      <tr><td>설명의 구체성</td><td></td><td></td><td></td></tr>
+      <tr><td>조건 반영 정도</td><td></td><td></td><td></td></tr>
+      <tr><td>표현 방식의 특징</td><td></td><td></td><td></td></tr>
+      <tr><td>사실 검증이 필요한 부분</td><td></td><td></td><td></td></tr>
+      <tr><td>실제 활용성</td><td></td><td></td><td></td></tr>
+    </tbody></table></div>
+    <h3 class="lc-h3">비교 후 정리</h3>
+    <ul class="lc-list"><li>세 결과에서 가장 눈에 띄는 차이 1가지 기록</li><li>가장 활용하기 좋은 결과 1개 선택</li><li>선택 이유를 2~3문장으로 작성</li><li>수정이 필요했던 부분과 개선 프롬프트를 기록</li><li>검증한 사실이 있다면 확인한 출처 또는 근거를 기록</li></ul>
+
+    <h2 class="lc-h2" id="outputs">📝 활동내역 및 산출물</h2>
+    <p class="lc-p">이번 주차부터 매주 이론 학습 내용을 실제 작업에 적용한 개인 결과물 또는 팀별 결과물을 제출함</p>
+    <div class="lc-callout lc-callout--gray"><span class="lc-callout-icon" aria-hidden="true">📦</span><div class="lc-callout-body"><p style="color:#445ED6"><strong>금주 산출물은 팀프로젝트의 개인 산출물 20%로 평가됨</strong></p><p><strong>주차별 팀프로젝트 산출물은 수시 점검하여 팀 프로젝트 산출물 점수로 체크할 예정으로 개인별 작업은 별도 노션 관리, 팀 구성 후 필요한 내용을 팀 프로젝트 문서로 옮겨 지속적으로 관리</strong></p><p><strong>팀 프로젝트 산출물은 14주차 최종 산출물에 누락 없이 제출되도록 별도 관리</strong></p></div></div>
+    <details class="lc-details"><summary><strong>[참고] 제출 산출물 목차</strong></summary><div class="lc-details-body"><h3 class="lc-h3">1. 실습 주제</h3><h3 class="lc-h3">2. 기본 프롬프트 템플릿</h3><h3 class="lc-h3">3. ChatGPT·Claude·Gemini 결과 비교표</h3><h3 class="lc-h3">4. 가장 적합한 결과 선택</h3><h3 class="lc-h3">5. 응답 개선 기록</h3><h3 class="lc-h3">6. 사실 검증 기록</h3><h3 class="lc-h3">7. 최종 결과 및 선택 이유</h3></div></details>
+
+    <nav class="lecture-nav" aria-label="강의 이동">
+      <a class="lecture-nav-item" href="lecture-week01.html"><span class="nav-dir">← 이전 강의</span><span class="nav-name">WEEK 01 · 생성형 AI 개요</span></a>
+      <a class="lecture-nav-item lecture-nav-item--next" href="lecture-week03.html"><span class="nav-dir">다음 강의 →</span><span class="nav-name">WEEK 03 · 주요 AI 플랫폼과 확장 기능 탐색</span></a>
+    </nav>
+  </article>
+</div>
+</main>
+<footer class="site-footer"><div class="shell footer-inner"><p class="footer-title">생성형 AI 활용 · Course Lab</p><p class="footer-meta">2026학년도 2학기 · 강의교안 웹뷰</p><a class="footer-top" href="#top">맨 위로 <span class="btn-arrow btn-arrow--up" aria-hidden="true">↑</span></a></div></footer>
+<button type="button" class="back-top" id="backTop" aria-label="맨 위로 이동"><span class="back-top-arrow" aria-hidden="true">↑</span></button>
+<script>
+(function(){
+  var sel=document.getElementById('weekSelect');
+  if(sel) sel.addEventListener('change',function(){if(this.value) location.href=this.value;});
+  var bar=document.getElementById('scrollProgress');
+  function progress(){var max=document.documentElement.scrollHeight-window.innerHeight;var ratio=max>0?window.scrollY/max:0;if(bar)bar.style.transform='scaleX('+ratio.toFixed(4)+')';}
+  window.addEventListener('scroll',progress,{passive:true});window.addEventListener('resize',progress);progress();
+
+  var locks=document.querySelectorAll('.lc-lock[data-lock-password]');
+  locks.forEach(function(lock){
+    var pass=lock.getAttribute('data-lock-password');
+    var src=lock.getAttribute('data-lock-src');
+    var form=lock.querySelector('.lc-lock-form');
+    var input=lock.querySelector('.lc-lock-input');
+    var errorEl=lock.querySelector('.lc-lock-error');
+    var frame=lock.querySelector('.lc-lock-frame');
+    if(!form) return;
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(input.value===pass){
+        lock.classList.add('is-unlocked');
+        errorEl.hidden=true;
+        frame.src=src;
+        frame.hidden=false;
+        frame.addEventListener('load',function resize(){
+          try{
+            var doc=frame.contentWindow.document;
+            frame.style.height=(doc.documentElement.scrollHeight+40)+'px';
+          }catch(err){ frame.style.height='1400px'; }
+        });
+      } else {
+        errorEl.hidden=false;
+        input.value='';
+        input.focus();
+      }
+    });
+  });
+})();
+</script>
+<script src="../js/secure-lock.js"></script>
+<script src="../js/backtop.js?v=20260910"></script>
+</body>
+</html>

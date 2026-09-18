@@ -1,0 +1,222 @@
+/* ==========================================================================
+   base.css — 디자인 토큰, 리셋, 타이포그래피
+   기준 해상도 1520px / 기본 폰트 사이즈 18px
+   ========================================================================== */
+
+:root {
+  /* ---- 컬러: 보라(주조) + 민트(강조) ---- */
+  --violet-950: #14102A;
+  --violet-900: #1C1540;
+  --violet-800: #2A1F5E;
+  --violet-600: #6C4CF1;
+  --violet-500: #8168FF;
+  --violet-200: #CFC4FF;
+  --violet-050: #F2EFFF;
+
+  --mint-600: #12B694;
+  --mint-500: #23D6AE;
+  --mint-300: #7DEFD3;
+  --mint-050: #E6FBF5;
+
+  --ink-900: #16132A;
+  --ink-700: #3B3556;
+  --ink-500: #6B6485;
+  --ink-300: #A7A1BC;
+
+  --paper: #FFFFFF;
+  --paper-tint: #F7F5FD;
+  --line: #E6E2F2;
+  --line-dark: rgba(255,255,255,.14);
+
+  /* ---- 타이포 ---- */
+  --font-body: 'IBM Plex Sans KR', system-ui, -apple-system, 'Malgun Gothic', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --fs-xs: 13.5px;
+  --fs-base: 18px;
+  --fs-md: 20px;
+  --fs-lg: 24px;
+  --fs-xl: 30px;
+  --fs-2xl: 42px;
+  --fs-3xl: 54px;
+
+  /* 강의교안 전용 위계: 본문 18px을 최하 기준으로 단계 상승 */
+  --lecture-body: 18px;
+  --lecture-subtitle: 20px;
+  --lecture-h4: 20px;
+  --lecture-h3: 24px;
+  --lecture-h2: 30px;
+  --lecture-h1: 36px;
+  --lecture-page-title: 42px;
+
+  /* ---- 레이아웃 ---- */
+  --shell-max: 1520px;
+  --shell-pad: 32px;
+  --grid-gap: 28px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  /* ---- 그림자 ---- */
+  --shadow-card: 0 2px 4px rgba(28, 21, 64, .04), 0 18px 40px rgba(28, 21, 64, .07);
+  --shadow-card-hover: 0 6px 12px rgba(28, 21, 64, .07), 0 28px 56px rgba(28, 21, 64, .14);
+
+  /* ---- 모션 ---- */
+  --ease: cubic-bezier(.22, .8, .3, 1);
+  --ease-soft: cubic-bezier(.45, .05, .55, .95);
+}
+
+/* ---- 리셋 ---- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink-700);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: 1.72;
+  letter-spacing: -.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, p, ol, ul, figure { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+img { display: block; max-width: 100%; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color .2s var(--ease);
+}
+
+button, input {
+  font: inherit;
+  color: inherit;
+}
+
+button { cursor: pointer; border: 0; background: none; }
+
+/* ---- 타이포 유틸 ---- */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--mint-300);
+  margin-bottom: 12px;
+}
+
+.eyebrow--dark { color: var(--violet-600); }
+
+.grad {
+  background: linear-gradient(96deg, var(--mint-300) 0%, var(--violet-200) 52%, var(--violet-500) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- 접근성 ---- */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px; top: -60px;
+  z-index: 200;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  background: var(--violet-600);
+  color: #fff;
+  font-size: var(--fs-xs);
+  transition: top .2s var(--ease);
+}
+.skip-link:focus { top: 16px; }
+
+:focus-visible {
+  outline: 3px solid var(--mint-500);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- 강의교안 공통 타이포 하이어라키 ----
+   OT · 1주차 · 2주차 모두 lecture.css를 공유하므로 이 규칙을 공통 적용
+   작은 UI 텍스트(13.5px)를 제외한 실제 교안 본문은 18px 미만으로 내려가지 않음 */
+.lecture-title { font-size: var(--lecture-page-title) !important; }
+.lecture-content { font-size: var(--lecture-body) !important; }
+.lecture-content .lc-h1 { font-size: var(--lecture-h1) !important; line-height: 1.28; }
+.lecture-content .lc-h2 { font-size: var(--lecture-h2) !important; line-height: 1.35; }
+.lecture-content .lc-h3 { font-size: var(--lecture-h3) !important; line-height: 1.42; }
+.lecture-content .lc-h4 { font-size: var(--lecture-h4) !important; line-height: 1.5; }
+
+.lecture-content .lc-p,
+.lecture-content .lc-intro,
+.lecture-content .lc-note,
+.lecture-content .lc-list li,
+.lecture-content .lc-list--plain li,
+.lecture-content .lc-num li,
+.lecture-content .lc-table,
+.lecture-content .lc-callout p,
+.lecture-content .lc-callout .lc-list li,
+.lecture-content .lc-details-body,
+.lecture-content .lc-details-body p,
+.lecture-content .lc-details-body li {
+  font-size: var(--lecture-body) !important;
+}
+
+/* 본문에 단독 strong으로 작성된 라벨은 하위 콘텐츠 소타이틀로 취급 */
+.lecture-content > .lc-p:has(> strong:only-child) {
+  margin-top: 28px;
+  margin-bottom: 8px;
+  font-size: var(--lecture-subtitle) !important;
+  line-height: 1.5;
+  color: var(--ink-900);
+}
+.lecture-content > .lc-p:has(> strong:only-child) > strong {
+  font-size: inherit;
+  font-weight: 700;
+}
+
+/* [참고] 교안 안내는 예외적으로 전체 13.5px 사용 */
+.lecture-content #notice,
+.lecture-content #notice p,
+.lecture-content #notice strong,
+.lecture-content #notice .lc-list li,
+.lecture-content #notice .lc-list--plain li,
+.lecture-content #notice .lc-sub {
+  font-size: var(--fs-xs) !important;
+}
+
+/* 토글 안 제목형 H3/H4도 본문 18px보다 한 단계 이상 크게 유지 */
+.lecture-content .lc-details-body .lc-h3 { font-size: var(--lecture-h3) !important; }
+.lecture-content .lc-details-body .lc-h4 { font-size: var(--lecture-h4) !important; }
+
+@media (max-width: 560px) {
+  .lecture-title { font-size: 36px !important; }
+  .lecture-content .lc-h1 { font-size: 30px !important; }
+  .lecture-content .lc-h2 { font-size: 26px !important; }
+  .lecture-content .lc-h3 { font-size: 22px !important; }
+  .lecture-content .lc-h4,
+  .lecture-content > .lc-p:has(> strong:only-child) { font-size: 20px !important; }
+}
+
+/* ---- 모션 최소화 설정 존중 ---- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+}

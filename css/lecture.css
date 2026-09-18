@@ -1,0 +1,639 @@
+/* ========================================================================== 
+   lecture.css — 강의교안 상세(웹뷰) 페이지 전용
+   header · footer · 버튼 · back-top 은 base/layout/components 를 재사용한다
+   ========================================================================== */
+
+/* ---------- 강의 히어로 ---------- */
+.lecture-hero {
+  background:
+    radial-gradient(120% 150% at 12% 0%, #2E2168 0%, transparent 60%),
+    var(--violet-900);
+  color: #fff;
+  padding-block: 46px 42px;
+}
+.lecture-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: .2em;
+  color: var(--mint-300);
+}
+.lecture-eyebrow strong { color: #fff; font-weight: 700; }
+.lecture-title {
+  margin-top: 12px;
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.22;
+}
+.lecture-sub {
+  margin-top: 12px;
+  color: var(--violet-200);
+  font-size: var(--fs-base);
+}
+
+/* ---------- 2단 레이아웃 ---------- */
+.lecture-layout {
+  display: grid;
+  grid-template-columns: 272px minmax(0, 1fr);
+  column-gap: 48px;
+  row-gap: 18px;
+  padding-block: 28px 80px;
+  align-items: start;
+}
+.lecture-layout.is-side-closed { grid-template-columns: minmax(0, 1fr); }
+
+/* 좌측 영역 전체 열기·닫기 */
+.lecture-side-toggle {
+  grid-column: 1 / -1;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--violet-600);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+}
+.lecture-side-toggle:hover { background: var(--violet-050); border-color: var(--violet-200); }
+.lecture-side-toggle:focus-visible { outline: 2px solid var(--violet-500); outline-offset: 2px; }
+
+/* 좌측 사이드바 */
+.lecture-side { position: sticky; top: 96px; align-self: start; }
+.lecture-layout.is-side-closed .lecture-side { display: none; }
+.lecture-layout.is-side-closed .lecture-content { grid-column: 1 / -1; }
+
+.side-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin-bottom: 10px;
+}
+.week-select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink-900);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+}
+.week-select optgroup { font-weight: 700; color: var(--ink-900); }
+.week-select option { font-weight: 500; color: var(--ink-900); }
+.week-select option:disabled { color: var(--ink-300); }
+
+.side-toc { margin-top: 28px; }
+.side-thumb {
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: linear-gradient(140deg, var(--violet-050), var(--mint-050));
+}
+.side-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.toc-list li + li { margin-top: 2px; }
+.toc-list a {
+  display: block;
+  padding: 7px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 0 6px 6px 0;
+  color: var(--ink-500);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+.toc-list a:hover {
+  color: var(--violet-600);
+  background: var(--violet-050);
+  border-left-color: var(--violet-500);
+}
+
+/* ---------- 본문 ---------- */
+.lecture-content {
+  min-width: 0;
+  font-size: var(--fs-base);
+}
+
+/* 본문 기본 텍스트는 18px로 명시적으로 통일 */
+.lecture-content .lc-p,
+.lecture-content .lc-intro,
+.lecture-content .lc-note,
+.lecture-content .lc-list li,
+.lecture-content .lc-list--plain li,
+.lecture-content .lc-num li,
+.lecture-content .lc-table,
+.lecture-content .lc-callout p,
+.lecture-content .lc-callout .lc-list li,
+.lecture-content .lc-details-body,
+.lecture-content .lc-details-body p,
+.lecture-content .lc-details-body li {
+  font-size: var(--fs-base);
+}
+
+.lc-intro {
+  padding: 20px 24px;
+  border-left: 3px solid var(--mint-500);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background: var(--mint-050);
+  color: var(--ink-700);
+}
+
+.lc-h2 {
+  margin-top: 48px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--ink-900);
+}
+.lc-h3 {
+  margin-top: 30px;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--ink-900);
+  word-break: keep-all;
+}
+.lc-p { margin-top: 16px; color: var(--ink-700); }
+.lc-p--tight { margin-top: 8px; }
+
+.lc-figure {
+  margin-top: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--paper-tint);
+}
+.lc-figure img { width: 100%; }
+
+/* 표 */
+.lc-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 20px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.lc-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: var(--fs-base);
+  border: 1px solid var(--line);
+}
+.lc-table th,
+.lc-table td {
+  padding: 13px 16px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.65;
+  color: var(--ink-700);
+}
+.lc-table th {
+  background: var(--paper-tint);
+  color: var(--ink-900);
+  font-weight: 600;
+}
+.lc-table td:first-child { font-weight: 600; color: var(--ink-900); }
+.lc-table--curriculum { table-layout: fixed; }
+.lc-table--curriculum .lc-col-week { width: 14%; }
+.lc-table--curriculum .lc-col-topic { width: 34%; }
+.lc-table--curriculum .lc-col-detail { width: 52%; }
+.lc-table--curriculum td:nth-child(1),
+.lc-table--curriculum td:nth-child(2),
+.lc-table--curriculum th:nth-child(1),
+.lc-table--curriculum th:nth-child(2) { white-space: nowrap; }
+
+/* 콜아웃 */
+.lc-callout {
+  display: flex;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--violet-050);
+}
+.lc-callout--gray { background: var(--paper-tint); }
+.lc-callout-icon { flex: 0 0 auto; font-size: 20px; line-height: 1.4; }
+.lc-callout-body { min-width: 0; }
+.lc-callout-body > * + * { margin-top: 10px; }
+.lc-callout strong { color: var(--ink-900); font-weight: 600; }
+.lc-callout p { color: var(--ink-700); font-size: var(--fs-base); line-height: 1.7; }
+.lc-callout .lc-list li {
+  position: relative;
+  padding-left: 16px;
+  color: var(--ink-700);
+  font-size: var(--fs-base);
+  line-height: 1.7;
+}
+.lc-callout .lc-list li + li { margin-top: 6px; }
+.lc-callout .lc-list li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--violet-500);
+}
+.lc-sub { display: block; color: var(--ink-500); }
+
+#notice p,
+#notice .lc-list li,
+#notice .lc-sub,
+#notice strong { font-size: var(--fs-xs); color: var(--ink-500); }
+#notice .lc-list li::before { color: var(--ink-300); }
+
+/* 흐름 라인 */
+.lc-flow {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: var(--violet-900);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: .03em;
+  line-height: 1.9;
+  word-break: keep-all;
+}
+.lc-flow strong { color: var(--mint-300); font-weight: 600; }
+
+.lc-divider { height: 1px; margin: 44px 0; border: 0; background: var(--line); }
+
+/* prev / next */
+.lecture-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 52px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.lecture-nav-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+.lecture-nav-item--next { text-align: right; align-items: flex-end; }
+.lecture-nav-item .nav-dir { font-size: var(--fs-xs); font-weight: 600; color: var(--ink-500); }
+.lecture-nav-item .nav-name { font-size: var(--fs-base); font-weight: 600; color: var(--violet-600); }
+button.lecture-nav-item:hover .nav-name { color: var(--violet-500); }
+.lecture-nav-item.is-disabled .nav-dir,
+.lecture-nav-item.is-disabled .nav-name { color: var(--ink-300); }
+
+/* 미오픈 강의 안내 토스트 */
+.lecture-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%) translateY(12px);
+  z-index: 120;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--violet-900);
+  color: #fff;
+  font-size: var(--fs-xs);
+  box-shadow: var(--shadow-card-hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.lecture-toast.is-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 980px) {
+  .lecture-layout { grid-template-columns: 1fr; column-gap: 0; row-gap: 18px; }
+  .lecture-side { position: static; top: auto; }
+  .side-toc { margin-top: 18px; }
+}
+
+@media (max-width: 560px) {
+  .lecture-hero { padding-block: 34px 30px; }
+  .lecture-title { font-size: var(--fs-xl); }
+  .lc-h2 { margin-top: 38px; font-size: var(--fs-lg); }
+  .lc-h1 { padding: 16px 18px; font-size: var(--fs-lg); }
+
+  /* OT의 정보 표는 좁은 화면에서 가로 스크롤 대신 읽기 쉬운 행 카드로 전환한다. */
+  .lc-table--mobile-cards {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    table-layout: auto;
+  }
+  .lc-table--mobile-cards colgroup { display: none; }
+  .lc-table--mobile-cards thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .lc-table--mobile-cards tbody,
+  .lc-table--mobile-cards tr,
+  .lc-table--mobile-cards td { display: block; width: 100%; }
+  .lc-table--mobile-cards tbody {
+    display: grid;
+    gap: 14px;
+  }
+  .lc-table--mobile-cards tr {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+  }
+  .lc-table--mobile-cards td,
+  .lc-table--curriculum.lc-table--mobile-cards td {
+    display: grid;
+    grid-template-columns: minmax(78px, 30%) minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px 14px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .lc-table--mobile-cards td:last-child { border-bottom: 0; }
+  .lc-table--mobile-cards td::before {
+    content: attr(data-label);
+    color: var(--ink-500);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    line-height: 1.65;
+  }
+  .lc-table--textbook td:nth-child(1)::before { content: '도서명'; }
+  .lc-table--textbook td:nth-child(2)::before { content: '저자'; }
+  .lc-table--textbook td:nth-child(3)::before { content: '출판사'; }
+  .lc-table--grading td:nth-child(1)::before { content: '평가 항목'; }
+  .lc-table--grading td:nth-child(2)::before { content: '배점'; }
+  .lc-table--grading td:nth-child(3)::before { content: '평가 내용'; }
+  .lc-table--curriculum td:nth-child(1)::before { content: '주차'; }
+  .lc-table--curriculum td:nth-child(2)::before { content: '커리큘럼'; }
+  .lc-table--curriculum td:nth-child(3)::before { content: '상세 내용'; }
+  .lc-table--project td:nth-child(1)::before { content: '단계'; }
+  .lc-table--project td:nth-child(2)::before { content: '주차'; }
+  .lc-table--project td:nth-child(3)::before { content: '팀 산출물'; }
+}
+
+/* ========================================================================== 
+   주차 상세 확장 요소 (대단원 H1 · H4 · 번호목록 · 접기 · 콜아웃 색상 등)
+   ========================================================================== */
+
+.lc-h1 {
+  margin-top: 58px;
+  padding: 20px 24px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(100deg, var(--violet-900), var(--violet-800));
+  color: #fff;
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+.lecture-content > .lc-h1:first-child { margin-top: 0; }
+.lc-h1--mint { background: linear-gradient(100deg, var(--mint-600), #0E9E82); }
+
+.lc-banner {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--paper-tint);
+}
+.lc-banner img { width: 100%; }
+
+.lc-h4 {
+  margin-top: 30px;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--ink-900);
+  word-break: keep-all;
+}
+
+.lc-num { margin-top: 16px; counter-reset: lcnum; }
+.lc-num > li {
+  position: relative;
+  padding-left: 34px;
+  margin-top: 10px;
+  color: var(--ink-700);
+  line-height: 1.7;
+}
+.lc-num > li::before {
+  counter-increment: lcnum;
+  content: counter(lcnum);
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--violet-050);
+  color: var(--violet-600);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.lc-note {
+  margin-top: 14px;
+  padding: 12px 18px;
+  border-left: 3px solid var(--line);
+  background: var(--paper-tint);
+  color: var(--ink-500);
+  font-size: var(--fs-base);
+  line-height: 1.7;
+}
+
+.lc-callout--green { background: var(--mint-050); border-color: #BCEADD; }
+.lc-callout--blue { background: #EEF1FE; border-color: #D6DDFB; }
+
+.lc-details {
+  margin-top: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.lc-details > summary {
+  padding: 15px 20px;
+  background: var(--paper-tint);
+  color: var(--ink-900);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.lc-details > summary::-webkit-details-marker { display: none; }
+.lc-details > summary::before { content: '▸  '; color: var(--violet-500); }
+.lc-details[open] > summary::before { content: '▾  '; }
+.lc-details-body { padding: 18px 20px 22px; }
+.lc-details-body > * + * { margin-top: 14px; }
+.lc-details-body .lc-h4:first-child,
+.lc-details-body h3:first-child { margin-top: 0; }
+
+.lc-table a { color: var(--violet-600); text-decoration: underline; }
+.lc-table a:hover { color: var(--violet-500); }
+
+/* 일반 목록 — 1주차와 동일한 대시 패턴 */
+.lc-list,
+.lc-list--plain { margin-top: 12px; }
+.lc-list li,
+.lc-list--plain li {
+  position: relative;
+  padding-left: 16px;
+  margin-top: 6px;
+  color: var(--ink-700);
+  line-height: 1.7;
+}
+.lc-list li::before,
+.lc-list--plain li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--violet-500);
+}
+.lc-list .lc-list { margin: 6px 0 0 14px; }
+
+/* Notion 코드블록 — 강의교안 디자인 토큰에 맞춘 공통 패턴 */
+.lecture-content pre {
+  margin: 16px 0 0;
+  padding: 18px 20px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper-tint);
+  color: var(--ink-700);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.lecture-content pre code {
+  font: inherit;
+  color: inherit;
+}
+.lecture-content :not(pre) > code {
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--violet-050);
+  color: var(--violet-600);
+  font-family: var(--font-mono);
+  font-size: .9em;
+}
+
+/* 표 너비 고정 — 줄바꿈 없이 한 줄로 표시하고 필요 시 가로 스크롤 */
+.lc-table--fixed { table-layout: fixed; }
+
+/* 실습 프롬프트 코드블록 — 어두운 배경 + 복사 버튼 */
+.lc-code-block { position: relative; margin-top: 16px; }
+.lc-code-block .lc-pre-dark {
+  margin: 0;
+  padding: 20px 88px 20px 20px;
+  overflow-x: auto;
+  border: 1px solid #2a2a30;
+  border-radius: var(--radius-md);
+  background: #1b1b1f;
+  color: #f2f2f4;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.lc-code-block .lc-pre-dark code { font: inherit; color: inherit; }
+.lc-copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 14px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  color: #f2f2f4;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.lc-copy-btn:hover { background: rgba(255,255,255,.18); }
+.lc-copy-btn.is-copied { background: var(--mint-600); border-color: var(--mint-600); color: #08211b; }
+
+/* 비밀번호 잠금 콘텐츠 — 개별 페이지를 iframe으로 불러오기 전 게이트 */
+.lc-lock {
+  margin-top: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper-tint);
+  overflow: hidden;
+}
+.lc-lock-gate { padding: 40px 24px; text-align: center; }
+.lc-lock-icon { font-size: 30px; line-height: 1; }
+.lc-lock-title { margin-top: 12px; font-size: var(--fs-lg); font-weight: 700; color: var(--ink-900); }
+.lc-lock-desc { margin-top: 6px; color: var(--ink-500); font-size: var(--fs-base); }
+.lc-lock-form { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 20px; flex-wrap: wrap; }
+.lc-lock-input {
+  width: 200px;
+  max-width: 60vw;
+  padding: 11px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: var(--fs-base);
+  font-family: var(--font-mono);
+  text-align: center;
+  letter-spacing: 3px;
+}
+.lc-lock-input:focus { outline: 2px solid var(--violet-500); outline-offset: 2px; }
+.lc-lock-btn {
+  padding: 11px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--violet-600);
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--fs-base);
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.lc-lock-btn:hover { background: var(--violet-500); }
+.lc-lock-error { margin-top: 12px; color: #D6455B; font-size: var(--fs-xs); }
+.lc-lock-frame { display: block; width: 100%; border: 0; background: var(--paper); }
+.lc-lock.is-unlocked .lc-lock-gate { display: none; }
+
+.lc-preview {
+  margin-top: 42px;
+  padding: 20px 24px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(100deg, var(--violet-900), var(--violet-800));
+  color: #fff;
+  line-height: 1.7;
+}
+.lc-preview strong { color: var(--mint-300); }
+
+/* 인쇄/PDF 저장 시 [참고] 교재 써머리 전체 영역 제외 */
+@media print {
+  .lc-details:has(.lc-lock[data-lock-src$="-summary.html"]) {
+    display: none !important;
+  }
+}

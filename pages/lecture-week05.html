@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WEEK 05 · 나만의 AI 비서 설계</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f8fc;color:#111}.loading{min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box}.loading-card{width:min(440px,100%);background:#fff;border-radius:22px;padding:32px;box-shadow:0 24px 70px rgba(25,30,60,.12);text-align:center}.loading-icon{font-size:30px}.loading-title{font-size:20px;font-weight:700;margin:10px 0 6px}.loading-desc{color:#667085;line-height:1.6}.loading-error{color:#c4320a}
+</style>
+</head>
+<body>
+<main class="loading"><section class="loading-card"><div class="loading-icon">AI</div><h1 class="loading-title">5주차 강의교안</h1><p class="loading-desc" id="status">강의교안을 불러오는 중입니다.</p></section></main>
+<script src="week05-full.enc.js?v=20260910"></script>
+<script src="week05-practice-bundle.enc.js?v=20260910"></script>
+<script>
+(()=>{'use strict';
+  const enc=new TextEncoder(),dec=new TextDecoder();
+  const b64=s=>{const b=atob(s),o=new Uint8Array(b.length);for(let i=0;i<b.length;i++)o[i]=b.charCodeAt(i);return o};
+  async function gunzip(bytes){
+    if(!('DecompressionStream' in window)) throw new Error('gzip unsupported');
+    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return dec.decode(await new Response(stream).arrayBuffer());
+  }
+  async function decrypt(password,payload){
+    const m=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveKey']);
+    const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(payload.salt),iterations:payload.iterations,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);
+    const plain=new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(payload.iv)},k,b64(payload.data)));
+    return payload.compression==='gzip' ? await gunzip(plain) : dec.decode(plain);
+  }
+  function withSectionImages(html){
+    const style=`<style id="week05-section-image-style">.week05-section-banner{display:block!important;margin:18px 0 28px!important;padding:0!important}.week05-section-banner img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;border-radius:14px!important;object-fit:cover!important}</style>`;
+    html=html.replace(/<(h[1-6])\b([^>]*)>([\s\S]*?)<\/\1>/gi,function(full,tag,attrs,inner){
+      const text=inner.replace(/<[^>]*>/g,'').replace(/&nbsp;/gi,' ').replace(/&amp;/gi,'&').trim();
+      const match=text.match(/^(1[01]|[1-9])\.\s+/);
+      if(!match)return full;
+      const n=parseInt(match[1],10);
+      return full+'<figure class="week05-section-banner" data-week05-image="'+n+'"><img src="../assets/img/5_'+n+'.png" alt="'+text.replace(/"/g,'&quot;')+'" loading="lazy" decoding="async"></figure>';
+    });
+    return html.replace('</head>',style+'</head>');
+  }
+  function withOutputLayout(html){
+    return html.replace(/<div class="lc-output-box"><h3>((?:개인|팀) 산출물[\s\S]*?)<\/h3><ol class="lc-list">([\s\S]*?)<\/ol><\/div>/g,function(_,title,items){
+      return '<h3 class="lc-h3">'+title+'</h3><ol class="lc-num">'+items+'</ol>';
+    });
+  }
+  function withPracticeBundle(html){
+    html=html.replace(/<script[^>]+src=["']\.\.\/js\/secure-lock\.js["'][^>]*><\/script>/gi,'');
+    const frameStyle=`<style id="week05-frame-style">.lc-lock-frame{display:block;width:100%!important;min-height:0!important;height:80px;border:0!important;overflow:hidden!important}</style>`;
+    const practiceScript=`<script>(()=>{'use strict';const enc=new TextEncoder(),dec=new TextDecoder();const b64=s=>{const b=atob(s),o=new Uint8Array(b.length);for(let i=0;i<b.length;i++)o[i]=b.charCodeAt(i);return o};async function gunzip(bytes){const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));return dec.decode(await new Response(stream).arrayBuffer())}async function unlock(password,payload){const m=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveKey']);const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(payload.salt),iterations:payload.iterations,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);const plain=new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(payload.iv)},k,b64(payload.data)));return JSON.parse(await gunzip(plain))}function fit(frame){if(!frame)return;frame.setAttribute('scrolling','no');frame.style.overflow='hidden';frame.style.width='100%';try{const d=frame.contentDocument||(frame.contentWindow&&frame.contentWindow.document);if(!d||!d.body||!d.documentElement)return;d.body.style.overflow='hidden';d.documentElement.style.overflow='hidden';frame.style.height='1px';const b=d.body,h=d.documentElement,n=Math.max(b.scrollHeight,b.offsetHeight,h.scrollHeight,h.offsetHeight,h.clientHeight);frame.style.height=Math.max(80,n+4)+'px'}catch(_){}}function wire(frame){fit(frame);const d=frame.contentDocument||(frame.contentWindow&&frame.contentWindow.document);if(!d)return;Array.from(d.images||[]).forEach(img=>{if(!img.complete)img.addEventListener('load',()=>fit(frame),{once:true})});if(window.ResizeObserver&&!frame._w5ro){const ro=new ResizeObserver(()=>fit(frame));if(d.body)ro.observe(d.body);if(d.documentElement)ro.observe(d.documentElement);frame._w5ro=ro}setTimeout(()=>fit(frame),50);setTimeout(()=>fit(frame),250);setTimeout(()=>fit(frame),800)}let payloadPromise=null,cache=null;const getPayload=()=>payloadPromise||(payloadPromise=Promise.resolve(window.WEEK05_PRACTICE_PAYLOAD).then(p=>{if(!p)throw new Error('bundle');return p}));const locks=Array.from(document.querySelectorAll('.lc-lock[id^="lock-practice-"]'));locks.forEach(lock=>{const form=lock.querySelector('.lc-lock-form'),input=lock.querySelector('.lc-lock-input'),err=lock.querySelector('.lc-lock-error');form?.addEventListener('submit',async e=>{e.preventDefault();err.hidden=true;const btn=form.querySelector('button');btn.disabled=true;try{cache=cache||await unlock(input.value,await getPayload());locks.forEach(x=>{const key=x.id.replace('lock-practice-','');const content=cache[key];if(!content)return;const frame=x.querySelector('.lc-lock-frame');frame.onload=()=>wire(frame);frame.hidden=false;frame.srcdoc=content;const gate=x.querySelector('.lc-lock-gate');if(gate)gate.hidden=true})}catch(_){cache=null;err.hidden=false;input.value='';input.focus()}finally{btn.disabled=false}})});window.addEventListener('resize',()=>setTimeout(()=>locks.forEach(x=>fit(x.querySelector('.lc-lock-frame'))),80))})();<\/script>`;
+    return html.replace('</head>',frameStyle+'</head>').replace('</body>',practiceScript+'</body>');
+  }
+  function withOutputLock(html){
+    const lockStyle=`<style id="week05-output-lock-style">.w5-locked-content{display:none}.w5-output-gate{padding:28px 22px;text-align:center;border:1px solid #d9dcec;border-radius:12px;background:#f7f8ff;margin:18px 0}.w5-output-gate .w5-lock-icon{font-size:28px;margin:0 0 8px}.w5-output-gate .w5-lock-title{font-weight:700;color:#303b69;margin:0 0 6px}.w5-output-gate .w5-lock-desc{color:#667085;margin:0 0 14px}.w5-output-gate form{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.w5-output-gate input{width:220px;max-width:70vw;border:1px solid #cfd4e6;border-radius:999px;padding:10px 14px;font:inherit}.w5-output-gate button{border:0;border-radius:999px;background:#5266e8;color:#fff;padding:10px 18px;font:inherit;font-weight:700;cursor:pointer}.w5-output-gate .w5-lock-error{margin:10px 0 0;color:#c4320a;font-size:13px}</style>`;
+    const lockScript=`<script>(()=>{'use strict';const targetHash='537ecc3eec951cd2dd7e4c26332d3cebb7cea43764296790150e60fde05ff0a8';const enc=new TextEncoder();const hex=b=>Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');const h=document.getElementById('outputs');if(!h||!h.parentNode)return;const holder=document.createElement('div');holder.className='w5-locked-content';let n=h.nextSibling;while(n){const next=n.nextSibling;holder.appendChild(n);n=next}h.parentNode.appendChild(holder);const gate=document.createElement('div');gate.className='w5-output-gate';gate.innerHTML='<p class="w5-lock-icon">🔒</p><p class="w5-lock-title">비밀번호가 필요한 산출물입니다</p><p class="w5-lock-desc">산출물 내용은 비밀번호 확인 후 열람할 수 있습니다.</p><form><input type="password" autocomplete="off" placeholder="비밀번호"><button type="submit">열람하기</button></form><p class="w5-lock-error" hidden>비밀번호가 올바르지 않습니다.</p>';h.parentNode.insertBefore(gate,holder);const f=gate.querySelector('form'),inp=gate.querySelector('input'),err=gate.querySelector('.w5-lock-error');f.addEventListener('submit',async e=>{e.preventDefault();err.hidden=true;const digest=hex(await crypto.subtle.digest('SHA-256',enc.encode(inp.value)));if(digest===targetHash){holder.classList.remove('w5-locked-content');gate.remove()}else{err.hidden=false;inp.value='';inp.focus()}})})();<\/script>`;
+    return html.replace('</head>',lockStyle+'</head>').replace('</body>',lockScript+'</body>');
+  }
+  function withWeek05SideToggle(html){
+    const script=`<script id="week05-side-toggle-fix">(()=>{'use strict';function bind(){const layout=document.getElementById('lectureLayout');const oldBtn=document.getElementById('lectureSideToggle');if(!layout||!oldBtn)return;const btn=oldBtn.cloneNode(true);oldBtn.replaceWith(btn);const storageKey='lecture-side-closed';function setClosed(closed){layout.classList.toggle('is-side-closed',closed);btn.setAttribute('aria-expanded',String(!closed));btn.innerHTML=closed?'<span aria-hidden="true">▶</span> 왼쪽 영역 열기':'<span aria-hidden="true">◀</span> 왼쪽 영역 닫기'}let saved=false;try{saved=localStorage.getItem(storageKey)==='true'}catch(_){}setClosed(saved);btn.addEventListener('click',()=>{const closed=!layout.classList.contains('is-side-closed');setClosed(closed);try{localStorage.setItem(storageKey,String(closed))}catch(_){}})}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind()})();<\/script>`;
+    return html.replace('</body>',script+'</body>');
+  }
+  async function openLecture(){
+    try{
+      const payload=window.WEEK05_FULL_PAYLOAD;
+      if(!payload) throw new Error('load');
+      const decrypted=await decrypt('XGbhezCRqSxjd8Wo',payload);
+      const html=withWeek05SideToggle(withOutputLock(withPracticeBundle(withOutputLayout(withSectionImages(decrypted)))));
+      document.open();document.write(html);document.close();
+    }catch(_){
+      const s=document.getElementById('status');
+      if(s){s.className='loading-desc loading-error';s.textContent='강의교안을 불러오지 못했습니다. 페이지를 새로고침해 주세요.';}
+    }
+  }
+  openLecture();
+})();
+</script>
+</body></html>

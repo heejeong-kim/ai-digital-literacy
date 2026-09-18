@@ -1,0 +1,490 @@
+/* ==========================================================================
+   components.css — 버튼, 흐름 패널, 검색, 칩, 주차 카드, 팀 카드
+   호버 및 등장 모션은 motion.css 에서 관리함
+   ========================================================================== */
+
+/* ---------- 버튼 ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 28px;
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: .03em;
+  transition: transform .25s var(--ease), background-color .25s var(--ease),
+              color .25s var(--ease), border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary {
+  background: linear-gradient(120deg, var(--violet-600), var(--mint-500));
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(108, 76, 241, .38);
+}
+.btn-primary:hover { box-shadow: 0 18px 40px rgba(35, 214, 174, .34); }
+
+.btn-ghost {
+  border: 1px solid rgba(255, 255, 255, .28);
+  color: var(--violet-200);
+}
+.btn-ghost:hover { border-color: var(--mint-300); color: #fff; background: rgba(255,255,255,.06); }
+
+.btn-mint {
+  background: var(--mint-500);
+  color: var(--violet-950);
+  box-shadow: 0 12px 30px rgba(35, 214, 174, .3);
+}
+.btn-mint:hover { box-shadow: 0 18px 40px rgba(35, 214, 174, .42); }
+
+/* ---------- 시그니처: 학기 흐름 패널 ---------- */
+.flow-panel {
+  position: relative;
+  padding: 26px 28px;
+  border: 1px solid var(--line-dark);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(170deg, rgba(42, 31, 94, .82), rgba(20, 16, 42, .74));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.panel-label {
+  margin-bottom: 18px;
+  color: var(--ink-300);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: .2em;
+}
+
+.flow-list { position: relative; }
+
+/* 단계를 잇는 민트 라인 */
+.flow-list::before {
+  content: '';
+  position: absolute;
+  left: 15px; top: 14px; bottom: 30px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--mint-500), rgba(129, 104, 255, .22));
+}
+
+.flow-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  align-items: start;
+  gap: 8px;
+}
+.flow-item + .flow-item { margin-top: 17px; }
+
+.flow-num {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 31px; height: 31px;
+  border-radius: 50%;
+  background: var(--violet-950);
+  border: 1px solid rgba(35, 214, 174, .5);
+  color: var(--mint-300);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.flow-name {
+  color: var(--violet-200);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+.flow-desc {
+  margin-top: 2px;
+  color: var(--ink-300);
+  font-size: var(--fs-xs);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* ---------- 범례 ---------- */
+.legend {
+  display: flex;
+  gap: 18px;
+  color: var(--ink-500);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+.legend li { display: flex; align-items: center; gap: 7px; }
+
+.dot { width: 9px; height: 9px; border-radius: 50%; }
+.dot--class { background: var(--violet-600); }
+.dot--demo  { background: var(--violet-200); }
+.dot--eval  { background: var(--mint-500); }
+
+/* ---------- 필터 바 ---------- */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.search { position: relative; width: 340px; }
+
+.search-icon {
+  position: absolute;
+  left: 16px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-300);
+  font-size: var(--fs-base);
+  pointer-events: none;
+}
+
+.search input {
+  width: 100%;
+  padding: 13px 18px 13px 42px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: var(--fs-xs);
+  color: var(--ink-900);
+}
+.search input::placeholder { color: var(--ink-300); }
+.search input:focus {
+  outline: none;
+  border-color: var(--violet-500);
+  box-shadow: 0 0 0 4px rgba(129, 104, 255, .16);
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip {
+  padding: 11px 22px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink-500);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+}
+.chip:hover { border-color: var(--violet-200); color: var(--violet-600); }
+
+.chip.is-active {
+  background: var(--violet-900);
+  border-color: var(--violet-900);
+  color: #fff;
+}
+
+/* 어두운 배경용 칩 */
+.chips--light .chip {
+  background: rgba(255, 255, 255, .06);
+  border-color: var(--line-dark);
+  color: var(--violet-200);
+}
+.chips--light .chip:hover { border-color: var(--mint-500); color: #fff; }
+.chips--light .chip.is-active {
+  background: var(--mint-500);
+  border-color: var(--mint-500);
+  color: var(--violet-950);
+}
+
+/* ---------- 주차 카드 ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  box-shadow: var(--shadow-card);
+}
+.card:hover { border-color: var(--violet-200); box-shadow: var(--shadow-card-hover); }
+
+/* 유형별 상단 인디케이터 */
+.card::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: var(--violet-600);
+}
+.card--demo::before { background: var(--violet-200); }
+.card--eval::before { background: var(--mint-500); }
+
+.card-thumb {
+  display: block;
+  position: relative;
+  margin: 14px 14px 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(140deg, var(--violet-050), var(--mint-050));
+}
+
+.card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* 이미지가 아직 없을 때 노출되는 대체 표기 */
+.thumb-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: .14em;
+  color: var(--violet-500);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 18px 20px 20px;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.card-week {
+  color: var(--ink-500);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: .12em;
+}
+
+.badge {
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: var(--violet-050);
+  color: var(--violet-600);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+}
+.badge--demo { background: #F0EBFF; color: #5B3ED6; }
+.badge--eval { background: var(--mint-050); color: var(--mint-600); }
+
+.card-title {
+  color: var(--ink-900);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  letter-spacing: -.025em;
+  line-height: 1.4;
+  word-break: keep-all;
+  /* 제목이 1줄이어도 2줄 높이를 확보해 카드 간 요약 시작선(그리드)을 맞춘다 */
+  min-height: 2.8em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-title a { color: inherit; }
+.card-title a:hover { color: var(--violet-600); }
+
+/* 두 줄 요약 */
+.card-summary {
+  margin-top: 10px;
+  padding-left: 11px;
+  border-left: 2px solid var(--line);
+}
+
+.card-summary li {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;         /* 각 요약 항목을 1줄로 제한 → 요약 전체 최대 2줄 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--ink-500);
+  font-size: var(--fs-xs);
+  font-weight: 300;
+  line-height: 1.62;
+  word-break: keep-all;
+}
+.card-summary li + li { margin-top: 5px; }
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 18px;
+}
+
+.tag {
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--paper-tint);
+  border: 1px solid var(--line);
+  color: var(--ink-500);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+
+.card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 13px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--violet-900);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+.card-cta:hover { background: var(--violet-600); }
+
+.card-cta--soon {
+  margin-top: auto;
+  background: var(--paper-tint);
+  border: 1px solid var(--line);
+  color: var(--ink-300);
+  cursor: not-allowed;
+}
+.card-cta--soon:hover { background: var(--paper-tint); color: var(--ink-300); }
+
+/* ---------- 모바일 주차 카드: 썸네일 소형 · 주차/커리큘럼명/CTA만 노출 ---------- */
+@media (max-width: 560px) {
+  .card { flex-direction: row; align-items: stretch; }
+  .card::before { display: none; }              /* 상단 유형 인디케이터 숨김 */
+
+  .card-thumb {
+    flex: 0 0 72px;                              /* 썸네일 아주 작게(72px 정사각) */
+    width: 72px;
+    align-self: flex-start;
+    aspect-ratio: 1 / 1;
+    margin: 14px 0 14px 14px;
+  }
+
+  .card-body { padding: 14px 16px; }
+  .card-meta { margin-bottom: 6px; }
+  .card-title { min-height: 0; }                 /* 모바일 단일 열: 2줄 높이 확보 불필요 */
+  .badge { display: none; }                      /* 유형 배지 숨김 */
+  .card-summary { display: none; }               /* 요약 숨김 */
+  .tags { display: none; }                       /* 태그 숨김 */
+  .card-cta,
+  .card-cta--soon { padding: 11px 14px; }
+}
+
+/* ---------- 팀 카드 ---------- */
+.team-card {
+  padding: 24px 24px 22px;
+  border: 1px solid var(--line-dark);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, .05);
+}
+.team-card:hover { border-color: var(--mint-500); background: rgba(255, 255, 255, .09); }
+
+.team-class {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(129, 104, 255, .22);
+  color: var(--violet-200);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: .08em;
+}
+
+.team-name {
+  color: #fff;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+.team-topic {
+  margin-top: 4px;
+  color: var(--violet-200);
+  font-size: var(--fs-xs);
+  font-weight: 300;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.team-progress {
+  margin-top: 18px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .12);
+  overflow: hidden;
+}
+
+.team-progress span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--violet-500), var(--mint-500));
+}
+
+.team-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.team-count {
+  color: var(--ink-300);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: .06em;
+}
+
+.team-link { color: var(--mint-300); font-size: var(--fs-xs); font-weight: 500; }
+.team-link:hover { color: #fff; }
+.team-link[aria-disabled="true"] { color: var(--ink-300); pointer-events: none; }
+
+/* ---------- 팀 현황 CTA ---------- */
+.teams-cta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line-dark);
+}
+
+.teams-cta-note {
+  color: var(--ink-300);
+  font-size: var(--fs-xs);
+}
+
+/* ---------- 플로팅 '맨 위로' 버튼 (스크롤 추종, 전 페이지 공통) ---------- */
+.back-top {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 999px;
+  border: 1px solid var(--line-dark);
+  background: var(--violet-900);
+  color: #fff;
+  box-shadow: var(--shadow-card-hover);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  transition: opacity .25s ease, transform .25s ease, visibility .25s ease, background .2s ease;
+}
+.back-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.back-top:hover { background: var(--violet-600); }
+.back-top:focus-visible { outline: 2px solid var(--mint-500); outline-offset: 3px; }
+.back-top-arrow { font-size: 21px; line-height: 1; }
+
+@media (max-width: 560px) {
+  .back-top { right: 16px; bottom: 16px; width: 46px; height: 46px; }
+}

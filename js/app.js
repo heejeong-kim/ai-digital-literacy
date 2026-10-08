@@ -133,15 +133,23 @@
         markdown = await response.text();
       }
 
-      lesson.innerHTML = renderNotionMarkdown(markdown);
-      normalizeNotionBlocks(lesson);
-      enhanceStandaloneCode(lesson);
-      structureLecture(lesson);
-      buildSectionNav(lesson);
+      renderLessonMarkdown(markdown);
     } catch (error) {
       lesson.innerHTML = `<div class="load-error"><h2>강의교안을 불러오지 못했습니다.</h2><p>${esc(error.message)}</p></div>`;
     }
   }
+
+  // 강의 본문 렌더링(잠금 해제 후 재렌더링에도 사용)
+  function renderLessonMarkdown(markdown) {
+    const lesson = document.getElementById('lessonContent');
+    if (!lesson) return;
+    lesson.innerHTML = renderNotionMarkdown(markdown);
+    normalizeNotionBlocks(lesson);
+    enhanceStandaloneCode(lesson);
+    structureLecture(lesson);
+    buildSectionNav(lesson);
+  }
+  window.renderLessonMarkdown = renderLessonMarkdown;
 
   function copyableCodeBlock(text, extraClass='') {
     return `<div class="copy-code-block ${extraClass}">

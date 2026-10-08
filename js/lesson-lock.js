@@ -1,10 +1,10 @@
 // 11~14주차 '정리와 과제 제출' 영역 비밀번호 잠금
 // - 잠긴 본문은 AES-GCM(256bit)으로 암호화된 상태로만 배포됨(js/locked-week-XX.js)
-// - 비밀번호는 HTML·JS 어디에도 들어 있지 않으며, 입력값으로 복호화에 성공해야만 본문이 보임
+// - 비밀번호는 주차마다 다르며 HTML·JS 어디에도 들어 있지 않음. 입력값으로 복호화에 성공해야만 본문이 보임
 (() => {
   'use strict';
   const MARK = '🔒 정리와 과제 제출 영역은 수업 중 안내된 비밀번호를 입력해야 열람할 수 있음';
-  const STORE_KEY = 'aidl-lesson-lock';
+  const STORE_KEY = 'aidl-lesson-lock-' + String(document.body.dataset.week || ''); // 주차별 비밀번호를 따로 기억
   const root = document.getElementById('lessonContent');
   const key = String(document.body.dataset.week || '');
   const payload = window.LOCKED_LESSONS && window.LOCKED_LESSONS[key];

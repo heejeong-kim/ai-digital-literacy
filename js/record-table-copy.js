@@ -1,5 +1,5 @@
-// 실습 기록표 전체 복사: "실습 기록표" 제목 옆에 복사 버튼 1개를 두고,
-// 실습별 제목과 표, 인사이트 표까지 한 번에 복사함
+// 정리와 과제 제출 전체 복사: "정리와 과제 제출" 제목 옆에 복사 버튼 1개를 두고,
+// 결과물 양식과 실습 기록표까지 과제 제출 영역 전체를 한 번에 복사함
 (() => {
   const root = document.getElementById('lessonContent');
   if (!root) return;
@@ -30,13 +30,19 @@
   const tableText = table => [...table.querySelectorAll('tr')]
     .map(tr => [...tr.children].map(td => td.textContent.trim()).join('\t')).join('\n');
 
-  // 실습 기록표 영역의 제목(굵은 글씨 문단)과 표를 순서대로 모아 하나의 문서로 만듦
-  const buildCopy = (items, title = '실습 기록표') => {
-    const html = [`<p><strong>${title}</strong></p>`];
+  // 정리와 과제 제출 영역의 소제목·문단·목록·표를 순서대로 모아 하나의 문서로 만듦
+  const buildCopy = (nodes, title) => {
+    const html = [`<h1>${title}</h1>`];
     const text = [title, ''];
-    items.forEach(item => {
-      if (item.type === 'title') { html.push(`<p><strong>${item.value}</strong></p>`); text.push(item.value); }
-      else { html.push(tableHtml(item.value), '<p></p>'); text.push(tableText(item.value), ''); }
+    nodes.forEach(node => {
+      const table = node.tagName === 'TABLE' ? node : node.querySelector?.('table');
+      if (table) { html.push(tableHtml(table), '<p></p>'); text.push(tableText(table), ''); return; }
+      const clone = node.cloneNode(true);
+      clone.querySelectorAll('button').forEach(b => b.remove());
+      const value = clone.textContent.trim();
+      if (!value) return;
+      if (/^H[2-6]$/.test(node.tagName)) { html.push(`<${node.tagName.toLowerCase()}>${value}</${node.tagName.toLowerCase()}>`); text.push('', value); }
+      else { html.push(clone.outerHTML); text.push(value); }
     });
     return { html: html.join(''), text: text.join('\n') };
   };
@@ -63,31 +69,23 @@
     holder.remove();
   };
 
+  // 정리와 과제 제출 제목 다음부터 구분선·학습 요약·다음 장 제목 전까지 모음
   const collect = heading => {
-    const items = [];
+    const nodes = [];
     let node = heading.nextElementSibling;
-    while (node && !/^H[12]$/.test(node.tagName) && !node.classList.contains('notion-callout')) {
-      const strong = node.tagName === 'P' ? node.querySelector('strong') : null;
-      if (strong && node.textContent.trim() === strong.textContent.trim()) {
-        items.push({ type: 'title', value: strong.textContent.trim() });
-      }
-      const table = node.tagName === 'TABLE' ? node : node.querySelector?.('table');
-      if (table) items.push({ type: 'table', value: table });
+    while (node && node.tagName !== 'H1' && node.tagName !== 'HR' && !node.classList.contains('notion-callout')) {
+      nodes.push(node);
       node = node.nextElementSibling;
     }
-    return items;
+    return nodes;
   };
 
-  // 복사 버튼을 붙일 제목: 실습 기록표, 11주차 종합 실습 결과물(콘텐츠 브리프), 12~14주차 실습 결과물
-  const TARGETS = [
-    { test: /실습 기록표/, title: '실습 기록표', label: '기록표 전체 복사' },
-    { test: /종합 실습 결과물/, title: '콘텐츠 브리프', label: '브리프 전체 복사' },
-    { test: /실습 결과물/, title: '실습 결과물', label: '결과물 전체 복사' }
-  ];
+  // 복사 버튼은 11~14주차 '정리와 과제 제출' 제목 하나에만 붙임
+  const TARGET = { test: /정리와 과제 제출/, title: '정리와 과제 제출', label: '과제 양식 전체 복사' };
 
   const attach = (heading, target) => {
     if (heading.querySelector('.record-table-copy')) return true;
-    if (!collect(heading).some(item => item.type === 'table')) return false;
+    if (!collect(heading).some(node => node.tagName === 'TABLE' || node.querySelector?.('table'))) return false;
     ensureStyle();
     const label = document.createElement('span');
     label.append(...heading.childNodes);
@@ -100,7 +98,8 @@
     button.setAttribute('aria-label', `${target.title} 전체 복사`);
     button.addEventListener('click', async () => {
       try {
-        await writeClipboard(buildCopy(collect(heading), target.title));
+        const title = label.textContent.trim().replace(/^\d+\.\s*/, '');
+        await writeClipboard(buildCopy(collect(heading), title));
         button.textContent = '복사됨';
         button.classList.add('is-copied');
       } catch (error) {
@@ -112,15 +111,9 @@
     return true;
   };
 
-  // 실습 기록표 버튼이 붙으면 완료로 보고, 브리프 제목이 있으면 함께 처리
   const apply = () => {
-    const headings = [...root.querySelectorAll('h2')];
-    let done = false;
-    TARGETS.forEach(target => {
-      const heading = headings.find(h => target.test.test(h.textContent));
-      if (heading && attach(heading, target) && target.title === '실습 기록표') done = true;
-    });
-    return done;
+    const heading = [...root.querySelectorAll('h1')].find(h => TARGET.test.test(h.textContent));
+    return Boolean(heading && attach(heading, TARGET));
   };
 
   if (apply()) return;

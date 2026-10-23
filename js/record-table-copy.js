@@ -31,9 +31,9 @@
     .map(tr => [...tr.children].map(td => td.textContent.trim()).join('\t')).join('\n');
 
   // 실습 기록표 영역의 제목(굵은 글씨 문단)과 표를 순서대로 모아 하나의 문서로 만듦
-  const buildCopy = items => {
-    const html = ['<p><strong>실습 기록표</strong></p>'];
-    const text = ['실습 기록표', ''];
+  const buildCopy = (items, title = '실습 기록표') => {
+    const html = [`<p><strong>${title}</strong></p>`];
+    const text = [title, ''];
     items.forEach(item => {
       if (item.type === 'title') { html.push(`<p><strong>${item.value}</strong></p>`); text.push(item.value); }
       else { html.push(tableHtml(item.value), '<p></p>'); text.push(tableText(item.value), ''); }
@@ -78,9 +78,13 @@
     return items;
   };
 
-  const apply = () => {
-    const heading = [...root.querySelectorAll('h2')].find(h => /실습 기록표/.test(h.textContent));
-    if (!heading) return false;
+  // 복사 버튼을 붙일 제목: 실습 기록표, 11주차 종합 실습 결과물(콘텐츠 브리프)
+  const TARGETS = [
+    { test: /실습 기록표/, title: '실습 기록표', label: '기록표 전체 복사' },
+    { test: /종합 실습 결과물/, title: '콘텐츠 브리프', label: '브리프 전체 복사' }
+  ];
+
+  const attach = (heading, target) => {
     if (heading.querySelector('.record-table-copy')) return true;
     if (!collect(heading).some(item => item.type === 'table')) return false;
     ensureStyle();
@@ -91,20 +95,31 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'record-table-copy';
-    button.textContent = '기록표 전체 복사';
-    button.setAttribute('aria-label', '실습 기록표 전체 복사');
+    button.textContent = target.label;
+    button.setAttribute('aria-label', `${target.title} 전체 복사`);
     button.addEventListener('click', async () => {
       try {
-        await writeClipboard(buildCopy(collect(heading)));
+        await writeClipboard(buildCopy(collect(heading), target.title));
         button.textContent = '복사됨';
         button.classList.add('is-copied');
       } catch (error) {
         button.textContent = '복사 실패';
       }
-      window.setTimeout(() => { button.textContent = '기록표 전체 복사'; button.classList.remove('is-copied'); }, 1600);
+      window.setTimeout(() => { button.textContent = target.label; button.classList.remove('is-copied'); }, 1600);
     });
     heading.appendChild(button);
     return true;
+  };
+
+  // 실습 기록표 버튼이 붙으면 완료로 보고, 브리프 제목이 있으면 함께 처리
+  const apply = () => {
+    const headings = [...root.querySelectorAll('h2')];
+    let done = false;
+    TARGETS.forEach(target => {
+      const heading = headings.find(h => target.test.test(h.textContent));
+      if (heading && attach(heading, target) && target.title === '실습 기록표') done = true;
+    });
+    return done;
   };
 
   if (apply()) return;

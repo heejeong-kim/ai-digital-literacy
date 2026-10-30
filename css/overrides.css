@@ -70,3 +70,14 @@ body[data-page="week"] .week-side__visual img { width:100%;height:150px;object-f
 @media (max-width:960px){#lectureGrid.lecture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.week-context__inner{grid-template-columns:1fr;gap:0;min-height:0;padding:11px 0 12px}}
 @media (max-width:720px){body[data-page="week"] .notion-content table{min-width:620px}.table-wrap{overflow-x:auto}}
 @media (max-width:640px){#lectureGrid.lecture-grid{grid-template-columns:1fr}#lectureGrid .lecture-card__heading{gap:10px;margin:16px 0 8px}#lectureGrid .lecture-card__heading h3{font-size:21px}.hero--detail{padding:58px 0 52px}.lecture-card__thumb{margin-bottom:16px;border-radius:14px}.lecture-card h3,.lecture-card p{min-height:0}.lecture-card__cta{margin-top:30px;padding:11px 14px}.week-context h1{font-size:20px}.week-context p{font-size:14px}.prompt-block{min-height:96px;border-radius:19px}.prompt-block pre{padding:24px 82px 24px 22px}.prompt-block pre code{font-size:18px;line-height:1.65}.prompt-copy{top:14px;right:14px;min-width:48px;height:35px;padding:0 11px;font-size:13px}body[data-page="week"] .lesson-overview > h2:first-child,body[data-page="week"] .lesson-overview > h2:first-child + ol,body[data-page="week"] .notion-callout--summary,body[data-page="week"] .notion-callout--summary .callout-body > p:first-child,body[data-page="week"] .notion-callout--summary .callout-body > strong:first-child{font-size:13.5px}}
+
+/* 입력 예시 토글: 검정 대신 짙은 회색 */
+.notion-details.input-example{background:#f4f4f5;border-color:#d4d4d8}
+.notion-content .notion-details.input-example>summary{background:#e4e4e7;color:#3f3f46;font-weight:700}
+.notion-details.input-example .copy-code-block{background:#3f3f46}
+.notion-details.input-example .copy-code-block pre code{color:#f4f4f5!important;font-weight:500}
+
+/* 빨간색 강조 문구: 과제 필수 안내 등 */
+.notion-text-red,.notion-content .notion-text-red strong{color:#e03131!important;font-weight:800}
+/* 과제 제출 안내 박스(📮): 아웃라인 강조 */
+body[data-page="week"] .notion-callout.notion-callout--submit{background:#fff!important;border:2px solid #3b6fd8!important;border-radius:14px}

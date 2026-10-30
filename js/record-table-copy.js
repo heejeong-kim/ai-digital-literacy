@@ -69,14 +69,16 @@
     holder.remove();
   };
 
-  // 정리와 과제 제출 제목 다음부터 구분선·학습 요약·다음 장 제목 전까지 모음
+  // 정리와 과제 제출 제목 다음부터 학습 요약·다음 장 제목 전까지 모음
+  // (제출 안내 박스와 실습 목록 위 구분선은 포함하고, 마지막 구분선은 제외)
   const collect = heading => {
     const nodes = [];
     let node = heading.nextElementSibling;
-    while (node && node.tagName !== 'H1' && node.tagName !== 'HR' && !node.classList.contains('notion-callout')) {
+    while (node && node.tagName !== 'H1' && !node.classList.contains('notion-callout--summary')) {
       nodes.push(node);
       node = node.nextElementSibling;
     }
+    while (nodes.length && nodes[nodes.length - 1].tagName === 'HR') nodes.pop();
     return nodes;
   };
 

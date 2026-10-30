@@ -12,6 +12,8 @@
   };
 
   const getItemKey = element => {
+    // 외부 주소(구글 폼 등)는 주차 링크로 바꾸지 않음
+    if (/^https?:\/\//i.test(element?.getAttribute?.('href') || '')) return null;
     const explicit = normalizeKey(element?.dataset?.week);
     if (explicit) return explicit;
 

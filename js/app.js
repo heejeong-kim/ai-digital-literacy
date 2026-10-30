@@ -271,7 +271,7 @@
       if (/^<callout\b/i.test(line)) {
         flush();
         const icon = (line.match(/icon="([^"]+)"/) || [,'💡'])[1];
-        const summaryClass = icon === '📌' ? ' notion-callout--summary' : '';
+        const summaryClass = icon === '📌' ? ' notion-callout--summary' : (icon === '📮' ? ' notion-callout--submit' : '');
         out.push(`<aside class="notion-callout${summaryClass}"><span class="callout-icon" aria-hidden="true">${esc(icon)}</span><div class="callout-body">`);
         continue;
       }
@@ -293,6 +293,12 @@
       if (/^<summary>/i.test(line)) {
         flush();
         const text = line.replace(/^<summary>/i,'').replace(/<\/summary>$/i,'');
+        // '입력 예시' 토글은 짙은 회색 스타일 적용
+        if (/^입력 예시/.test(text)) {
+          for (let d = out.length - 1; d >= 0; d--) {
+            if (out[d] === '<details class="notion-details">') { out[d] = '<details class="notion-details input-example">'; break; }
+          }
+        }
         out.push(`<summary>${inline(text)}</summary>`);
         continue;
       }
@@ -368,6 +374,13 @@
       graySpans.push(inner);
       return key;
     });
+    // 빨간색 강조 문구(<span color="red">)는 굵은 빨간 글씨로 표시
+    const redSpans = [];
+    source = source.replace(/<span\s+color="red">([\s\S]*?)<\/span>/gi, (_, inner) => {
+      const key = `%%RED${redSpans.length}%%`;
+      redSpans.push(inner);
+      return key;
+    });
 
     let text = esc(source);
     const code = [];
@@ -383,6 +396,9 @@
     code.forEach((html, index) => { text = text.replace(`%%CODE${index}%%`, html); });
     graySpans.forEach((value, index) => {
       text = text.replace(`%%GRAY${index}%%`, `<span class="notion-text-gray">${inline(value)}</span>`);
+    });
+    redSpans.forEach((value, index) => {
+      text = text.replace(`%%RED${index}%%`, `<span class="notion-text-red">${inline(value)}</span>`);
     });
     return text;
   }

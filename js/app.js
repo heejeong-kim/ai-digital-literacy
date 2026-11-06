@@ -382,6 +382,14 @@
       return key;
     });
 
+    // 파란색 강조 문구(<span color="blue">)는 굵은 파란 글씨로 표시
+    const blueSpans = [];
+    source = source.replace(/<span\s+color="blue">([\s\S]*?)<\/span>/gi, (_, inner) => {
+      const key = `%%BLUE${blueSpans.length}%%`;
+      blueSpans.push(inner);
+      return key;
+    });
+
     let text = esc(source);
     const code = [];
     text = text.replace(/`([^`]+)`/g, (_,v) => {
@@ -399,6 +407,9 @@
     });
     redSpans.forEach((value, index) => {
       text = text.replace(`%%RED${index}%%`, `<span class="notion-text-red">${inline(value)}</span>`);
+    });
+    blueSpans.forEach((value, index) => {
+      text = text.replace(`%%BLUE${index}%%`, `<span class="notion-text-blue">${inline(value)}</span>`);
     });
     return text;
   }
